@@ -63,6 +63,16 @@ public class ConfigManager {
      */
     public static boolean isEnable(BaseHook baseHook) {
         if (!inited) return true;
-        return mmkv.decodeBool(baseHook.getName(), true);
+        return isEnable(baseHook.getName());
+    }
+
+    /**
+     * @param baseHook 要获取的hook
+     * @return hook启用(true)/禁用(false)
+     */
+    public static boolean isEnable(String baseHook) {
+        if (!inited) return true;
+        if (Objects.isNull(mmkv)) return;
+        return mmkv.decodeBool(baseHook, true);
     }
 }

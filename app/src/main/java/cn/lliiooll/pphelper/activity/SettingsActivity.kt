@@ -17,7 +17,9 @@ class SettingsActivity : Activity(), OnClickListener {
         setContentView(R.layout.settings_activity)
         val switch_noad = findViewById<Switch>(R.id.switch_noad)
         val switch_nomark = findViewById<Switch>(R.id.switch_nomark)
+        switch_noad.isChecked = ConfigManager.isEnable("remove_ad")
         switch_noad.setOnClickListener(this)
+        switch_nomark.isChecked = ConfigManager.isEnable("no_mark")
         switch_nomark.setOnClickListener(this)
     }
 
@@ -30,8 +32,10 @@ class SettingsActivity : Activity(), OnClickListener {
             }
             R.id.switch_nomark -> {
                 val switch = view as Switch
-                switch.isChecked = false
                 "该功能还没实现".showShortToast()
+                switch.isChecked = false
+                //ConfigManager.setEnable("no_mark", switch.isChecked)
+                //"保存成功".showShortToast()
             }
         }
     }
