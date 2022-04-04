@@ -40,7 +40,6 @@ public class ConfigManager {
      * @param enable   启用(true)/禁用(false)
      */
     public static void setEnable(BaseHook baseHook, boolean enable) {
-        if (!inited) return;
         setEnable(baseHook.getName(), enable);
     }
 
@@ -51,8 +50,7 @@ public class ConfigManager {
      * @param enable   启用(true)/禁用(false)
      */
     public static void setEnable(String hookName, boolean enable) {
-        if (!inited) return;
-        if (Objects.isNull(mmkv)) return;
+        if (!inited || Objects.isNull(mmkv)) return;
         mmkv.encode(hookName, enable);
 
     }
@@ -62,7 +60,6 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(BaseHook baseHook) {
-        if (!inited) return true;
         return isEnable(baseHook.getName());
     }
 
@@ -71,8 +68,7 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(String baseHook) {
-        if (!inited) return true;
-        if (Objects.isNull(mmkv)) return;
+        if (!inited || Objects.isNull(mmkv)) return true;
         return mmkv.decodeBool(baseHook, true);
     }
 }
