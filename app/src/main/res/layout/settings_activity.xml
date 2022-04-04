@@ -1,28 +1,78 @@
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/rootView" android:background="@color/cc" android:fitsSystemWindows="true" android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout android:id="@+id/navBar" android:layout_width="match_parent"
+                    android:layout_height="@dimen/navbar_height">
+        <ImageView android:id="@+id/ivBack" android:layout_width="@dimen/item_height"
+                   android:layout_height="match_parent"
+                   android:src="@mipmap/icon_arrow_left" android:scaleType="center"/>
+        <TextView android:textSize="@dimen/f2"
+                  android:textStyle="bold"
+                  android:textColor="@color/ct_1"
+                  android:ellipsize="middle"
+                  android:gravity="center_vertical"
+                  android:id="@+id/tvTitle"
+                  android:visibility="visible"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:text="PPHelper"
+                  android:singleLine="true"
+                  android:drawablePadding="@dimen/divide_space_5"
+                  android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true"
+                android:layout_below="@+id/navBar">
+
+        <LinearLayout
+                android:gravity="center_horizontal" android:orientation="vertical" android:paddingBottom="60dp"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
 
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
             <TextView
-                    android:text="TextView"
+                    android:background="@color/bg_setting_divider"
+                    android:text="基本功能"
+                    android:textSize="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView2" android:layout_weight="1"/>
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="wrap_content"/>
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="30dp">
 
+                <Switch
+                        android:text="去广告"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_noad"
+                        android:layout_weight="1"
+                        android:minHeight="48dp"/>
             </LinearLayout>
-        </ScrollView>
+            <View
+                    android:background="@color/bg_setting_divider"
+                    android:textSize="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"/>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="30dp">
 
-    </LinearLayout>
+                <Switch
+                        android:text="去水印"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/switch_nomark"
+                        android:layout_weight="1"
+                        android:minHeight="48dp"/>
+            </LinearLayout>
 
-</LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

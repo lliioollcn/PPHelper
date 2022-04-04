@@ -41,8 +41,19 @@ public class ConfigManager {
      */
     public static void setEnable(BaseHook baseHook, boolean enable) {
         if (!inited) return;
+        setEnable(baseHook.getName(), enable);
+    }
+
+    /**
+     * 设置模块状态
+     *
+     * @param hookName 要设置的hook名称
+     * @param enable   启用(true)/禁用(false)
+     */
+    public static void setEnable(String hookName, boolean enable) {
+        if (!inited) return;
         if (Objects.isNull(mmkv)) return;
-        mmkv.encode(baseHook.getName(), enable);
+        mmkv.encode(hookName, enable);
 
     }
 

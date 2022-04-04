@@ -10,7 +10,7 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 32
-        versionCode 52
+        versionCode 56
         versionName "1.0.0." + versionCode
 
         vectorDrawables.useSupportLibrary = true

@@ -1,6 +1,5 @@
 package cn.lliiooll.pphelper.hook;
 
-import android.app.Activity;
 import cn.lliiooll.pphelper.utils.PLog;
 
 public class Hooks {
@@ -9,6 +8,7 @@ public class Hooks {
     private static final BaseHook[] hooks = new BaseHook[]{
             SettingHook.INSTANCE,
             RemoveADHook.INSTANCE,
+            NoMarkHook.INSTANCE,
             TestHook.INSTANCE,
     };
 

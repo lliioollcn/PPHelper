@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ct_1">#ff333333</color>
+    <color name="ct_1_night">#73ffffff</color>
+    <color name="cc">#ffffffff</color>
+    <color name="bg_setting_divider">#f5f5f7</color>
+    <color name="bg_setting_divider_night">#ff171719</color>
+    <color name="ct_3">#ff999999</color>
+    <color name="ct_3_night">#4dffffff</color>
+
 </resources>
