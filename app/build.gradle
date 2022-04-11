@@ -1,26 +1,27 @@
+import cn.lliiooll.dhl.plugin.Common
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'cn.lliiooll.dhl.plugin'
 }
 
 android {
     compileSdk 32
-
     defaultConfig {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 32
-        versionCode 57
-        versionName "1.0.0." + versionCode
-
+        versionCode Common.getTimeStamp()//Common.getBuildVersionCode(rootProject)
+        versionName "1.0.0.${versionCode}${Common.getGitHeadRefsSuffix(rootProject)}"
         vectorDrawables.useSupportLibrary = true
-        vectorDrawables.generatedDensities = []
         multiDexEnabled = false
+        buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
 
     }
 
     aaptOptions {
-        additionalParameters ("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0x37")
+        additionalParameters("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0x37")
     }
 
     buildTypes {
@@ -30,10 +31,12 @@ android {
             kotlinOptions.suppressWarnings = true
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
         compileOptions {

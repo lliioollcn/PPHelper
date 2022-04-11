@@ -44,7 +44,7 @@ public class CounterfeitActivityInfoFactory {
                 ActivityInfo proto = ctx.getPackageManager().getActivityInfo(new ComponentName(
                         ctx.getPackageName(), "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity"), (int) flags);
                 // init style here, comment it out if it crashes on Android >= 10
-                proto.theme = R.style.Base_Theme_AppCompat;
+                proto.theme = androidx.appcompat.R.style.Base_Theme_AppCompat;
                 return initCommon(proto, className);
             } catch (PackageManager.NameNotFoundException e) {
                 throw new IllegalStateException(

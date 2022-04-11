@@ -28,14 +28,14 @@ class SettingsActivity : Activity(), OnClickListener {
             R.id.switch_noad -> {
                 val switch = view as Switch
                 ConfigManager.setEnable("remove_ad", switch.isChecked)
-                "保存成功".showShortToast()
+                "保存成功,重启应用后生效".showShortToast()
             }
             R.id.switch_nomark -> {
                 val switch = view as Switch
                 "该功能还没实现".showShortToast()
                 switch.isChecked = false
-                //ConfigManager.setEnable("no_mark", switch.isChecked)
-                //"保存成功".showShortToast()
+                ConfigManager.setEnable("no_mark", switch.isChecked)
+                //"保存成功,重启应用后生效".showShortToast()
             }
         }
     }

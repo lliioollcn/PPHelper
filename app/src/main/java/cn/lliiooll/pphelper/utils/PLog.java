@@ -10,11 +10,17 @@ public class PLog {
             s = s.replaceFirst("\\{\\}", replace.toString());
         }
         s = "[PPHelper] >> " + s;
-        XposedBridge.log(s);
+        //XposedBridge.log(s);
         Log.d("PPHelper", s);
     }
 
     public static void log(Throwable e2) {
         e2.printStackTrace();
+    }
+
+    public static void printStacks() {
+        for (StackTraceElement stack : Thread.currentThread().getStackTrace()) {
+            log("    " + stack.toString());
+        }
     }
 }

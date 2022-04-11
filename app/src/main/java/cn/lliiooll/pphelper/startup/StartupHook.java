@@ -4,6 +4,7 @@ import android.content.Context;
 import cn.lliiooll.pphelper.config.ConfigManager;
 import cn.lliiooll.pphelper.hook.Hooks;
 import cn.lliiooll.pphelper.lifecycle.Parasitics;
+import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
 import cn.xiaochuankeji.zuiyouLite.app.AppController;
@@ -31,6 +32,7 @@ public class StartupHook {
         Parasitics.injectModuleResources(Utils.getApplication().getResources());
         Parasitics.initForStubActivity(Utils.getApplication());
         ConfigManager.init();
+        HostInfo.init();
         Hooks.init();
     }
 

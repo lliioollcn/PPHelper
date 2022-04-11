@@ -1,0 +1,237 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/rootView" android:background="@color/cc"
+                android:fitsSystemWindows="true" android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <RelativeLayout android:id="@+id/navBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/navbar_height">
+        <TextView android:textSize="@dimen/f2"
+                  android:textStyle="bold"
+                  android:textColor="@color/ct_1"
+                  android:ellipsize="middle"
+                  android:gravity="center"
+                  android:id="@+id/tvTitle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:layout_marginLeft="10dp"
+                  android:text="PPHelper"
+                  android:singleLine="true"
+                  android:drawablePadding="@dimen/divide_space_5"
+                  android:layout_centerInParent="false"/>
+    </RelativeLayout>
+
+    <TextView
+            android:background="@color/bg_setting_divider"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/navBar"
+            android:id="@+id/main_bar"
+            android:layout_height="3dp"/>
+
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true"
+                android:layout_below="@+id/main_bar">
+
+        <LinearLayout
+                android:gravity="center_horizontal" android:orientation="vertical" android:paddingBottom="60dp"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_round_disable"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/check_parent"
+            >
+                <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_round_close"
+                        android:id="@+id/check_img"/>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:text="未激活"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/f4"
+                            android:textColor="#ffffff"
+                            android:id="@+id/check_text_enable"/>
+                    <TextView
+                            android:text="请在您的Xposed模块管理器中启用此模块"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="#ffffff"
+                            android:textSize="@dimen/f5"
+                            android:id="@+id/check_text_type"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_round_normal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+            >
+                <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_round_info"
+                />
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:text="模块信息"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ff000000"
+                            android:textSize="@dimen/f4"
+                    />
+                    <TextView
+                            android:text="模块版本: 未知"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:id="@+id/main_module_version"
+                            android:textSize="@dimen/f6"
+                    />
+                    <TextView
+                            android:text="更新模块后重启皮皮搞笑后即可生效"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="@dimen/f6"
+                    />
+                    <TextView
+                            android:text="请在(皮皮搞笑主界面 > 我的 > 设置 > 皮皮助手)中进行模块设置"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="@dimen/f6"
+                    />
+                    <TextView
+                            android:text="作者: lliiooll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="@dimen/f6"
+                    />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/main_select_github"
+            >
+                <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_github"
+                />
+                <TextView
+                        android:text="源代码 ☞Github"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#ff000000"
+                        android:textSize="@dimen/f5"
+                />
+
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/main_select_group"
+            >
+                <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_group"
+                />
+                <TextView
+                        android:text="加入QQ群"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#ff000000"
+                        android:textSize="@dimen/f5"
+                />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/main_select_about"
+            >
+                <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_round_about"
+                />
+                <TextView
+                        android:text="关于模块"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#ff000000"
+                        android:textSize="@dimen/f5"
+                />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
