@@ -11,6 +11,9 @@ public class Hooks {
             SettingHook.INSTANCE,
             RemoveADHook.INSTANCE,
             NoMarkHook.INSTANCE,
+            CustomVoiceHook.INSTANCE,
+            AriaInitHook.INSTANCE,
+            RemoveLiveHook.INSTANCE,
             TestHook.INSTANCE,
     };
 
@@ -26,9 +29,9 @@ public class Hooks {
         } else {
             for (BaseHook hook : hooks) {
                 if (hook.isEnable()) {
-                    PLog.log("初始化hook: {}@{}", hook.getName(), hook.init());
+                    PLog.log("初始化hook: {}({})@{}", hook.getLabel(), hook.getName(), hook.init());
                 } else
-                    PLog.log("hook被禁用: {}@{}", hook.getName());
+                    PLog.log("hook被禁用: {}({})@{}", hook.getLabel(), hook.getName());
             }
         }
         inited = true;

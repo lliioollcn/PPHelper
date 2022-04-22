@@ -1,6 +1,8 @@
 package cn.lliiooll.pphelper.config;
 
+import cn.lliiooll.pphelper.hook.AriaInitHook;
 import cn.lliiooll.pphelper.hook.BaseHook;
+import cn.lliiooll.pphelper.hook.SettingHook;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
 import com.tencent.mmkv.MMKV;
@@ -40,7 +42,7 @@ public class ConfigManager {
      * @param enable   启用(true)/禁用(false)
      */
     public static void setEnable(BaseHook baseHook, boolean enable) {
-        setEnable(baseHook.getName(), enable);
+        setEnable(baseHook.getLabel(), enable);
     }
 
     /**
@@ -51,6 +53,8 @@ public class ConfigManager {
      */
     public static void setEnable(String hookName, boolean enable) {
         if (!inited || Objects.isNull(mmkv)) return;
+        if (hookName.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) enable = true;
+        if (hookName.equalsIgnoreCase(AriaInitHook.INSTANCE.getLabel())) enable = true;
         mmkv.encode(hookName, enable);
 
     }
@@ -60,7 +64,7 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(BaseHook baseHook) {
-        return isEnable(baseHook.getName());
+        return isEnable(baseHook.getLabel());
     }
 
     /**
@@ -68,7 +72,9 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(String baseHook) {
-        if (!inited || Objects.isNull(mmkv)) return true;
+        if (!inited || Objects.isNull(mmkv)) return false;
+        if (baseHook.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) return true;
+        if (baseHook.equalsIgnoreCase(AriaInitHook.INSTANCE.getLabel())) return true;
         return mmkv.decodeBool(baseHook, true);
     }
 }

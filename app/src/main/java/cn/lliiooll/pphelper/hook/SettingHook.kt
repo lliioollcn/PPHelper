@@ -16,7 +16,7 @@ import cn.lliiooll.pphelper.utils.showShortToast
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
-object SettingHook : BaseHook("setting") {
+object SettingHook : BaseHook("setting","设置界面") {
     override fun init(): Boolean {
         val settingC = "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity".loadClass()
         XposedHelpers.findAndHookMethod(settingC, "onCreate", Bundle::class.java, object : XC_MethodHook() {

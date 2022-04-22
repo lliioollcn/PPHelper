@@ -4,6 +4,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'cn.lliiooll.dhl.plugin'
+    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
@@ -18,6 +19,12 @@ android {
         multiDexEnabled = false
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
     }
 
     aaptOptions {
@@ -27,8 +34,14 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             kotlinOptions.suppressWarnings = true
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -51,7 +64,14 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.preference:preference:1.2.0'
+
     implementation 'com.tencent:mmkv-static:1.1.1'
-    compileOnly 'de.robv.android.xposed:api:82'
+    implementation 'me.laoyuyu.aria:core:3.8.16'
+    implementation 'cn.hutool:hutool-all:5.7.22'
+
+    annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
+    kapt 'me.laoyuyu.aria:compiler:3.8.16'
+
     compileOnly fileTree('lib')
+    compileOnly 'de.robv.android.xposed:api:82'
 }

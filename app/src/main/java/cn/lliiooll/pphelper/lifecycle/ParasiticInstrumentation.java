@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import androidx.annotation.Nullable;
 import cn.lliiooll.pphelper.activity.SettingsActivity;
 import cn.lliiooll.pphelper.startup.StartupHook;
+import cn.lliiooll.pphelper.utils.PLog;
 
 public class ParasiticInstrumentation extends Instrumentation {
     private final Instrumentation mBase;
@@ -26,6 +27,11 @@ public class ParasiticInstrumentation extends Instrumentation {
     @Override
     public Activity newActivity(ClassLoader cl, String className, Intent intent)
             throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        PLog.log("==================================================");
+        PLog.log("新的界面被创建: {},intent: {}", className, intent);
+        PLog.log("当前堆栈: ");
+        PLog.printStacks();
+        PLog.log("==================================================");
         try {
             return mBase.newActivity(cl, className, intent);
         } catch (Exception e) {
@@ -250,6 +256,11 @@ public class ParasiticInstrumentation extends Instrumentation {
                                 Application application, Intent intent, ActivityInfo info, CharSequence title,
                                 Activity parent, String id, Object lastNonConfigurationInstance)
             throws IllegalAccessException, InstantiationException {
+        PLog.log("==================================================");
+        PLog.log("新的界面被创建: {},intent: {}", clazz.getName(), intent);
+        PLog.log("当前堆栈: ");
+        PLog.printStacks();
+        PLog.log("==================================================");
         return mBase
                 .newActivity(clazz, context, token, application, intent, info, title, parent, id,
                         lastNonConfigurationInstance);

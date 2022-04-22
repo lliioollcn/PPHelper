@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="match_parent">
+    <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textColor="#ff000000"
+            android:layout_gravity="left"
+            android:textSize="@dimen/f4"
+            android:scaleType="centerInside"
+            android:id="@+id/setting_child_title"
+    />
+    <Switch
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:id="@+id/setting_child_content"
+            android:scaleType="centerInside"
+            android:thumb="@drawable/style_switch_thumb"
+            android:track="@drawable/style_switch_track_selector"
+    />
+</LinearLayout>

@@ -17,41 +17,19 @@ import cn.lliiooll.pphelper.utils.PermissionUtils
 import cn.lliiooll.pphelper.utils.Utils
 import cn.lliiooll.pphelper.utils.addSetting
 import cn.lliiooll.pphelper.utils.showShortToast
+import com.arialyy.aria.core.Aria
 
-class SettingsActivity : Activity(), OnClickListener {
+class DownloadActivity : Activity(), OnClickListener {
 
     private val requestId: Int = 0x7c0c8cf
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        setContentView(R.layout.download_activity)
         if (!PermissionUtils.checkPermissions(Utils.getApplication())) {
             PermissionUtils.requirePermissions(this, this.requestId)
         }
-        val app_setting_base_parent = findViewById<LinearLayout>(R.id.app_setting_base_parent)// 基础功能
-        val app_setting_play_parent = findViewById<LinearLayout>(R.id.app_setting_play_parent)// 娱乐功能
-        val app_setting_clean_parent = findViewById<LinearLayout>(R.id.app_setting_clean_parent)// 净化功能
-        val app_setting_debug_parent = findViewById<LinearLayout>(R.id.app_setting_debug_parent)// 调试功能
-        NoMarkHook.addSetting(this, app_setting_base_parent)
-        RemoveADHook.addSetting(this, app_setting_base_parent)
-        TestHook.addSetting(this, app_setting_debug_parent)
-        CustomVoiceHook.setClickListener {
-            "还没写呢".showShortToast()
-        }
-        CustomVoiceHook.addSetting(this, app_setting_play_parent)
-        RemoveLiveHook.setClickListener {
-            "还没写呢".showShortToast()
-        }
-        RemoveLiveHook.addSetting(this, app_setting_clean_parent)
-        /*
-        val switch_noad = findViewById<Switch>(R.id.switch_noad)
-        val switch_nomark = findViewById<Switch>(R.id.switch_nomark)
-        switch_noad.isChecked = ConfigManager.isEnable("remove_ad")
-        switch_noad.setOnClickListener(this)
-        switch_nomark.isChecked = ConfigManager.isEnable("no_mark")
-        switch_nomark.setOnClickListener(this)
-
-         */
+        Aria.download(this).register()
     }
 
     override fun onClick(view: View?) {

@@ -4,6 +4,7 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google/' }
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.0"

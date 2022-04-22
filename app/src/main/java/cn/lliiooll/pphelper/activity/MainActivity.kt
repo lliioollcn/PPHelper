@@ -36,34 +36,25 @@ class MainActivity : Activity(), OnClickListener {
         }
         main_module_version.text = "模块版本: " + BuildConfig.VERSION_NAME
         val main_select_github = findViewById<LinearLayout>(R.id.main_select_github)
-        main_select_github.setOnClickListener {
-            "https://github.com/lliioollcn/PPHelper".openUrl(this)
-        }
         val main_select_group = findViewById<LinearLayout>(R.id.main_select_group)
-        main_select_group.setOnClickListener {
-            "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=1028233124&card_type=group&source=qrcode".openUrl(
-                this
-            )
-        }
         val main_select_about = findViewById<LinearLayout>(R.id.main_select_about)
-        main_select_about.setOnClickListener {
-            this.open(AboutActivity::class.java)
-        }
+        main_select_github.setOnClickListener(this)
+        main_select_group.setOnClickListener(this)
+        main_select_about.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.switch_noad -> {
-                val switch = view as Switch
-                ConfigManager.setEnable("remove_ad", switch.isChecked)
-                "保存成功".showShortToast()
+            R.id.main_select_github -> {
+                "https://github.com/lliioollcn/PPHelper".openUrl(this)
             }
-            R.id.switch_nomark -> {
-                val switch = view as Switch
-                "该功能还没实现".showShortToast()
-                switch.isChecked = false
-                //ConfigManager.setEnable("no_mark", switch.isChecked)
-                //"保存成功".showShortToast()
+            R.id.main_select_group -> {
+                "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=1028233124&card_type=group&source=qrcode".openUrl(
+                    this
+                )
+            }
+            R.id.main_select_about -> {
+                this.open(AboutActivity::class.java)
             }
         }
     }

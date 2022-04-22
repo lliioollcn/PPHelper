@@ -6,8 +6,9 @@ import cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
-object TestHook : BaseHook("test") {
+object TestHook : BaseHook("test", "测试hook") {
     override fun init(): Boolean {
+        this.desc = "测试hook"
         XposedHelpers.findAndHookMethod(
             MainActivity::class.java,
             "onCreate",

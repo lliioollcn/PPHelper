@@ -7,8 +7,9 @@ import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 import java.util.*
 
-object RemoveADHook : BaseHook("remove_ad") {
+object RemoveADHook : BaseHook("remove_ad", "去广告") {
     override fun init(): Boolean {
+        this.desc = "启用后将去除应用内所有广告"
         val hermesC = "cn.xiaochuankeji.hermes.core.Hermes".loadClass()
         for (m in hermesC?.declaredMethods!!) {
             if (m.name.contains("create") && m.name.contains("AD")) {
