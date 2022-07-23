@@ -74,7 +74,8 @@ public class Parasitics {
      */
     private static void checkInject(Resources res) throws Resources.NotFoundException {
         try {
-            res.getString(R.string.res_inject_success);
+            res.getLayout(R.layout.settings_activity);
+            //res.getString(R.string.res_inject_success);
         } catch (Resources.NotFoundException ignored) {
             throw new Resources.NotFoundException();
         }

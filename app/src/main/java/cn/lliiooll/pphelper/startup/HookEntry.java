@@ -54,5 +54,6 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         modulePath = startupParam.modulePath;
+        PLog.log("模块路径: " + modulePath);
     }
 }

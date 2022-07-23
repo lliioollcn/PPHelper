@@ -17,8 +17,9 @@ import cn.lliiooll.pphelper.utils.PermissionUtils
 import cn.lliiooll.pphelper.utils.Utils
 import cn.lliiooll.pphelper.utils.addSetting
 import cn.lliiooll.pphelper.utils.showShortToast
+import cn.xiaochuankeji.zuiyouLite.ui.base.BaseActivity
 
-class SettingsActivity : Activity(), OnClickListener {
+class SettingsActivity : BaseActivity(), OnClickListener {
 
     private val requestId: Int = 0x7c0c8cf
 

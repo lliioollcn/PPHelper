@@ -11,10 +11,13 @@ public class HostInfo {
     }
 
     public static boolean isSupport() {
+        /*
         if (BuildConfig.VERSION_CODE < 207029) {
             PLog.log("不支持的版本: {}", BuildConfig.VERSION_NAME);
             return false;
         }
+
+         */
         return true;
     }
 }

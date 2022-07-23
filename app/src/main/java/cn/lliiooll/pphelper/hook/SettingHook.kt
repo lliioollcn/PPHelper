@@ -31,7 +31,6 @@ object SettingHook : BaseHook("setting","设置界面") {
                 tvVersion.text = BuildConfig.VERSION_NAME
                 relaCheckUpdate.setOnClickListener {
                     "点击了检查更新".showShortToast()
-
                     val intent = Intent(activity, SettingsActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     Utils.getApplication().startActivity(intent)

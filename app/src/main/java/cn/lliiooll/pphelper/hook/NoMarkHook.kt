@@ -3,6 +3,8 @@ package cn.lliiooll.pphelper.hook
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.View.OnClickListener
 import cn.lliiooll.pphelper.utils.*
 import cn.xiaochuankeji.zuiyouLite.data.post.ServerImageBean
 import cn.xiaochuankeji.zuiyouLite.data.post.ServerVideoBean
@@ -36,28 +38,67 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                     }
                 })
                 break
+            } else {
+                m.hook(object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam?) {
+                        PLog.log("\n========================================")
+                        PLog.log(
+                            "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
+                            param?.thisObject?.javaClass?.simpleName,
+                            m.name,
+                            m.parameterCount,
+                            Arrays.toString(m.parameterTypes),
+                            Arrays.toString(param?.args)
+                        )
+                        PLog.printStacks()
+                        PLog.log("========================================\n")
+                    }
+                })
             }
 
         }
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.download.MediaFileDownloadListener".loadClass()
-        val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass()
+        val clazz1 = "cn.xiaochuankeji.zuiyouLite.control.main2.MainSchedulerControl".loadClass()
+        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass()
+        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass()
         for (m in clazz1?.declaredMethods!!) {
             PLog.log("寻找方法: {},{}@({})", m.name, m.parameterCount, Arrays.toString(m.parameterTypes))
-            m.hook(object : XC_MethodHook() {
-                override fun afterHookedMethod(param: MethodHookParam?) {
-                    PLog.log("\n========================================")
-                    PLog.log(
-                        "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
-                        param?.thisObject?.javaClass?.simpleName,
-                        m.name,
-                        m.parameterCount,
-                        Arrays.toString(m.parameterTypes),
-                        Arrays.toString(param?.args)
-                    )
-                    PLog.printStacks()
-                    PLog.log("========================================\n")
-                }
-            })
+            if (m.name == "b" && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {
+                PLog.log("找到方法!")
+                m.hook(object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam?) {
+                        PLog.log("\n========================================")
+                        PLog.log(
+                            "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
+                            param?.thisObject?.javaClass?.name,
+                            m.name,
+                            m.parameterCount,
+                            Arrays.toString(m.parameterTypes),
+                            Arrays.toString(param?.args)
+                        )
+                        //PLog.printStacks()
+                        PLog.log("========================================\n")
+                        val dwBtn: View = XposedHelpers.getObjectField(param?.thisObject, "downloadBtn") as View
+                        dwBtn.setOnClickListener {
+                            PLog.log("下载按钮被点击")
+                            val clazz = "f.g.x.i.a.e".loadClass()
+                            for (m1 in clazz?.declaredMethods!!) {
+                                PLog.log(
+                                    "寻找方法(在混淆方法中): {},{}@({})",
+                                    m.name,
+                                    m.parameterCount,
+                                    Arrays.toString(m.parameterTypes)
+                                )
+                            }
+                            val click: OnClickListener = XposedHelpers.newInstance(
+                                clazz,
+                                param?.thisObject
+                            ) as OnClickListener
+                            click.onClick(it)
+                        }
+                    }
+                })
+            }
         }
         return true
     }

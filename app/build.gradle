@@ -19,16 +19,11 @@ android {
         multiDexEnabled = false
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
-            }
-        }
 
     }
 
     aaptOptions {
-        additionalParameters("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0x37")
+        additionalParameters("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0xcf")
     }
 
     buildTypes {
