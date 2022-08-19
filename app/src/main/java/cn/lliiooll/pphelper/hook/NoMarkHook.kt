@@ -20,7 +20,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
         this.desc = "启用后将替换帖子右下角的保存至相册按钮，评论视频请长按选择保存至相册"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.postlist.holder.PostOperator".loadClass()
         for (m in clazz?.declaredMethods!!) {
-            if (m.name == "a" && m.parameterCount == 5 && m.parameterTypes[0] == Activity::class.java && m.parameterTypes[1] == String::class.java) {
+            if (m.parameterCount == 5 && m.parameterTypes[0] == Activity::class.java && m.parameterTypes[1] == String::class.java) {
                 PLog.log("找到下载视频的方法")
                 m.hook(object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
