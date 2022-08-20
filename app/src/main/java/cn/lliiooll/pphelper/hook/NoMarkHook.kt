@@ -60,6 +60,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                     }
                 }
             }
+            /*
             if (m.name == "w0" && m.parameterCount == 2) {
                 m.replace {
                     PLog.log("开始下载视频")
@@ -68,6 +69,8 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                     serverImages.download()
                 }
             }
+
+             */
         }
         /*
           if ((m.name == "b" || m.name == "v") && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {
