@@ -1,18 +1,9 @@
 package cn.lliiooll.pphelper.hook
 
 import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.view.View.OnClickListener
 import cn.lliiooll.pphelper.utils.*
-import cn.xiaochuankeji.zuiyouLite.data.post.ServerImageBean
-import cn.xiaochuankeji.zuiyouLite.data.post.ServerVideoBean
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
-import java.lang.reflect.Method
 import java.util.*
 
 object NoMarkHook : BaseHook("no_mark", "去水印") {
@@ -24,17 +15,8 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                 PLog.log("找到下载视频的方法")
                 m.hook(object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
-                        val imageBean = param?.args?.get(2) as ServerImageBean
-                        val isVideo = XposedHelpers.callMethod(imageBean, "imageIsVideo") as Boolean
-                        if (isVideo) {
-                            val videoBean = XposedHelpers.getObjectField(imageBean, "videoBean") as ServerVideoBean
-                            val urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
-                            val thumbId = XposedHelpers.getObjectField(videoBean, "thumbId") as Long
-                            ("无水印链接获取成功: " + urlSrc).log()
-                            DownloadManager.download(thumbId, urlSrc)
-                            "开始下载".showShortToast()
-                        }
-
+                        val imageBean = param?.args?.get(2)
+                        imageBean.download()
                     }
                 })
                 break
@@ -58,12 +40,37 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
 
         }
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.download.MediaFileDownloadListener".loadClass()
-        val clazz1 = "cn.xiaochuankeji.zuiyouLite.control.main2.MainSchedulerControl".loadClass()
+        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.control.main2.MainSchedulerControl".loadClass()
+        val clazz1 = "j.g.w.f0.f0.n1.g.z".loadClass()
+        //val clazz1 = "j.g.w.f0.x.e.c0\$q".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass()
         for (m in clazz1?.declaredMethods!!) {
             PLog.log("寻找方法: {},{}@({})", m.name, m.parameterCount, Arrays.toString(m.parameterTypes))
-            if (m.name == "b" && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {
+            if (m.name == "u0" && m.parameterCount == 1) {
+                val commentBeanClass = "cn.xiaochuankeji.zuiyouLite.data.CommentBean".loadClass()
+                m.replace {
+                    PLog.log("开始下载视频")
+                    val obj = it?.thisObject
+                    val commentBean = it?.args?.get(0)
+                    val serverImageF = commentBeanClass?.getDeclaredField("serverImages")
+                    val serverImages = serverImageF?.get(commentBean) as List<*>
+                    for (img in serverImages) {
+                        img.download()
+                    }
+                }
+            }
+            if (m.name == "w0" && m.parameterCount == 2) {
+                m.replace {
+                    PLog.log("开始下载视频")
+                    val obj = it?.thisObject
+                    val serverImages = it?.args?.get(0)
+                    serverImages.download()
+                }
+            }
+        }
+        /*
+          if ((m.name == "b" || m.name == "v") && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {
                 PLog.log("找到方法!")
                 m.hook(object : XC_MethodHook() {
                     override fun afterHookedMethod(param: MethodHookParam?) {
@@ -79,27 +86,60 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                         //PLog.printStacks()
                         PLog.log("========================================\n")
                         val dwBtn: View = XposedHelpers.getObjectField(param?.thisObject, "downloadBtn") as View
-                        dwBtn.setOnClickListener {
-                            PLog.log("下载按钮被点击")
-                            val clazz = "f.g.x.i.a.e".loadClass()
-                            for (m1 in clazz?.declaredMethods!!) {
-                                PLog.log(
-                                    "寻找方法(在混淆方法中): {},{}@({})",
-                                    m.name,
-                                    m.parameterCount,
-                                    Arrays.toString(m.parameterTypes)
-                                )
+                        val listenerInfo = XposedHelpers.callMethod(dwBtn, "getListenerInfo")
+                        val mOnClickListener = XposedHelpers.getObjectField(listenerInfo, "mOnClickListener")
+                        if (mOnClickListener != null) {
+                            dwBtn.setOnClickListener {
+                                PLog.log("下载按钮被点击")
+                                val clazz = mOnClickListener.javaClass
+                                //PLog.log(clazz, mOnClickListener)
+                                for (m in clazz1.declaredMethods) {
+                                    if (m.name == "n0" && m.parameterCount == 1) {
+                                        val type = m.parameterTypes[0];
+                                        PLog.log(type)
+                                    }
+                                }
+                                /*
+                                for (f in clazz.declaredFields) {
+                                    if (f.name == "a") {
+                                        f.isAccessible = true
+                                        PLog.log(f.type, f.get(mOnClickListener))
+                                    }
+                                }
+
+                                 */
+                                val click: OnClickListener = XposedHelpers.newInstance(
+                                    clazz,
+                                    param?.thisObject
+                                ) as OnClickListener
+                                click.onClick(it)
                             }
-                            val click: OnClickListener = XposedHelpers.newInstance(
-                                clazz,
-                                param?.thisObject
-                            ) as OnClickListener
-                            click.onClick(it)
                         }
+
                     }
                 })
             }
-        }
+            if (m.name == "n0" && m.parameterCount == 1) {
+                m.hook(object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam?) {
+                        PLog.log("\n========================================")
+                        PLog.log(
+                            "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
+                            param?.thisObject?.javaClass?.name,
+                            m.name,
+                            m.parameterCount,
+                            Arrays.toString(m.parameterTypes),
+                            Arrays.toString(param?.args)
+                        )
+                        //PLog.printStacks()
+                        PLog.log("========================================\n")
+                        PLog.printStacks()
+                    }
+                })
+            }
+         */
         return true
     }
 }
+
+

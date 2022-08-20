@@ -61,8 +61,8 @@ object DownloadManager {
     fun complete(task: DownloadTask) {
         "任务 ${task.taskName}(${task.entity.fileName}) 下载完成(从 ${task.entity.realUrl} 到 ${task.entity.filePath})".log()
         saveToStore(task.entity.fileName, task.entity.filePath)
-        "视频下载完毕".showShortToast()
-        "视频下载完毕".log()
+        "无水印视频下载完毕".showShortToast()
+        "无水印视频下载完毕".log()
     }
 
     fun saveToStore(fileName: String?, filePath: String) {

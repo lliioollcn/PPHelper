@@ -5,26 +5,26 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.hook.BaseHook
 import cn.lliiooll.pphelper.startup.HybridClassLoader
 import cn.xiaochuankeji.zuiyouLite.app.AppController
+import cn.xiaochuankeji.zuiyouLite.data.post.ServerVideoBean
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import java.lang.reflect.Member
+import java.lang.reflect.Method
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 import kotlin.random.Random
 
 object Utils {
@@ -73,6 +73,41 @@ fun Activity.open(clazz: Class<*>) {
 
 fun Member.hook(callback: XC_MethodHook) {
     XposedBridge.hookMethod(this, callback)
+}
+
+fun Method.hookAfter(callback: (XC_MethodHook.MethodHookParam?) -> Unit) {
+    XposedBridge.hookMethod(this, object : XC_MethodHook() {
+        override fun afterHookedMethod(param: MethodHookParam?) {
+            callback.invoke(param)
+        }
+    })
+}
+
+fun Method.replace(callback: (XC_MethodHook.MethodHookParam?) -> Unit) {
+    XposedBridge.hookMethod(this, object : XC_MethodReplacement() {
+        override fun replaceHookedMethod(param: MethodHookParam?): Any {
+            return callback.invoke(param)
+        }
+    })
+}
+
+fun Any?.download() {
+    if (this?.javaClass?.name?.contains("ServerImageBean") == true) {
+        val isVideo = XposedHelpers.callMethod(this, "imageIsVideo") as Boolean
+        if (isVideo) {
+            val videoBean = XposedHelpers.getObjectField(this, "videoBean") as ServerVideoBean
+            val urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
+            val thumbId = XposedHelpers.getObjectField(videoBean, "thumbId") as Long
+            ("无水印链接获取成功: " + urlSrc).log()
+            DownloadManager.download(thumbId, urlSrc)
+            "开始无水印下载".showShortToast()
+        } else {
+            "不是视频".log()
+        }
+    } else {
+        ("什么几把东西: " + this?.javaClass?.name).log()
+    }
+
 }
 
 fun CharSequence.showShortToast() {
