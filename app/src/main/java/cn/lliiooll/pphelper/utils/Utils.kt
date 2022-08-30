@@ -54,6 +54,12 @@ object Utils {
     fun loadClass(name: String): Class<*>? {
         return XposedHelpers.findClass(name, HybridClassLoader.clLoader)
     }
+
+    @JvmStatic
+    fun isNotBlank(s: String): Boolean {
+        return s.isNotEmpty()
+
+    }
 }
 
 

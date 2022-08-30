@@ -18,6 +18,7 @@ crash-report-*
 /android/libs/x86/
 /android/libs/x86_64/
 /android/gen/
+/app/.cxx/
 .idea/
 *.ipr
 *.iws

@@ -4,6 +4,7 @@ import android.content.Context;
 import cn.lliiooll.pphelper.config.ConfigManager;
 import cn.lliiooll.pphelper.hook.Hooks;
 import cn.lliiooll.pphelper.lifecycle.Parasitics;
+import cn.lliiooll.pphelper.utils.DexKit;
 import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
@@ -29,11 +30,12 @@ public class StartupHook {
      */
     public static void init(Object instance, ClassLoader xposedClassLoader) throws Throwable {
         injectClassLoader(instance, xposedClassLoader);
+        DexKit.init();
         Parasitics.injectModuleResources(Utils.getApplication().getResources());
         Parasitics.initForStubActivity(Utils.getApplication());
         ConfigManager.init();
         HostInfo.init();
-        Hooks.init();
+        Hooks.init(instance);
     }
 
     /**

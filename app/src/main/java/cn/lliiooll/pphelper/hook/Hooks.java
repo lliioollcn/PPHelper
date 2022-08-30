@@ -1,7 +1,11 @@
 package cn.lliiooll.pphelper.hook;
 
+import cn.lliiooll.pphelper.utils.DexKit;
 import cn.lliiooll.pphelper.utils.PLog;
-import cn.xiaochuankeji.zuiyouLite.R$id;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Hooks {
 
@@ -20,9 +24,23 @@ public class Hooks {
     /**
      * 初始化hook
      */
-    public static void init() {
+    public static void init(Object instance) {
         if (inited) return;
         PLog.log("正在初始化hook...");
+        PLog.log("正在寻找被混淆的类...");
+        String result = DexKit.find(instance.getClass().getClassLoader(), new HashMap<String, Set<String>>() {{
+            put(DexKit.OBF_COMMENT_VIDEO, new HashSet<String>() {{
+                add("event_media_play_observer");
+                add("event_on_play_review_comment");
+                add("post");
+                add("review");
+                add("+%d");
+                add("http://alfile.ippzone.com/img/mp4/id/");
+                add("videocomment");
+            }});
+        }});
+        PLog.log("查找结果: " + result);
+        DexKit.cache(result);
         if (sDisableHooks) {
             PLog.log("禁用了所有的hook...");
             SettingHook.INSTANCE.init();

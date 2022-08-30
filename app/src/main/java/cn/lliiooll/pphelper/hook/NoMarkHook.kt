@@ -11,7 +11,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
         this.desc = "启用后将替换帖子右下角的保存至相册按钮，评论视频请长按选择保存至相册"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.postlist.holder.PostOperator".loadClass()
         for (m in clazz?.declaredMethods!!) {
-            if (m.parameterCount == 5 && m.parameterTypes[0] == Activity::class.java && m.parameterTypes[1] == String::class.java) {
+            if (m.parameterTypes.size == 5 && m.parameterTypes[0] == Activity::class.java && m.parameterTypes[1] == String::class.java) {
                 PLog.log("找到下载视频的方法")
                 m.hook(object : XC_MethodReplacement() {
                     override fun replaceHookedMethod(param: MethodHookParam?) {
@@ -28,7 +28,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                             "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
                             param?.thisObject?.javaClass?.simpleName,
                             m.name,
-                            m.parameterCount,
+                            m.parameterTypes.size,
                             Arrays.toString(m.parameterTypes),
                             Arrays.toString(param?.args)
                         )
@@ -41,24 +41,44 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
         }
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.download.MediaFileDownloadListener".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.control.main2.MainSchedulerControl".loadClass()
-        val clazz1 = "j.g.w.f0.f0.n1.g.z".loadClass()
+
+        val clazz1 = DexKit.load(DexKit.OBF_COMMENT_VIDEO)
         //val clazz1 = "j.g.w.f0.x.e.c0\$q".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass()
+
+        val commentBeanClass = "cn.xiaochuankeji.zuiyouLite.data.CommentBean".loadClass()
         for (m in clazz1?.declaredMethods!!) {
-            PLog.log("寻找方法: {},{}@({})", m.name, m.parameterCount, Arrays.toString(m.parameterTypes))
-            if (m.name == "u0" && m.parameterCount == 1) {
-                val commentBeanClass = "cn.xiaochuankeji.zuiyouLite.data.CommentBean".loadClass()
+            PLog.log(
+                "寻找方法: {},{}:{}@({})",
+                m.name,
+                m.parameterCount,
+                m.returnType.name,
+                Arrays.toString(m.parameterTypes)
+            )
+            if (m.name == "u0" && m.parameterCount == 1 && m.parameterTypes[0] == commentBeanClass) {
+
+                PLog.log(
+                    "找到方法: {},{}:{}@({})",
+                    m.name,
+                    m.parameterCount,
+                    m.returnType.name,
+                    Arrays.toString(m.parameterTypes)
+                )
                 m.replace {
                     PLog.log("开始下载视频")
                     val obj = it?.thisObject
                     val commentBean = it?.args?.get(0)
                     val serverImageF = commentBeanClass?.getDeclaredField("serverImages")
-                    val serverImages = serverImageF?.get(commentBean) as List<*>
-                    for (img in serverImages) {
-                        img.download()
+                    val serverImageO = serverImageF?.get(commentBean)
+                    if (serverImageO != null) {
+                        val serverImages = serverImageF.get(commentBean) as List<*>
+                        for (img in serverImages) {
+                            img.download()
+                        }
                     }
                 }
+                break
             }
             /*
             if (m.name == "w0" && m.parameterCount == 2) {
@@ -72,6 +92,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
 
              */
         }
+
         /*
           if ((m.name == "b" || m.name == "v") && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {
                 PLog.log("找到方法!")
