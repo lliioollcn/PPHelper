@@ -1,0 +1,3 @@
+[submodule "app/src/main/cpp/DexKit"]
+	path = app/src/main/cpp/DexKit
+	url = https://github.com/LuckyPray/DexKit
