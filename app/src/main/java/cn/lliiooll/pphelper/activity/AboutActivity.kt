@@ -27,6 +27,8 @@ class AboutActivity : Activity(), OnClickListener {
         val about_os_qn = findViewById<LinearLayout>(R.id.about_os_qn)
         val about_os_xposed = findViewById<LinearLayout>(R.id.about_os_xposed)
         val about_os_mmkv = findViewById<LinearLayout>(R.id.about_os_mmkv)
+        val about_os_xa = findViewById<LinearLayout>(R.id.about_os_xa)
+        val about_os_dexkit = findViewById<LinearLayout>(R.id.about_os_dexkit)
         about_version.text = BuildConfig.VERSION_NAME
         about_time.text = BuildConfig.BUILD_TIMESTAMP.parseDate()
         about_back.setOnClickListener(this)
@@ -36,6 +38,8 @@ class AboutActivity : Activity(), OnClickListener {
         about_os_qn.setOnClickListener(this)
         about_os_xposed.setOnClickListener(this)
         about_os_mmkv.setOnClickListener(this)
+        about_os_xa.setOnClickListener(this)
+        about_os_dexkit.setOnClickListener(this)
 
     }
 
@@ -44,23 +48,39 @@ class AboutActivity : Activity(), OnClickListener {
             R.id.about_back -> {
                 this.onBackPressed()
             }
+
             R.id.about_eula -> {
                 this.open(EulaActivity::class.java)
             }
+
             R.id.about_group_qq -> {
-                "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=1028233124&card_type=group&source=qrcode".openUrl(this)
+                "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=1028233124&card_type=group&source=qrcode".openUrl(
+                    this
+                )
             }
+
             R.id.about_code_github -> {
                 "https://github.com/lliioollcn/PPHelper".openUrl(this)
             }
+
             R.id.about_os_qn -> {
                 "https://github.com/ferredoxin/QNotified".openUrl(this)
             }
+
             R.id.about_os_xposed -> {
                 "https://github.com/rovo89/XposedBridge".openUrl(this)
             }
+
             R.id.about_os_mmkv -> {
                 "https://github.com/Tencent/MMKV".openUrl(this)
+            }
+
+            R.id.about_os_xa -> {
+                "https://github.com/LuckyPray/XAutoDaily".openUrl(this)
+            }
+
+            R.id.about_os_dexkit -> {
+                "https://github.com/LuckyPray/DexKit".openUrl(this)
             }
         }
     }
