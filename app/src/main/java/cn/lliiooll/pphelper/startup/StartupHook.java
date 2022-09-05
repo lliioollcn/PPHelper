@@ -31,7 +31,6 @@ public class StartupHook {
      */
     public static void init(Object instance, ClassLoader xposedClassLoader) throws Throwable {
         injectClassLoader(instance, xposedClassLoader);
-        Toast.makeText(Utils.getApplication(),"正在寻找被混淆的类...",Toast.LENGTH_LONG).show();
         DexKit.init();
         Parasitics.injectModuleResources(Utils.getApplication().getResources());
         Parasitics.initForStubActivity(Utils.getApplication());
