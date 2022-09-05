@@ -47,8 +47,8 @@ object RemoveADHook : BaseHook("remove_ad", "去广告") {
                 override fun beforeHookedMethod(param: MethodHookParam?) {
                     val what: Int = param?.args?.get(0) as Int
                     if (what == 29) {
-                        PLog.log("空信道消息: 29")
-                        param.args[1] = 1000L
+                        PLog.log("空信道消息: " + what)
+                        param.args[1] = 10L
                     }
                 }
             })

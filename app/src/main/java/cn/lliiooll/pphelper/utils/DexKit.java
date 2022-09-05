@@ -1,6 +1,8 @@
 package cn.lliiooll.pphelper.utils;
 
 
+import android.widget.Toast;
+
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,6 +58,7 @@ public class DexKit {
                 PLog.log("未找到合适的类: \n" + Arrays.toString(tokens.toArray()));
             }
         });
+        Toast.makeText(Utils.getApplication(),"加载完毕",Toast.LENGTH_LONG).show();
     }
 
     public static String doFilter(String key, List<String> classes) {
