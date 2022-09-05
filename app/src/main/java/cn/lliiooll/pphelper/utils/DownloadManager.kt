@@ -34,11 +34,10 @@ object DownloadManager {
         val file = File(dir, "${thumbId}.mp4")
         if (file.exists()) {
             "文件已存在: ${file.absoluteFile}".log()
-            return
+            file.delete()
         }
         "文件不存在: ${file.absoluteFile}".log()
         Aria.download(this).load(urlSrc).setFilePath(file.absolutePath).create()
-
     }
 
     @Download.onTaskStart
@@ -95,5 +94,6 @@ object DownloadManager {
                 resolver.update(localUri, values, null, null)
             }
         }
+        file.delete()
     }
 }
