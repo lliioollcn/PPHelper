@@ -1,6 +1,7 @@
 package cn.lliiooll.pphelper.utils;
 
 import android.util.Log;
+import cn.hutool.core.util.StrUtil;
 import cn.lliiooll.pphelper.BuildConfig;
 import de.robv.android.xposed.XposedBridge;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +18,23 @@ public class PLog {
             for (Object replace : replaces) {
                 s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
             }
-            s = "[PPHelper] >> " + s;
-            //XposedBridge.log(s);
-            Log.d("PPHelper", s);
+            int limit = 500;
+            if (s.length() >= limit) {
+                String q = s;
+                int c = 0;
+                for (int i = 0; i < s.length(); i += limit) {
+
+                    if (i != 0 && q.length() > limit) {
+                        q = q.substring(limit);
+                    }
+                    Log.d("PPHelper", "[PPHelper] @" + c + " >> " + q);
+                    c++;
+                }
+            } else {
+                s = "[PPHelper] >> " + s;
+                //XposedBridge.log(s);
+                Log.d("PPHelper", s);
+            }
         }
     }
 

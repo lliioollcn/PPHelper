@@ -1,7 +1,11 @@
 package cn.lliiooll.pphelper.startup;
 
+import android.app.Application;
+import android.content.Context;
 import cn.lliiooll.pphelper.R;
+import cn.lliiooll.pphelper.utils.CliOper;
 import cn.lliiooll.pphelper.utils.PLog;
+import cn.lliiooll.pphelper.utils.Utils;
 import cn.lliiooll.pphelper.utils.hookstatus.HookStatusInit;
 import cn.xiaochuankeji.zuiyouLite.app.AppController;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -38,7 +42,7 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
                 XposedHelpers.findAndHookMethod("cn.xiaochuankeji.zuiyouLite.app.AppController", lpparam.classLoader, "onCreate", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        PLog.log("开始初始化");
+                        PLog.log("开始初始化, app版本: "+ Utils.getVersion((Application) param.thisObject));
                         StartupHook.init(param.thisObject, lpparam.classLoader);
                     }
                 });

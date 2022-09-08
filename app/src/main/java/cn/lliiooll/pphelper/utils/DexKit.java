@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DexKit {
 
     public static String OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;";
+    public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
 
     private static native String find(ClassLoader loader, String input);
 
@@ -46,17 +47,18 @@ public class DexKit {
         List<String> results = new ArrayList<>(Arrays.asList(result.split("\n")));
         results.forEach(r -> {
             List<String> tokens = new ArrayList<>(Arrays.asList(r.split("\t")));
-            if (tokens.size() > 2 && Utils.isNotBlank(tokens.get(0))) {
+            if (tokens.size() > 1 && Utils.isNotBlank(tokens.get(0))) {
                 String filter = doFilter(tokens.get(0), tokens.subList(1, tokens.size()));
                 if (Utils.isNotBlank(filter)) {
                     caches.put(tokens.get(0), filter);
                     PLog.log("找到类: " + tokens.get(0) + " -> " + filter);
                 } else {
-                    PLog.log("未找到合适的类: \n" + Arrays.toString(tokens.toArray()));
+                    PLog.log("未找到合适的类(NoFilter): " + Arrays.toString(tokens.toArray()));
                 }
             } else {
-                PLog.log("未找到合适的类: \n" + Arrays.toString(tokens.toArray()));
+                PLog.log("未找到合适的类: " + Arrays.toString(tokens.toArray()));
             }
+
         });
     }
 

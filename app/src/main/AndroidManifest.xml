@@ -16,6 +16,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:requestLegacyExternalStorage="true"
+            android:dataExtractionRules="@xml/appcenter_backup_rule_h"
+            android:fullBackupContent="@xml/appcenter_backup_rule"
             android:theme="@style/Theme.PPHelper">
         <activity
                 android:name=".activity.SettingsActivity"

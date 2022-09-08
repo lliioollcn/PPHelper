@@ -1,22 +1,13 @@
 package cn.lliiooll.pphelper.activity
 
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.LinearLayout
-import android.widget.Switch
-import android.widget.TextView
 import cn.lliiooll.pphelper.R
-import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.hook.*
-import cn.lliiooll.pphelper.utils.PLog
-import cn.lliiooll.pphelper.utils.PermissionUtils
-import cn.lliiooll.pphelper.utils.Utils
-import cn.lliiooll.pphelper.utils.addSetting
-import cn.lliiooll.pphelper.utils.showShortToast
+import cn.lliiooll.pphelper.utils.*
 import cn.xiaochuankeji.zuiyouLite.ui.base.BaseActivity
 
 class SettingsActivity : BaseActivity(), OnClickListener {
@@ -44,6 +35,11 @@ class SettingsActivity : BaseActivity(), OnClickListener {
             "还没写呢".showShortToast()
         }
         RemoveLiveHook.addSetting(this, app_setting_clean_parent)
+        RemoveVoiceRoomHook.addSetting(this, app_setting_clean_parent)
+        RemoveVoiceRoomHook.setClickListener {
+            "此功能需要重启皮皮搞笑生效".showLongToast()
+        }
+        ShowHideHook.addSetting(this, app_setting_play_parent)
         /*
         val switch_noad = findViewById<Switch>(R.id.switch_noad)
         val switch_nomark = findViewById<Switch>(R.id.switch_nomark)

@@ -51,6 +51,13 @@ object Utils {
     }
 
     @JvmStatic
+    fun getVersion(ctx:Context): String {
+        val pkgMgr = ctx.packageManager
+        val info = pkgMgr.getPackageInfo(ctx.packageName, 0)
+        return info.versionName
+    }
+
+    @JvmStatic
     fun loadClass(name: String): Class<*>? {
         return XposedHelpers.findClass(name, HybridClassLoader.clLoader)
     }

@@ -18,7 +18,10 @@ public class Hooks {
             CustomVoiceHook.INSTANCE,
             AriaInitHook.INSTANCE,
             RemoveLiveHook.INSTANCE,
+            RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,
+            AccountHook.INSTANCE,
+            ShowHideHook.INSTANCE,
     };
 
     /**
@@ -37,6 +40,10 @@ public class Hooks {
                 add("+%d");
                 add("http://alfile.ippzone.com/img/mp4/id/");
                 add("videocomment");
+            }});
+            put(DexKit.OBF_ACCOUNT_SERVICE_MANAGER,new HashSet<String>(){{
+                add("avatar");
+                add("third_force_bind_phone");
             }});
         }});
         PLog.log("查找结果: " + result);
