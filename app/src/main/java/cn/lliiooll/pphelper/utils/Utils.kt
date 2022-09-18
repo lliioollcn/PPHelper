@@ -15,8 +15,6 @@ import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.hook.BaseHook
 import cn.lliiooll.pphelper.startup.HybridClassLoader
-import cn.xiaochuankeji.zuiyouLite.app.AppController
-import cn.xiaochuankeji.zuiyouLite.data.post.ServerVideoBean
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
@@ -40,7 +38,7 @@ object Utils {
 
     @JvmStatic
     fun show(str: CharSequence, length: Int) {
-        Toast.makeText(AppController.instance(), str, length).show()
+        Toast.makeText(getApplication(), str, length).show()
     }
 
     @JvmStatic
@@ -108,7 +106,7 @@ fun Any?.download() {
     if (this?.javaClass?.name?.contains("ServerImageBean") == true) {
         val isVideo = XposedHelpers.callMethod(this, "imageIsVideo") as Boolean
         if (isVideo) {
-            val videoBean = XposedHelpers.getObjectField(this, "videoBean") as ServerVideoBean
+            val videoBean = XposedHelpers.getObjectField(this, "videoBean")
             val urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
             val thumbId = XposedHelpers.getObjectField(videoBean, "thumbId") as Long
             ("无水印链接获取成功: " + urlSrc).log()

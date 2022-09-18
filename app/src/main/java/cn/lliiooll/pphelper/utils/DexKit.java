@@ -2,6 +2,7 @@ package cn.lliiooll.pphelper.utils;
 
 
 import android.widget.Toast;
+import me.teble.xposed.autodaily.dexkit.DexKitHelper;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -12,30 +13,18 @@ public class DexKit {
     public static String OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;";
     public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
 
-    private static native String find(ClassLoader loader, String input);
-
     private static Map<String, String> caches = new ConcurrentHashMap<>();
 
-    public static String find(ClassLoader loader, Map<String, Set<String>> input) {
-        StringBuilder sb = new StringBuilder();
-        input.forEach((k, v) -> {
-            List<String> list = new ArrayList<>(v);
-            sb.append(k);
-            sb.append("\t");
-            for (int i = 0; i < list.size(); i++) {
-                if (i > 0) {
-                    sb.append("\t");
-                }
-                sb.append(list.get(i));
-            }
-            sb.append("\n");
-        });
-        return find(loader, sb.toString());
+    public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
+        DexKitHelper helper = new DexKitHelper(loader);
+        Map<String, String[]> results = helper.batchFindClassesUsedStrings(input, false, new int[0]);
+        helper.release();
+        return results;
     }
 
     public static void init() {
         PLog.log("正在加载lib库...");
-        System.loadLibrary("dexkit");
+        System.loadLibrary("pp_native");
         PLog.log("加载成功！！！");
     }
 
@@ -43,22 +32,15 @@ public class DexKit {
         return caches.containsKey(key) ? Utils.loadClass(caches.get(key)) : null;
     }
 
-    public static void cache(String result) {
-        List<String> results = new ArrayList<>(Arrays.asList(result.split("\n")));
-        results.forEach(r -> {
-            List<String> tokens = new ArrayList<>(Arrays.asList(r.split("\t")));
-            if (tokens.size() > 1 && Utils.isNotBlank(tokens.get(0))) {
-                String filter = doFilter(tokens.get(0), tokens.subList(1, tokens.size()));
-                if (Utils.isNotBlank(filter)) {
-                    caches.put(tokens.get(0), filter);
-                    PLog.log("找到类: " + tokens.get(0) + " -> " + filter);
-                } else {
-                    PLog.log("未找到合适的类(NoFilter): " + Arrays.toString(tokens.toArray()));
-                }
+    public static void cache(Map<String, String[]> result) {
+        result.forEach((token, finds) -> {
+            String filter = doFilter(token, Arrays.asList(finds));
+            if (Utils.isNotBlank(filter)) {
+                caches.put(token, filter);
+                PLog.log("找到类: " + token + " -> " + filter);
             } else {
-                PLog.log("未找到合适的类: " + Arrays.toString(tokens.toArray()));
+                PLog.log("未找到合适的类(NoFilter): " + Arrays.toString(finds));
             }
-
         });
     }
 

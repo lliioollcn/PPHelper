@@ -4,8 +4,6 @@ import android.os.Bundle
 import cn.hutool.json.JSONUtil
 import cn.lliiooll.pphelper.utils.PLog
 import cn.lliiooll.pphelper.utils.loadClass
-import cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity
-import cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -13,7 +11,7 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
     override fun init(): Boolean {
         this.desc = "评论区显示隐藏评论"
         XposedHelpers.findAndHookMethod(
-            CommentDetailActivity::class.java,
+            "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass(),
             "onCreate",
             Bundle::class.java,
             object : XC_MethodHook() {
@@ -34,7 +32,7 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
                 }
             })
         XposedHelpers.findAndHookMethod(
-            ActivitySlideDetail::class.java,
+           "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass(),
             "onCreate",
             Bundle::class.java,
             object : XC_MethodHook() {

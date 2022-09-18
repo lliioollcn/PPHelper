@@ -1,7 +1,6 @@
 package cn.lliiooll.pphelper.utils;
 
 import cn.lliiooll.pphelper.hook.Hooks;
-import cn.xiaochuankeji.hermes.BuildConfig;
 
 public class HostInfo {
     public static void init() {

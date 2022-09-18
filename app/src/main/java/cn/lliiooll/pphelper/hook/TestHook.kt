@@ -5,7 +5,6 @@ import android.os.Bundle
 import cn.lliiooll.pphelper.utils.CliOper
 import cn.lliiooll.pphelper.utils.Utils
 import cn.lliiooll.pphelper.utils.loadClass
-import cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
@@ -23,7 +22,7 @@ object TestHook : BaseHook("test", "测试hook") {
                 }
             })
         XposedHelpers.findAndHookMethod(
-            MainActivity::class.java,
+           "cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity".loadClass(),
             "onCreate",
             Bundle::class.java,
             object : XC_MethodHook() {

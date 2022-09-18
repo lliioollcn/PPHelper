@@ -1,5 +1,6 @@
 package cn.lliiooll.pphelper.activity
 
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -8,9 +9,8 @@ import android.widget.LinearLayout
 import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.hook.*
 import cn.lliiooll.pphelper.utils.*
-import cn.xiaochuankeji.zuiyouLite.ui.base.BaseActivity
 
-class SettingsActivity : BaseActivity(), OnClickListener {
+class SettingsActivity : Activity(), OnClickListener {
 
     private val requestId: Int = 0x7c0c8cf
 

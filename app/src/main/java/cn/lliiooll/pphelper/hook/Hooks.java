@@ -5,6 +5,7 @@ import cn.lliiooll.pphelper.utils.PLog;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Hooks {
@@ -31,7 +32,7 @@ public class Hooks {
         if (inited) return;
         PLog.log("正在初始化hook...");
         PLog.log("正在寻找被混淆的类...");
-        String result = DexKit.find(instance.getClass().getClassLoader(), new HashMap<String, Set<String>>() {{
+        Map<String, String[]> result = DexKit.find(instance.getClass().getClassLoader(), new HashMap<String, Set<String>>() {{
             put(DexKit.OBF_COMMENT_VIDEO, new HashSet<String>() {{
                 add("event_media_play_observer");
                 add("event_on_play_review_comment");

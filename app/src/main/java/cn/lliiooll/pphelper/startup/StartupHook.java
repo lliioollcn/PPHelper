@@ -9,7 +9,6 @@ import cn.lliiooll.pphelper.utils.DexKit;
 import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
-import cn.xiaochuankeji.zuiyouLite.app.AppController;
 import com.tencent.mmkv.MMKV;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;

@@ -7,7 +7,6 @@ import cn.lliiooll.pphelper.utils.CliOper;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
 import cn.lliiooll.pphelper.utils.hookstatus.HookStatusInit;
-import cn.xiaochuankeji.zuiyouLite.app.AppController;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
