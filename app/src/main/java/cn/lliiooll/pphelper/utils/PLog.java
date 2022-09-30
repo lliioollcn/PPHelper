@@ -13,32 +13,33 @@ import java.util.Arrays;
 
 public class PLog {
     public static void log(String str, Object... replaces) {
-        if (BuildConfig.DEBUG) {
-            String s = str;
-            for (Object replace : replaces) {
-                s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
-            }
-            int limit = 500;
-            if (s.length() >= limit) {
-                String q = s;
-                int c = 0;
-                for (int i = 0; i < s.length(); i += limit) {
-
-                    if (i != 0 && q.length() > limit) {
-                        q = q.substring(limit);
-                    }
-                    Log.d("PPHelper", "[PPHelper] @" + c + " >> " + q);
-                    c++;
-                }
-            } else {
-                s = "[PPHelper] >> " + s;
-                //XposedBridge.log(s);
-                Log.d("PPHelper", s);
-            }
+        // if (BuildConfig.DEBUG) {
+        String s = str;
+        for (Object replace : replaces) {
+            s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
         }
+        int limit = 500;
+        if (s.length() >= limit) {
+            String q = s;
+            int c = 0;
+            for (int i = 0; i < s.length(); i += limit) {
+
+                if (i != 0 && q.length() > limit) {
+                    q = q.substring(limit);
+                }
+                Log.d("PPHelper", "[PPHelper] @" + c + " >> " + q);
+                c++;
+            }
+        } else {
+            s = "[PPHelper] >> " + s;
+            //XposedBridge.log(s);
+            Log.d("PPHelper", s);
+        }
+        // }
     }
 
     public static void log(Throwable e2) {
+        log("出现一个错误: ");
         e2.printStackTrace();
     }
 

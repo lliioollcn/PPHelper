@@ -8,7 +8,9 @@ import android.os.Process;
 import android.system.Os;
 import android.system.StructUtsname;
 import android.widget.Toast;
+import cn.hutool.core.io.FileUtil;
 import cn.lliiooll.pphelper.BuildConfig;
+import cn.lliiooll.pphelper.config.ConfigManager;
 import cn.lliiooll.pphelper.startup.HookEntry;
 import cn.lliiooll.pphelper.startup.HybridClassLoader;
 import com.tencent.mmkv.MMKV;
@@ -99,8 +101,11 @@ public class DexKit {
                 String modulePath = HookEntry.getModulePath();
                 if (modulePath != null) {
                     // try direct memory map
+                    PLog.log("尝试加载libpp_native.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/libpp_native.so");
+                    PLog.log("尝试加载libmmkv.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/libmmkv.so");
+                    PLog.log("尝试加载liblog.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/liblog.so");
                     PLog.log("dlopen by mmap success");
                 }
@@ -127,7 +132,56 @@ public class DexKit {
             // not in host process, ignore
             System.loadLibrary("pp_native");
         }
-        test();
+        try {
+            test();
+        } catch (UnsatisfiedLinkError e) {
+            PLog.log(e);
+            PLog.log("加载失败，尝试方案2...");
+            load2(ctx);
+            return;
+        }
+        ConfigManager.init();
+    }
+
+    public static void load2(Context ctx) {
+        String abi = getAbiForLibrary();
+        File dir = ctx.getExternalFilesDir("helper_lib");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File pp_native = new File(dir, ".\\" + abi + "\\libpp_native.so");
+        File mmkv = new File(dir, ".\\" + abi + "\\libmmkv.so");
+        File log = new File(dir, ".\\" + abi + "\\liblog.so");
+        if (pp_native.exists()) {
+            pp_native.delete();
+        }
+        if (mmkv.exists()) {
+            mmkv.delete();
+        }
+        if (log.exists()) {
+            log.delete();
+        }
+        try {
+            pp_native.createNewFile();
+            mmkv.createNewFile();
+            log.createNewFile();
+            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libpp_native.so"), pp_native);
+            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libmmkv.so"), mmkv);
+            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/liblog.so"), log);
+            PLog.log("尝试加载libpp_native.so ......");
+            System.load(pp_native.getAbsolutePath());
+            PLog.log("尝试加载libmmkv.so ......");
+            System.load(mmkv.getAbsolutePath());
+            PLog.log("尝试加载liblog.so ......");
+            System.load(log.getAbsolutePath());
+            PLog.log("加载成功");
+            ConfigManager.init();
+        } catch (IOException e) {
+            PLog.log(e);
+        } catch (UnsatisfiedLinkError e) {
+            PLog.log(">>>>>>>>>> 又nm得失败了！！！ <<<<<<<<<");
+            PLog.log(e);
+        }
     }
 
     public static String doReplace(String clazz) {

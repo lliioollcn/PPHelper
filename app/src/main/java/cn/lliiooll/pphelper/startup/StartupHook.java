@@ -33,7 +33,6 @@ public class StartupHook {
         DexKit.init();
         Parasitics.injectModuleResources(Utils.getApplication().getResources());
         Parasitics.initForStubActivity(Utils.getApplication());
-        ConfigManager.init();
         HostInfo.init();
         Hooks.init(instance);
     }
