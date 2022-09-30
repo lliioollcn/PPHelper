@@ -30,7 +30,9 @@ public class ConfigManager {
         if (!cacheDir.exists()) {
             cacheDir.mkdir();
         }
-        MMKV.initialize(mmkvDir.getAbsolutePath());
+        MMKV.initialize(mmkvDir.getAbsolutePath(), s -> {
+
+        });
         ConfigManager.mmkv = MMKV.mmkvWithID(ConfigManager.MMKV_MODULES, MMKV.MULTI_PROCESS_MODE);
         inited = true;
     }
