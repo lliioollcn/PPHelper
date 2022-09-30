@@ -1,9 +1,21 @@
 package cn.lliiooll.pphelper.utils;
 
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
+import android.os.Process;
+import android.system.Os;
+import android.system.StructUtsname;
 import android.widget.Toast;
+import cn.lliiooll.pphelper.BuildConfig;
+import cn.lliiooll.pphelper.startup.HookEntry;
+import cn.lliiooll.pphelper.startup.HybridClassLoader;
+import com.tencent.mmkv.MMKV;
 import me.teble.xposed.autodaily.dexkit.DexKitHelper;
 
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,9 +34,12 @@ public class DexKit {
         return results;
     }
 
+    public static native void test();
+
     public static void init() {
         PLog.log("正在加载lib库...");
-        System.loadLibrary("pp_native");
+        //System.loadLibrary("pp_native");
+        load(Utils.getApplication());
         PLog.log("加载成功！！！");
     }
 
@@ -69,6 +84,50 @@ public class DexKit {
         return "";
     }
 
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    public static void load(Context ctx) throws LinkageError {
+        try {
+            test();
+            return;
+        } catch (UnsatisfiedLinkError ignored) {
+        }
+        String abi = getAbiForLibrary();
+        try {
+            Class.forName(HybridClassLoader.getXposedBridgeClassName());
+            // in host process
+            try {
+                String modulePath = HookEntry.getModulePath();
+                if (modulePath != null) {
+                    // try direct memory map
+                    System.load(modulePath + "!/lib/" + abi + "/libpp_native.so");
+                    PLog.log("dlopen by mmap success");
+                }
+            } catch (UnsatisfiedLinkError e1) {
+
+                // give enough information to help debug
+                // Is this CPU_ABI bad?
+                PLog.log("Build.SDK_INT=" + Build.VERSION.SDK_INT);
+                PLog.log("Build.CPU_ABI is: " + Build.CPU_ABI);
+                PLog.log("Build.CPU_ABI2 is: " + Build.CPU_ABI2);
+                PLog.log("Build.SUPPORTED_ABIS is: " + Arrays.toString(Build.SUPPORTED_ABIS));
+                PLog.log("Build.SUPPORTED_32_BIT_ABIS is: " + Arrays.toString(Build.SUPPORTED_32_BIT_ABIS));
+                PLog.log("Build.SUPPORTED_64_BIT_ABIS is: " + Arrays.toString(Build.SUPPORTED_64_BIT_ABIS));
+                // check whether this is a 64-bit ART runtime
+                PLog.log("Process.is64bit is: " + Process.is64Bit());
+                StructUtsname uts = Os.uname();
+                PLog.log("uts.machine is: " + uts.machine);
+                PLog.log("uts.version is: " + uts.version);
+                PLog.log("uts.sysname is: " + uts.sysname);
+                // panic, this is a bug
+
+            }
+        } catch (ClassNotFoundException e) {
+            // not in host process, ignore
+            System.loadLibrary("pp_native");
+        }
+        test();
+    }
+
     public static String doReplace(String clazz) {
         String cl = clazz;
         if (cl.startsWith("L")) {
@@ -84,5 +143,20 @@ public class DexKit {
             cl = cl.replace("/", ".");
         }
         return cl;
+    }
+
+
+    public static String getAbiForLibrary() {
+        String[] supported = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS : Build.SUPPORTED_32_BIT_ABIS;
+        if (supported == null || supported.length == 0) {
+            throw new IllegalStateException("No supported ABI in this device");
+        }
+        List<String> abis = Arrays.asList("armeabi-v7a", "arm64-v8a");
+        for (String abi : supported) {
+            if (abis.contains(abi)) {
+                return abi;
+            }
+        }
+        throw new IllegalStateException("No supported ABI in " + Arrays.toString(supported));
     }
 }

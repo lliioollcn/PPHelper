@@ -1,10 +1,14 @@
 package cn.lliiooll.pphelper.startup;
 
+import cn.lliiooll.pphelper.utils.UtilsKt;
+
 /**
  * 混合类加载器
  */
 public class HybridClassLoader extends ClassLoader {
 
+    private static String sObfuscatedPackageName;
+    private static String sProbeLsposedNativeApiClassName;
     private final ClassLoader appCl;// 宿主提供的类加载器
     private final ClassLoader bootCl;// Context的类加载器
     private final ClassLoader xpCl;// Xposed提供的类加载器
@@ -63,6 +67,24 @@ public class HybridClassLoader extends ClassLoader {
 
     public static boolean isConflictingClass(String name) {
         return name.startsWith("androidx.") || name.startsWith("android.support.") || name.startsWith("kotlin.") || name.startsWith("kotlinx.") || name.startsWith("com.tencent.mmkv.") || name.startsWith("com.android.tools.r8.") || name.startsWith("com.google.android.material.") || name.startsWith("com.google.gson.") || name.startsWith("com.google.common.") || name.startsWith("org.intellij.lang.annotations.") || name.startsWith("org.jetbrains.annotations.");
+    }
+
+    public static void setObfuscatedXposedApiPackage(String packageName) {
+        sObfuscatedPackageName = packageName;
+    }
+
+    public static String getObfuscatedLsposedNativeApiClassName() {
+        return sProbeLsposedNativeApiClassName.replace('.', '/').substring(1, sObfuscatedPackageName.length() - 1);
+    }
+
+    public static String getXposedBridgeClassName() {
+        if (sObfuscatedPackageName == null) {
+            return "de.robv.android.xposed.XposedBridge";
+        } else {
+            StringBuilder sb = new StringBuilder(sObfuscatedPackageName);
+            sb.append(".XposedBridge");
+            return sb.toString();
+        }
     }
 
 }

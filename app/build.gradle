@@ -13,8 +13,8 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 32
-        //versionCode Common.getBuildVersionCode(rootProject)
-        versionCode Common.getTimeStamp()
+        versionCode Common.getBuildVersionCode(rootProject)
+        //versionCode Common.getTimeStamp()
         versionName "1.0.0.${versionCode}${Common.getGitHeadRefsSuffix(rootProject)}"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = false
@@ -95,7 +95,7 @@ dependencies {
 
     implementation 'com.tencent:mmkv-static:1.1.1'
     implementation 'me.laoyuyu.aria:core:3.8.16'
-    implementation 'cn.hutool:hutool-all:5.8.6'
+    implementation 'cn.hutool:hutool-all:5.8.7'
     implementation("com.github.LuckyPray:DexKit-Android:1.2.0")
 
     annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
@@ -104,7 +104,7 @@ dependencies {
     compileOnly fileTree('lib')
     compileOnly 'de.robv.android.xposed:api:82'
 
-    def appCenterSdkVersion = '4.3.1'
+    def appCenterSdkVersion = '4.4.5'
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 

@@ -164,3 +164,10 @@ Java_me_teble_xposed_autodaily_dexkit_DexKitHelper_findMethodOpPrefixSeq(JNIEnv 
     return FindMethodOpPrefixSeq(env, token, op_prefix_seq, method_declare_class, method_name,
                                     method_return_type, method_param_types, dex_priority);
 }
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_cn_lliiooll_pphelper_utils_DexKit_test(JNIEnv *env, jobject thiz) {
+LOGI(">>> test <<<");
+}

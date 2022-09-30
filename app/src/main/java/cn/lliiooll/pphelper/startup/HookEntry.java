@@ -7,10 +7,7 @@ import cn.lliiooll.pphelper.utils.CliOper;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
 import cn.lliiooll.pphelper.utils.hookstatus.HookStatusInit;
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.*;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit {
@@ -34,6 +31,12 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
         if (R.string.app_name >>> 24 == 0x7f) {
             PLog.log("package id must NOT be 0x7f, reject loading...");
             return;
+        }
+        Class<?> kXposedBridge = XposedBridge.class;
+        if (!"de.robv.android.xposed.XposedBridge".equals(kXposedBridge.getName())) {
+            String className = kXposedBridge.getName();
+            String pkgName = className.substring(0, className.lastIndexOf('.'));
+            HybridClassLoader.setObfuscatedXposedApiPackage(pkgName);
         }
         switch (lpparam.packageName) {
             case PACKAGE_ZUIYOU_LITE: {
