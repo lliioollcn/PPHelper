@@ -1,6 +1,10 @@
 package cn.lliiooll.pphelper.utils;
 
 import cn.lliiooll.pphelper.hook.Hooks;
+import cn.lliiooll.pphelper.startup.HookEntry;
+import cn.lliiooll.pphelper.startup.StartupHook;
+
+import static cn.lliiooll.pphelper.startup.HookEntry.PACKAGE_ZUIYOU_LITE;
 
 public class HostInfo {
     public static void init() {
@@ -18,5 +22,9 @@ public class HostInfo {
 
          */
         return true;
+    }
+
+    public static boolean isInHostProcess() {
+        return Utils.getApplication().getPackageName().equals(PACKAGE_ZUIYOU_LITE);
     }
 }

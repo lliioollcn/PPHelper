@@ -15,7 +15,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
-    private final static String PACKAGE_ZUIYOU_LITE = "cn.xiaochuankeji.zuiyouLite";
+    public final static String PACKAGE_ZUIYOU_LITE = "cn.xiaochuankeji.zuiyouLite";
     private final static String PACKAGE_SELF = "cn.lliiooll.pphelper";
     private static String modulePath;
     private static XC_LoadPackage.LoadPackageParam sLoadPackageParam;

@@ -2,21 +2,27 @@ package cn.lliiooll.pphelper.activity
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import cn.lliiooll.pphelper.R
+import cn.lliiooll.pphelper.databinding.SettingsActivityBinding
 import cn.lliiooll.pphelper.hook.*
 import cn.lliiooll.pphelper.utils.*
-import cn.xiaochuankeji.zuiyouLite.ui.base.BaseActivity
 
-class SettingsActivity : BaseActivity(), OnClickListener {
+class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
 
     private val requestId: Int = 0x7c0c8cf
+    lateinit var _binding: SettingsActivityBinding;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        setTheme(androidx.appcompat.R.style.Theme_AppCompat)
+        _binding = SettingsActivityBinding.inflate(LayoutInflater.from(this))
+        setContentView(_binding.root)
         if (!PermissionUtils.checkPermissions(Utils.getApplication())) {
             PermissionUtils.requirePermissions(this, this.requestId)
         }
