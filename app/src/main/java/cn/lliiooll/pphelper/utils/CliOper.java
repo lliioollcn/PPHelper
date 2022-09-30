@@ -1,7 +1,6 @@
 package cn.lliiooll.pphelper.utils;
 
 import android.app.Application;
-import android.os.Build;
 import cn.lliiooll.pphelper.BuildConfig;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
@@ -19,9 +18,6 @@ public class CliOper {
                 AppCenter.start(app, getSecert(), Analytics.class, Crashes.class);
             }
             Map<String, String> data = new HashMap<String, String>() {{
-                put("os_version", Build.VERSION.RELEASE);
-                put("os_brand", Build.BRAND);
-                put("os_model", Build.MODEL);
                 put("app_version", BuildConfig.VERSION_NAME);
                 put("app_type", BuildConfig.BUILD_TYPE);
                 put("app_code", BuildConfig.VERSION_CODE + "");
