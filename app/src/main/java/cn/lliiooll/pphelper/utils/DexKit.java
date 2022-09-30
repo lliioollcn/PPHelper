@@ -100,6 +100,8 @@ public class DexKit {
                 if (modulePath != null) {
                     // try direct memory map
                     System.load(modulePath + "!/lib/" + abi + "/libpp_native.so");
+                    System.load(modulePath + "!/lib/" + abi + "/libmmkv.so");
+                    System.load(modulePath + "!/lib/" + abi + "/liblog.so");
                     PLog.log("dlopen by mmap success");
                 }
             } catch (UnsatisfiedLinkError e1) {
