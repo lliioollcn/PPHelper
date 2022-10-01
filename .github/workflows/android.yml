@@ -21,6 +21,9 @@ jobs:
           echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "cmake;3.22.1" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+          
     - name: Build with Gradle
       run: |
           echo ${{ secrets.SIGN_KEYSTORE_BASE64 }} | base64 -d > keystore.jks
