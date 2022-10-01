@@ -3,7 +3,7 @@ name: main
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths-ignore:
       - '**.md'
       - '**.txt'
