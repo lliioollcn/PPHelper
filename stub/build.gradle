@@ -1,9 +1,24 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'cn.lliiooll.dhl.plugin'
     id 'org.jetbrains.kotlin.kapt'
 }
+
+android {
+    compileSdk 32
+    defaultConfig {
+        applicationId "cn.lliiooll.pphelper"
+        minSdk 26
+        targetSdk 32
+        versionCode 1
+        versionName "1.0.0"
+
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
 
 dependencies {
 
