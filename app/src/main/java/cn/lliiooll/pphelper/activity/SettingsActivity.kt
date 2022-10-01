@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.databinding.SettingsActivityBinding
 import cn.lliiooll.pphelper.hook.*
+import cn.lliiooll.pphelper.lifecycle.Parasitics
 import cn.lliiooll.pphelper.utils.*
 
 class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
@@ -21,6 +22,17 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(androidx.appcompat.R.style.Theme_AppCompat)
+        try {
+            PLog.log(getString(R.string.res_inject_success))
+        } catch (e: Throwable) {
+            Parasitics.injectModuleResources(resources)
+            try {
+                PLog.log(getString(R.string.res_inject_success))
+            } catch (e: Throwable) {
+                PLog.log(e)
+
+            }
+        }
         _binding = SettingsActivityBinding.inflate(LayoutInflater.from(this))
         setContentView(_binding.root)
         if (!PermissionUtils.checkPermissions(Utils.getApplication())) {
