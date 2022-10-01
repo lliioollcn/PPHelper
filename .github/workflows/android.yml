@@ -4,12 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
-      - '.github/**'
-      - '.idea/**'
-      - '!.github/workflows/**'
 
 jobs:
   build:
@@ -21,7 +15,6 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
-        cache: gradle
         
     - name: Setup cmake
       run: |
