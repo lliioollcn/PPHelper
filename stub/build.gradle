@@ -1,0 +1,14 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'cn.lliiooll.dhl.plugin'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+
+}

@@ -10,7 +10,6 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.lifecycle.Parasitics;
 import cn.lliiooll.pphelper.utils.HostInfo;

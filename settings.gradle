@@ -10,3 +10,5 @@ dependencyResolutionManagement {
 rootProject.name = "PPHelper"
 include ':app'
 includeBuild 'versionPlugin'
+include ':stub'
+

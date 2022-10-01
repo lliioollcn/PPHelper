@@ -23,7 +23,7 @@ android {
         externalNativeBuild {
             cmake {
                 arguments "-DANDROID_STL=c++_static"
-                cppFlags "-std=c++17","-Wall",
+                cppFlags "-std=c++17", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
@@ -84,6 +84,18 @@ android {
             version "3.22.1"
         }
     }
+
+    if (System.getenv("KEYSTORE_PATH") != null) {
+        signingConfigs {
+            create("release") {
+                storeFile = file(System.getenv("KEYSTORE_PATH"))
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+                enableV2Signing = true
+            }
+        }
+    }
 }
 
 dependencies {
@@ -101,7 +113,8 @@ dependencies {
     annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
     kapt 'me.laoyuyu.aria:compiler:3.8.16'
 
-    compileOnly fileTree('lib')
+    //compileOnly fileTree('lib')
+    compileOnly project(":stub")
     compileOnly 'de.robv.android.xposed:api:82'
 
     def appCenterSdkVersion = '4.4.5'
