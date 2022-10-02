@@ -52,8 +52,24 @@ android {
         additionalParameters("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0xcf")
     }
 
+    System.out.println(System.getenv("KEYSTORE_PATH"))
+    if (System.getenv("KEYSTORE_PATH") != null) {
+        System.out.println("start sign")
+        signingConfigs {
+            release {
+                storeFile = file(System.getenv("KEYSTORE_PATH"))
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+                enableV1Signing = true
+                enableV2Signing = true
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -82,20 +98,6 @@ android {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
             version "3.22.1"
-        }
-    }
-    System.out.println(System.getenv("KEYSTORE_PATH"))
-    if (System.getenv("KEYSTORE_PATH") != null) {
-        System.out.println("start sign")
-        signingConfigs {
-            release {
-                storeFile = file(System.getenv("KEYSTORE_PATH"))
-                storePassword = System.getenv("KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("KEY_ALIAS")
-                keyPassword = System.getenv("KEY_PASSWORD")
-                enableV1Signing = true
-                enableV2Signing = true
-            }
         }
     }
 }
