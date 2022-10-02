@@ -17,6 +17,7 @@ object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
                 if (m.name == "isInited") {
                     it?.result = true
                 }
+                /*
                 PLog.log(
                     "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
                     clazz1.name,
@@ -25,6 +26,8 @@ object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
                     Arrays.toString(m.parameterTypes),
                     Arrays.toString(it?.args)
                 )
+
+                 */
             }
         }
         return true

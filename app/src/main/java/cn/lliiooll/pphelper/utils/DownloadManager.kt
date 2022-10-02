@@ -3,8 +3,11 @@ package cn.lliiooll.pphelper.utils
 import android.content.ContentValues
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import cn.hutool.core.io.IoUtil
+import cn.hutool.http.HttpUtil
 import cn.lliiooll.pphelper.utils.Utils.getApplication
 import com.arialyy.annotations.Download
 import com.arialyy.aria.core.Aria
@@ -12,6 +15,7 @@ import com.arialyy.aria.core.task.DownloadTask
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import kotlin.concurrent.thread
 
 
 object DownloadManager {
@@ -33,11 +37,21 @@ object DownloadManager {
         }
         val file = File(dir, "${thumbId}.mp4")
         if (file.exists()) {
-            "文件已存在: ${file.absoluteFile}".log()
+            "文件已存在: ${file.absolutePath}".log()
             file.delete()
         }
-        "文件不存在: ${file.absoluteFile}".log()
-        Aria.download(this).load(urlSrc).setFilePath(file.absolutePath).create()
+        "文件不存在: ${file.absolutePath}".log()
+        PLog.log("准备下载:$urlSrc @ ${file.absolutePath}")
+        thread {
+            HttpUtil.downloadFileFromUrl(urlSrc, file)
+            Handler(Looper.getMainLooper()).post {
+                saveToStore(file.name, file.absolutePath)
+                "无水印视频下载完毕".showShortToast()
+                "无水印视频下载完毕".log()
+            }
+
+        }
+        //Aria.download(this).load(urlSrc).setFilePath(file.absolutePath).create()
     }
 
     @Download.onTaskStart
@@ -52,8 +66,14 @@ object DownloadManager {
 
 
     @Download.onTaskFail
-    fun fail(task: DownloadTask) {
-        "任务 ${task.taskName}(${task.entity.fileName}) 下载失败(从 ${task.entity.realUrl} 到 ${task.entity.filePath})".log()
+    fun fail(task: DownloadTask?) {
+        destroy()
+        if (task == null) {
+            "无水印视频下载失败".showShortToast()
+            "任务不可为null!".log()
+            return
+        }
+        "任务 ${task?.taskName}(${task?.entity?.fileName}) 下载失败(从 ${task?.entity?.realUrl} 到 ${task?.entity?.filePath})".log()
     }
 
     @Download.onTaskComplete
@@ -62,6 +82,7 @@ object DownloadManager {
         saveToStore(task.entity.fileName, task.entity.filePath)
         "无水印视频下载完毕".showShortToast()
         "无水印视频下载完毕".log()
+        destroy()
     }
 
     fun saveToStore(fileName: String?, filePath: String) {

@@ -5,24 +5,35 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import cn.hutool.core.io.FileUtil
+import cn.hutool.core.util.URLUtil
+import cn.hutool.http.HttpConnection
+import cn.hutool.http.HttpUtil
+import cn.hutool.json.JSONUtil
 import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.hook.BaseHook
 import cn.lliiooll.pphelper.startup.HybridClassLoader
+import com.arialyy.aria.core.Aria
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
+import java.io.File
 import java.lang.reflect.Member
 import java.lang.reflect.Method
+import java.net.URL
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 import kotlin.random.Random
 
 object Utils {
@@ -49,7 +60,7 @@ object Utils {
     }
 
     @JvmStatic
-    fun getVersion(ctx:Context): String {
+    fun getVersion(ctx: Context): String {
         val pkgMgr = ctx.packageManager
         val info = pkgMgr.getPackageInfo(ctx.packageName, 0)
         return info.versionName
@@ -86,7 +97,7 @@ fun Member.hook(callback: XC_MethodHook) {
     XposedBridge.hookMethod(this, callback)
 }
 
-fun Method.hookAfter(callback: (XC_MethodHook.MethodHookParam?) -> Unit) {
+fun Member.hookAfter(callback: (XC_MethodHook.MethodHookParam?) -> Unit) {
     XposedBridge.hookMethod(this, object : XC_MethodHook() {
         override fun afterHookedMethod(param: MethodHookParam?) {
             callback.invoke(param)
@@ -109,9 +120,33 @@ fun Any?.download() {
             val videoBean = XposedHelpers.getObjectField(this, "videoBean")
             val urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
             val thumbId = XposedHelpers.getObjectField(videoBean, "thumbId") as Long
-            ("无水印链接获取成功: " + urlSrc).log()
-            DownloadManager.download(thumbId, urlSrc)
-            "开始无水印下载".showShortToast()
+            val h265Sources = XposedHelpers.getObjectField(videoBean, "h265Sources") as List<*>
+            if (h265Sources.isNotEmpty()) {
+                val src1 = h265Sources.get(0)
+                val urls = XposedHelpers.getObjectField(src1, "urls") as List<*>
+                if (urls.isNotEmpty()) {
+                    val src2 = urls.get(0)
+                    val url = XposedHelpers.getObjectField(src2, "url") as String
+                    val urlS = url.replace("http://", "");
+                    var str = "http://127.0.0.1:2017/$urlS"
+                    PLog.log("可连接: $str 在返回值 ${str.isConnected()}")
+                    if (!str.isConnected()) {
+                        str = "http://127.0.0.1:2018/$urlS"
+                    }
+                    ("无水印链接获取成功: " + str).log()
+                    "开始无水印下载".showShortToast()
+                    //DownloadManager.init()
+                    DownloadManager.download(thumbId, str)
+
+                } else {
+                    "视频不存在".showShortToast()
+                }
+
+            } else {
+                "视频不存在".showShortToast()
+            }
+
+
         } else {
             "不是视频".log()
         }
@@ -165,3 +200,6 @@ fun BaseHook.addSetting(ctx: Context, parent: LinearLayout) {
     PLog.log("为 {}({}) 添加设置选项,自定义点击事件: {}", this.name, this.label, this.clickListener != null)
 }
 
+fun String.isConnected(): Boolean {
+    return SyncUtils.isConnected(this)
+}

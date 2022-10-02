@@ -30,7 +30,6 @@ object AriaInitHook : BaseHook("aria_init", "Aria初始化") {
         appCfg.isUseBroadcast = false
         appCfg.logLevel = ALog.LOG_LEVEL_VERBOSE
         Aria.init(app)
-        DownloadManager.init()
         return true
     }
 }

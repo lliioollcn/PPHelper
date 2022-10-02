@@ -3,10 +3,7 @@ package cn.lliiooll.pphelper.hook;
 import cn.lliiooll.pphelper.utils.DexKit;
 import cn.lliiooll.pphelper.utils.PLog;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Hooks {
 
@@ -42,12 +39,27 @@ public class Hooks {
                 add("http://alfile.ippzone.com/img/mp4/id/");
                 add("videocomment");
             }});
-            put(DexKit.OBF_ACCOUNT_SERVICE_MANAGER,new HashSet<String>(){{
+            put(DexKit.OBF_ACCOUNT_SERVICE_MANAGER, new HashSet<String>() {{
                 add("avatar");
                 add("third_force_bind_phone");
             }});
+            put(DexKit.OBF_ZUIYOUVIDEOPLAYER, new HashSet<String>() {{
+                add("ZuiyouVideoPlayer");
+            }});
+            put(DexKit.OBF_JZMEDIAEXO, new HashSet<String>() {{
+                add("JZMediaExo");
+                add("play error:");
+            }});
         }});
-        PLog.log("查找结果: " + result);
+
+        result.forEach((key, value) -> {
+            PLog.log("========================================");
+            PLog.log("查找结果");
+            PLog.log(key);
+            PLog.log(Arrays.toString(value));
+            PLog.log("========================================");
+        });
+
         DexKit.cache(result);
         if (sDisableHooks) {
             PLog.log("禁用了所有的hook...");

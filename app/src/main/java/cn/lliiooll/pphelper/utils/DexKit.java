@@ -15,6 +15,7 @@ import cn.lliiooll.pphelper.startup.HookEntry;
 import cn.lliiooll.pphelper.startup.HybridClassLoader;
 import com.tencent.mmkv.MMKV;
 import me.teble.xposed.autodaily.dexkit.DexKitHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -26,8 +27,12 @@ public class DexKit {
 
     public static String OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;";
     public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
+    public static String OBF_ZUIYOUVIDEOPLAYER = "Lcn/xiaochuankeji/zuiyouLite/ui/video/ZuiyouVideoPlayer";
+    public static String OBF_JZMEDIAEXO = "Lcn/xiaochuankeji/zuiyouLite/ui/video/JZMediaExo";
 
     private static Map<String, String> caches = new ConcurrentHashMap<>();
+    public static final Class<?> clazz_long = long.class;
+    public static final Class<?> clazz_boolean = boolean.class;
 
     public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
         DexKitHelper helper = new DexKitHelper(loader);

@@ -1,14 +1,19 @@
 package cn.lliiooll.pphelper.hook
 
 import android.app.Activity
+import cn.hutool.core.io.FileUtil
+import cn.hutool.json.JSONUtil
 import cn.lliiooll.pphelper.utils.*
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
+import de.robv.android.xposed.XposedHelpers
+import java.io.File
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 object NoMarkHook : BaseHook("no_mark", "去水印") {
     override fun init(): Boolean {
-        this.desc = "启用后将替换帖子右下角的保存至相册按钮，评论视频请长按选择保存至相册"
+        this.desc = "启用后将替换帖子右下角的保存至相册按钮，评论视频请点击右上角下载按钮"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.postlist.holder.PostOperator".loadClass()
         for (m in clazz?.declaredMethods!!) {
             if (m.parameterTypes.size == 5 && m.parameterTypes[0] == Activity::class.java && m.parameterTypes[1] == String::class.java) {
@@ -21,6 +26,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                 })
                 break
             } else {
+                /*
                 m.hook(object : XC_MethodHook() {
                     override fun afterHookedMethod(param: MethodHookParam?) {
                         PLog.log("\n========================================")
@@ -36,6 +42,8 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                         PLog.log("========================================\n")
                     }
                 })
+
+                 */
             }
 
         }
@@ -43,12 +51,12 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.control.main2.MainSchedulerControl".loadClass()
 
         val clazz1 = DexKit.load(DexKit.OBF_COMMENT_VIDEO)
-        //val clazz1 = "j.g.w.f0.x.e.c0\$q".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass()
         //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass()
 
         val commentBeanClass = "cn.xiaochuankeji.zuiyouLite.data.CommentBean".loadClass()
         for (m in clazz1?.declaredMethods!!) {
+            /*
             PLog.log(
                 "寻找方法: {},{}:{}@({})",
                 m.name,
@@ -56,8 +64,9 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                 m.returnType.name,
                 Arrays.toString(m.parameterTypes)
             )
-            if (m.name == "u0" && m.parameterCount == 1 && m.parameterTypes[0] == commentBeanClass) {
 
+             */
+            if (m.name == "u0" && m.parameterCount == 1 && m.parameterTypes[0] == commentBeanClass) {
                 PLog.log(
                     "找到方法: {},{}:{}@({})",
                     m.name,
@@ -77,6 +86,7 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                             img.download()
                         }
                     }
+
                 }
                 break
             }
@@ -92,6 +102,46 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
 
              */
         }
+
+        /*
+        val clazz2 = "com.google.android.exoplayer2.upstream.cache.SimpleCache".loadClass()
+        val clazz3 = "com.google.android.exoplayer2.upstream.DataSpec".loadClass()
+        for (c in clazz3?.declaredConstructors!!) {
+            c.hookAfter {
+                val param = it
+                PLog.log("\n========================================")
+                PLog.log(
+                    "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {},\n堆栈: ",
+                    clazz3.name,
+                    c.name,
+                    c.parameterCount,
+                    Arrays.toString(c.parameterTypes),
+                    Arrays.toString(param?.args)
+                )
+                //PLog.printStacks()
+                PLog.log("========================================\n")
+            }
+        }
+        for (m in clazz2?.declaredMethods!!) {
+            if (m.name == "commitFile")
+                m.hookAfter {
+                    val param = it
+                    PLog.log("\n========================================")
+                    PLog.log(
+                        "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}",
+                        clazz2.name,
+                        m.name,
+                        m.parameterCount,
+                        Arrays.toString(m.parameterTypes),
+                        Arrays.toString(param?.args)
+                    )
+                    //PLog.printStacks()
+                    PLog.log("========================================\n")
+                }
+
+        }
+
+         */
 
         /*
           if ((m.name == "b" || m.name == "v") && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {

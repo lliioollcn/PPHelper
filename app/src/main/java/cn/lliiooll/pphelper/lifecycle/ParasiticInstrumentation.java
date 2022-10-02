@@ -27,11 +27,14 @@ public class ParasiticInstrumentation extends Instrumentation {
     @Override
     public Activity newActivity(ClassLoader cl, String className, Intent intent)
             throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        /*
         PLog.log("==================================================");
         PLog.log("新的界面被创建: {},intent: {}", className, intent);
         PLog.log("当前堆栈: ");
         PLog.printStacks();
         PLog.log("==================================================");
+
+         */
         try {
             return mBase.newActivity(cl, className, intent);
         } catch (Exception e) {
