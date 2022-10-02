@@ -117,4 +117,19 @@ object DownloadManager {
         }
         file.delete()
     }
+
+    fun downloadA(thumbId: Long, urlSrc: String) {
+        val dir = getApplication().getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        if (!dir!!.exists()) {
+            dir.mkdirs()
+        }
+        val file = File(dir, "${thumbId}.mp4")
+        if (file.exists()) {
+            "文件已存在: ${file.absolutePath}".log()
+            file.delete()
+        }
+        "文件不存在: ${file.absolutePath}".log()
+        PLog.log("准备下载:$urlSrc @ ${file.absolutePath}")
+        Aria.download(this).load(urlSrc).setFilePath(file.absolutePath).create()
+    }
 }

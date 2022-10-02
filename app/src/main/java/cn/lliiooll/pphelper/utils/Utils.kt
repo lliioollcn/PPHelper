@@ -120,33 +120,44 @@ fun Any?.download() {
             val videoBean = XposedHelpers.getObjectField(this, "videoBean")
             val urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
             val thumbId = XposedHelpers.getObjectField(videoBean, "thumbId") as Long
-            val h265Sources = XposedHelpers.getObjectField(videoBean, "h265Sources") as List<*>
-            if (h265Sources.isNotEmpty()) {
-                val src1 = h265Sources.get(0)
-                val urls = XposedHelpers.getObjectField(src1, "urls") as List<*>
-                if (urls.isNotEmpty()) {
-                    val src2 = urls.get(0)
-                    val url = XposedHelpers.getObjectField(src2, "url") as String
-                    val urlS = url.replace("http://", "");
-                    var str = "http://127.0.0.1:2017/$urlS"
-                    PLog.log("可连接: $str 在返回值 ${str.isConnected()}")
-                    if (!str.isConnected()) {
-                        str = "http://127.0.0.1:2018/$urlS"
+            val h265Sourceso = XposedHelpers.getObjectField(videoBean, "h265Sources")
+            if (h265Sourceso != null) {
+                val h265Sources = XposedHelpers.getObjectField(videoBean, "h265Sources") as List<*>
+                if (h265Sources.isNotEmpty()) {
+                    val src1 = h265Sources.get(0)
+                    val urls = XposedHelpers.getObjectField(src1, "urls") as List<*>
+                    if (urls.isNotEmpty()) {
+                        val src2 = urls.get(0)
+                        val url = XposedHelpers.getObjectField(src2, "url") as String
+                        val urlS = url.replace("http://", "");
+                        var str = "http://127.0.0.1:2017/$urlS"
+                        PLog.log("可连接: $str 在返回值 ${str.isConnected()}")
+                        if (!str.isConnected()) {
+                            str = "http://127.0.0.1:2018/$urlS"
+                        }
+                        ("无水印链接获取成功: " + str).log()
+                        "开始无水印下载".showShortToast()
+                        //DownloadManager.init()
+                        DownloadManager.download(thumbId, str)
+
+                    } else {
+                        ("无水印链接获取成功: " + urlSrc).log()
+                        "开始无水印下载".showShortToast()
+                        DownloadManager.init()
+                        DownloadManager.downloadA(thumbId, urlSrc)
                     }
-                    ("无水印链接获取成功: " + str).log()
-                    "开始无水印下载".showShortToast()
-                    //DownloadManager.init()
-                    DownloadManager.download(thumbId, str)
-
                 } else {
-                    "视频不存在".showShortToast()
+                    ("无水印链接获取成功: " + urlSrc).log()
+                    "开始无水印下载".showShortToast()
+                    DownloadManager.init()
+                    DownloadManager.downloadA(thumbId, urlSrc)
                 }
-
             } else {
-                "视频不存在".showShortToast()
+                ("无水印链接获取成功: " + urlSrc).log()
+                "开始无水印下载".showShortToast()
+                DownloadManager.init()
+                DownloadManager.downloadA(thumbId, urlSrc)
             }
-
-
         } else {
             "不是视频".log()
         }
