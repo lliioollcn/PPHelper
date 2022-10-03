@@ -32,7 +32,7 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
                 }
             })
         XposedHelpers.findAndHookMethod(
-           "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass(),
+            "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass(),
             "onCreate",
             Bundle::class.java,
             object : XC_MethodHook() {
@@ -43,9 +43,9 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
                     for (field in objClazz?.declaredFields!!) {
                         if (field.type == postDataBeanClazz) {
                             val postDataBean = XposedHelpers.getObjectField(param.thisObject, field.name)
-                            val godReviews = XposedHelpers.getObjectField(postDataBean, field.name) as List<*>
-                            val myReviews = XposedHelpers.getObjectField(postDataBean, field.name) as List<*>
-                            val reviewList = XposedHelpers.getObjectField(postDataBean, field.name) as List<*>
+                            val godReviews = XposedHelpers.getObjectField(postDataBean, "godReviews") as List<*>
+                            val myReviews = XposedHelpers.getObjectField(postDataBean, "myReviews") as List<*>
+                            val reviewList = XposedHelpers.getObjectField(postDataBean, "reviewList") as List<*>
                             for (replay in godReviews) {
                                 XposedHelpers.setIntField(replay, "isHide", 0)
                             }

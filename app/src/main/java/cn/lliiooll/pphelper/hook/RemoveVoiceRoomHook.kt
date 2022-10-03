@@ -1,11 +1,8 @@
 package cn.lliiooll.pphelper.hook
 
-import android.content.Context
-import android.os.Bundle
-import cn.lliiooll.pphelper.utils.*
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedHelpers
+import cn.lliiooll.pphelper.utils.PLog
+import cn.lliiooll.pphelper.utils.hookAfter
+import cn.lliiooll.pphelper.utils.loadClass
 import java.util.*
 
 object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
@@ -17,7 +14,7 @@ object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
                 if (m.name == "isInited") {
                     it?.result = true
                 }
-                /*
+                PLog.log("========================================\n")
                 PLog.log(
                     "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
                     clazz1.name,
@@ -26,8 +23,8 @@ object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
                     Arrays.toString(m.parameterTypes),
                     Arrays.toString(it?.args)
                 )
-
-                 */
+                //PLog.printStacks()
+                PLog.log("========================================\n")
             }
         }
         return true

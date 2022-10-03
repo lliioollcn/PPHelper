@@ -27,13 +27,12 @@ public class DexKit {
 
     public static String OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;";
     public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
-    public static String OBF_ZUIYOUVIDEOPLAYER = "Lcn/xiaochuankeji/zuiyouLite/ui/video/ZuiyouVideoPlayer";
-    public static String OBF_JZMEDIAEXO = "Lcn/xiaochuankeji/zuiyouLite/ui/video/JZMediaExo";
+    public static String OBF_LIVE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/live/LiveManager";
 
     private static Map<String, String> caches = new ConcurrentHashMap<>();
     public static final Class<?> clazz_long = long.class;
     public static final Class<?> clazz_boolean = boolean.class;
-
+    public static final Class<?> clazz_void = void.class;
     public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
         DexKitHelper helper = new DexKitHelper(loader);
         Map<String, String[]> results = helper.batchFindClassesUsedStrings(input, false, new int[0]);

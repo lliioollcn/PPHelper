@@ -43,12 +43,8 @@ public class Hooks {
                 add("avatar");
                 add("third_force_bind_phone");
             }});
-            put(DexKit.OBF_ZUIYOUVIDEOPLAYER, new HashSet<String>() {{
-                add("ZuiyouVideoPlayer");
-            }});
-            put(DexKit.OBF_JZMEDIAEXO, new HashSet<String>() {{
-                add("JZMediaExo");
-                add("play error:");
+            put(DexKit.OBF_LIVE_MANAGER, new HashSet<String>() {{
+                add("liveendpage");
             }});
         }});
 
