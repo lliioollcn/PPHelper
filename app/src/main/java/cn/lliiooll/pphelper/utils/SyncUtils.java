@@ -33,7 +33,7 @@ public class SyncUtils {
                     success.set(conn.getResponseCode() == HttpURLConnection.HTTP_OK);
                     ok.set(false);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    PLog.log(e);
                     success.set(false);
                     ok.set(false);
                 }

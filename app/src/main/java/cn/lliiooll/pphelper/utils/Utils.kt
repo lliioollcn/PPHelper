@@ -12,16 +12,12 @@ import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.util.URLUtil
-import cn.hutool.http.HttpConnection
-import cn.hutool.http.HttpUtil
-import cn.hutool.json.JSONUtil
 import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.config.ConfigManager
+import cn.lliiooll.pphelper.download.DownloadCallback
+import cn.lliiooll.pphelper.download.DownloadManager
 import cn.lliiooll.pphelper.hook.BaseHook
 import cn.lliiooll.pphelper.startup.HybridClassLoader
-import com.arialyy.aria.core.Aria
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
@@ -30,10 +26,8 @@ import java.io.File
 import java.lang.reflect.Member
 import java.lang.reflect.Method
 import java.net.URL
-import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.thread
 import kotlin.random.Random
 
 object Utils {
@@ -118,7 +112,7 @@ fun Any?.download() {
         val isVideo = XposedHelpers.callMethod(this, "imageIsVideo") as Boolean
         if (isVideo) {
             val videoBean = XposedHelpers.getObjectField(this, "videoBean")
-            val urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
+            var urlSrc = XposedHelpers.getObjectField(videoBean, "urlsrc") as String
             val thumbId = XposedHelpers.getObjectField(videoBean, "thumbId") as Long
             val h265Sourceso = XposedHelpers.getObjectField(videoBean, "h265Sources")
             if (h265Sourceso != null) {
@@ -135,29 +129,39 @@ fun Any?.download() {
                         if (!str.isConnected()) {
                             str = "http://127.0.0.1:2018/$urlS"
                         }
-                        ("无水印链接获取成功: " + str).log()
-                        "开始无水印下载".showShortToast()
                         //DownloadManager.init()
-                        DownloadManager.download(thumbId, str)
-
-                    } else {
-                        ("无水印链接获取成功: " + urlSrc).log()
-                        "开始无水印下载".showShortToast()
-                        DownloadManager.init()
-                        DownloadManager.downloadA(thumbId, urlSrc)
+                        urlSrc = str;
                     }
-                } else {
-                    ("无水印链接获取成功: " + urlSrc).log()
-                    "开始无水印下载".showShortToast()
-                    DownloadManager.init()
-                    DownloadManager.downloadA(thumbId, urlSrc)
                 }
-            } else {
-                ("无水印链接获取成功: " + urlSrc).log()
-                "开始无水印下载".showShortToast()
-                DownloadManager.init()
-                DownloadManager.downloadA(thumbId, urlSrc)
             }
+            ("无水印链接获取成功: " + urlSrc).log()
+            val dir = Utils.getApplication().getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+            if (!dir!!.exists()) {
+                dir.mkdirs()
+            }
+            val file = File(dir, "${thumbId}.mp4")
+            if (file.exists()) {
+                "文件已存在: ${file.absolutePath}".log()
+                file.delete()
+            }
+            file.createNewFile()
+            val dw = DownloadManager(urlSrc, file);
+            dw.download(object : DownloadCallback {
+                override fun onFinished(url: URL?, file: File?) {
+                    StoreUtils.saveToStore(file?.name, file?.absolutePath!!)
+                    "无水印视频下载完毕".showShortToast()
+                }
+
+                override fun onFailed(url: URL?, file: File?, e: Throwable?) {
+                    PLog.log(e)
+                    "无水印视频下载失败".showShortToast()
+                }
+
+                override fun onStart(url: URL?, file: File?) {
+                    "开始无水印下载".showShortToast()
+                }
+
+            })
         } else {
             "不是视频".log()
         }

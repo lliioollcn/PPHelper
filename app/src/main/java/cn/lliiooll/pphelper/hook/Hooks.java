@@ -14,7 +14,6 @@ public class Hooks {
             RemoveADHook.INSTANCE,
             NoMarkHook.INSTANCE,
             CustomVoiceHook.INSTANCE,
-            AriaInitHook.INSTANCE,
             RemoveLiveHook.INSTANCE,
             RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,

@@ -1,8 +1,6 @@
 package cn.lliiooll.pphelper.hook
 
 import android.os.Bundle
-import cn.hutool.json.JSONUtil
-import cn.lliiooll.pphelper.utils.PLog
 import cn.lliiooll.pphelper.utils.loadClass
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
@@ -43,18 +41,23 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
                     for (field in objClazz?.declaredFields!!) {
                         if (field.type == postDataBeanClazz) {
                             val postDataBean = XposedHelpers.getObjectField(param.thisObject, field.name)
-                            val godReviews = XposedHelpers.getObjectField(postDataBean, "godReviews") as List<*>
-                            val myReviews = XposedHelpers.getObjectField(postDataBean, "myReviews") as List<*>
-                            val reviewList = XposedHelpers.getObjectField(postDataBean, "reviewList") as List<*>
-                            for (replay in godReviews) {
-                                XposedHelpers.setIntField(replay, "isHide", 0)
+                            val godReviewsObj = XposedHelpers.getObjectField(postDataBean, "godReviews")
+                            var godReviews: List<*>
+                            if (godReviewsObj != null) {
+                                godReviews = godReviewsObj as List<*>;
+                                val myReviews = XposedHelpers.getObjectField(postDataBean, "myReviews") as List<*>
+                                val reviewList = XposedHelpers.getObjectField(postDataBean, "reviewList") as List<*>
+                                for (replay in godReviews) {
+                                    XposedHelpers.setIntField(replay, "isHide", 0)
+                                }
+                                for (replay in myReviews) {
+                                    XposedHelpers.setIntField(replay, "isHide", 0)
+                                }
+                                for (replay in reviewList) {
+                                    XposedHelpers.setIntField(replay, "isHide", 0)
+                                }
                             }
-                            for (replay in myReviews) {
-                                XposedHelpers.setIntField(replay, "isHide", 0)
-                            }
-                            for (replay in reviewList) {
-                                XposedHelpers.setIntField(replay, "isHide", 0)
-                            }
+
                             //PLog.log(JSONUtil.toJsonStr(commentBean))
                         }
                     }

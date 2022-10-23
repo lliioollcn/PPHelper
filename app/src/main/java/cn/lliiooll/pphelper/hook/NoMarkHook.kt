@@ -1,14 +1,8 @@
 package cn.lliiooll.pphelper.hook
 
 import android.app.Activity
-import cn.hutool.core.io.FileUtil
-import cn.hutool.json.JSONUtil
 import cn.lliiooll.pphelper.utils.*
-import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedHelpers
-import java.io.File
-import java.nio.charset.StandardCharsets
 import java.util.*
 
 object NoMarkHook : BaseHook("no_mark", "去水印") {

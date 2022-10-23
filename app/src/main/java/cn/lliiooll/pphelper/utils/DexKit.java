@@ -7,18 +7,14 @@ import android.os.Build;
 import android.os.Process;
 import android.system.Os;
 import android.system.StructUtsname;
-import android.widget.Toast;
-import cn.hutool.core.io.FileUtil;
-import cn.lliiooll.pphelper.BuildConfig;
 import cn.lliiooll.pphelper.config.ConfigManager;
 import cn.lliiooll.pphelper.startup.HookEntry;
 import cn.lliiooll.pphelper.startup.HybridClassLoader;
-import com.tencent.mmkv.MMKV;
-import me.teble.xposed.autodaily.dexkit.DexKitHelper;
-import org.jetbrains.annotations.Nullable;
+import io.luckypray.dexkit.DexKitBridge;
+import io.luckypray.dexkit.descriptor.member.DexClassDescriptor;
 
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,11 +29,20 @@ public class DexKit {
     public static final Class<?> clazz_long = long.class;
     public static final Class<?> clazz_boolean = boolean.class;
     public static final Class<?> clazz_void = void.class;
+
     public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
-        DexKitHelper helper = new DexKitHelper(loader);
-        Map<String, String[]> results = helper.batchFindClassesUsedStrings(input, false, new int[0]);
-        helper.release();
-        return results;
+        DexKitBridge helper = DexKitBridge.create(loader);
+        Map<String, List<DexClassDescriptor>> results = helper.batchFindClassesUsingStrings(input, false, new int[0]);
+        helper.close();
+        Map<String, String[]> finds = new HashMap<>();
+        results.forEach((key, value) -> {
+            List<String> res = new ArrayList<>();
+            value.forEach(desc -> {
+                res.add(desc.getName());
+            });
+            finds.put(key, res.toArray(new String[0]));
+        });
+        return finds;
     }
 
     public static native void test();
@@ -111,6 +116,8 @@ public class DexKit {
                     System.load(modulePath + "!/lib/" + abi + "/libmmkv.so");
                     PLog.log("尝试加载liblog.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/liblog.so");
+                    PLog.log("尝试加载libdexkit.so ......");
+                    System.load(modulePath + "!/lib/" + abi + "/libdexkit.so");
                     PLog.log("dlopen by mmap success");
                 }
             } catch (UnsatisfiedLinkError e1) {
@@ -156,6 +163,7 @@ public class DexKit {
         File pp_native = new File(dir, ".\\" + abi + "\\libpp_native.so");
         File mmkv = new File(dir, ".\\" + abi + "\\libmmkv.so");
         File log = new File(dir, ".\\" + abi + "\\liblog.so");
+        File dexkit = new File(dir, ".\\" + abi + "\\libdexkit.so");
         if (pp_native.exists()) {
             pp_native.delete();
         }
@@ -178,6 +186,8 @@ public class DexKit {
             System.load(mmkv.getAbsolutePath());
             PLog.log("尝试加载liblog.so ......");
             System.load(log.getAbsolutePath());
+            PLog.log("尝试加载libdexkit.so ......");
+            System.load(dexkit.getAbsolutePath());
             PLog.log("加载成功");
             ConfigManager.init();
         } catch (IOException e) {

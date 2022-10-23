@@ -1,6 +1,5 @@
 package cn.lliiooll.pphelper.config;
 
-import cn.lliiooll.pphelper.hook.AriaInitHook;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.hook.SettingHook;
 import cn.lliiooll.pphelper.utils.PLog;
@@ -56,7 +55,6 @@ public class ConfigManager {
     public static void setEnable(String hookName, boolean enable) {
         if (!inited || Objects.isNull(mmkv)) return;
         if (hookName.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) enable = true;
-        if (hookName.equalsIgnoreCase(AriaInitHook.INSTANCE.getLabel())) enable = true;
         mmkv.encode(hookName, enable);
 
     }
@@ -76,7 +74,6 @@ public class ConfigManager {
     public static boolean isEnable(String baseHook) {
         if (!inited || Objects.isNull(mmkv)) return false;
         if (baseHook.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) return true;
-        if (baseHook.equalsIgnoreCase(AriaInitHook.INSTANCE.getLabel())) return true;
         return mmkv.decodeBool(baseHook, true);
     }
 }

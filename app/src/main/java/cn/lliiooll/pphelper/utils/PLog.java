@@ -1,10 +1,7 @@
 package cn.lliiooll.pphelper.utils;
 
 import android.util.Log;
-import cn.hutool.core.util.StrUtil;
 import cn.lliiooll.pphelper.BuildConfig;
-import de.robv.android.xposed.XposedBridge;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -39,8 +36,14 @@ public class PLog {
     }
 
     public static void log(Throwable e2) {
-        log("出现一个错误: ");
-        e2.printStackTrace();
+        log("出现一个错误: " + e2.getClass().getName() + " @ " + e2.getMessage());
+        for (StackTraceElement element : e2.getStackTrace()) {
+            log("在堆栈 " + element);
+        }
+        if (e2.getCause() != null) {
+            log(e2.getCause());
+        }
+
     }
 
     public static void printStacks() {
