@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
-import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.Switch
 import cn.lliiooll.pphelper.R
+import cn.lliiooll.pphelper.activity.dialog.PPInputDialog
+import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.databinding.SettingsActivityBinding
 import cn.lliiooll.pphelper.hook.*
 import cn.lliiooll.pphelper.lifecycle.Parasitics
@@ -38,10 +41,27 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         if (!PermissionUtils.checkPermissions(Utils.getApplication())) {
             PermissionUtils.requirePermissions(this, this.requestId)
         }
+        val rootView = findViewById<RelativeLayout>(R.id.rootView)// 基础功能
         val app_setting_base_parent = findViewById<LinearLayout>(R.id.app_setting_base_parent)// 基础功能
         val app_setting_play_parent = findViewById<LinearLayout>(R.id.app_setting_play_parent)// 娱乐功能
         val app_setting_clean_parent = findViewById<LinearLayout>(R.id.app_setting_clean_parent)// 净化功能
         val app_setting_debug_parent = findViewById<LinearLayout>(R.id.app_setting_debug_parent)// 调试功能
+        val setting_download_multi_root = findViewById<LinearLayout>(R.id.setting_download_multi_root)
+        val setting_debug_appcenter = findViewById<Switch>(R.id.setting_debug_appcenter)// appcenter调试
+        val setting_download_multi = findViewById<Switch>(R.id.setting_download_multi)// 多线程下载
+        setting_debug_appcenter.isChecked = ConfigManager.isEnable("pp_appcenter")
+        setting_download_multi.isChecked = ConfigManager.isEnable("pp_download_multi_thread")
+        setting_debug_appcenter.setOnClickListener {
+            ConfigManager.setEnable("pp_appcenter", setting_debug_appcenter.isChecked)
+        }
+
+        setting_download_multi_root.setOnClickListener {
+            PPInputDialog(this).show()
+        }
+
+        setting_download_multi.setOnClickListener {
+            ConfigManager.setEnable("pp_download_multi_thread", setting_download_multi.isChecked)
+        }
         // 基础功能
         NoMarkHook.addSetting(this, app_setting_base_parent)
         RemoveADHook.addSetting(this, app_setting_base_parent)

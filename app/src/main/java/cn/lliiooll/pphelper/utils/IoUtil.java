@@ -25,7 +25,7 @@ public class IoUtil {
     public static void copy(InputStream is, RandomAccessFile os) {
         try {
             int read = 0;
-            byte[] buf = new byte[2048];
+            byte[] buf = new byte[4096];
             while ((read = is.read(buf)) != -1) {
                 os.write(buf, 0, read);
             }

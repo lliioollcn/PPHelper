@@ -2,6 +2,7 @@ package cn.lliiooll.pphelper.utils;
 
 import android.app.Application;
 import cn.lliiooll.pphelper.BuildConfig;
+import cn.lliiooll.pphelper.config.ConfigManager;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -13,18 +14,22 @@ import java.util.Map;
 public class CliOper {
     public static void init(Application app, String account) {
         PLog.log("开始初始化统计...");
-        if (!BuildConfig.DEBUG){
-            if (!AppCenter.isConfigured()) {
-                AppCenter.start(app, getSecert(), Analytics.class, Crashes.class);
+        if (!BuildConfig.DEBUG) {
+            if (ConfigManager.isEnable("pp_appcenter")) {
+                if (!AppCenter.isConfigured()) {
+                    AppCenter.start(app, getSecert(), Analytics.class, Crashes.class);
+                }
+                Map<String, String> data = new HashMap<String, String>() {{
+                    put("app_version", BuildConfig.VERSION_NAME);
+                    put("app_type", BuildConfig.BUILD_TYPE);
+                    put("app_code", BuildConfig.VERSION_CODE + "");
+                    put("account", account);
+                }};
+                Analytics.trackEvent("onLoad", data);
+                PLog.log("上报数据: " + data);
+            } else {
+                PLog.log("用户未开启统计");
             }
-            Map<String, String> data = new HashMap<String, String>() {{
-                put("app_version", BuildConfig.VERSION_NAME);
-                put("app_type", BuildConfig.BUILD_TYPE);
-                put("app_code", BuildConfig.VERSION_CODE + "");
-                put("account", account);
-            }};
-            Analytics.trackEvent("onLoad", data);
-            PLog.log("上报数据: " + data);
         }
     }
 

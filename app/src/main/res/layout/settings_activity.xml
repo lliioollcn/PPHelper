@@ -50,6 +50,7 @@
                         android:text="基础"
                         android:textSize="@dimen/f3"
                         android:textColor="#177cb0"
+                        android:gravity="center_vertical"
                         android:layout_marginTop="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
@@ -74,6 +75,7 @@
                         android:textSize="@dimen/f3"
                         android:textColor="#177cb0"
                         android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
@@ -90,11 +92,13 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
+
                     android:id="@+id/app_setting_clean_parent"
                     android:orientation="vertical"
             >
                 <TextView
                         android:text="净化"
+                        android:gravity="center_vertical"
                         android:textSize="@dimen/f3"
                         android:textColor="#177cb0"
                         android:layout_marginTop="10dp"
@@ -104,6 +108,118 @@
                         android:layout_height="25dp"
                 />
 
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_round_normal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/app_setting_download_parent"
+                    android:orientation="vertical"
+            >
+                <TextView
+                        android:text="下载"
+                        android:textSize="@dimen/f3"
+                        android:gravity="center_vertical"
+                        android:textColor="#177cb0"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical"
+                >
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:textColor="#ff000000"
+                                android:layout_gravity="left"
+                                android:gravity="center_vertical"
+                                android:text="多线程下载"
+                                android:textSize="@dimen/f4"
+                                android:scaleType="centerInside"
+                        />
+                        <Switch
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:gravity="right"
+                                android:id="@+id/setting_download_multi"
+                                android:thumb="@drawable/style_switch_thumb"
+                                android:track="@drawable/style_switch_track_selector"
+                        />
+                    </LinearLayout>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="#ff000000"
+                            android:layout_gravity="left"
+                            android:gravity="center_vertical"
+                            android:text="开启后获得更快的下载速度"
+                            android:textSize="@dimen/f6"
+                    />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical"
+                        android:id="@+id/setting_download_multi_root"
+                >
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:textColor="#ff000000"
+                                android:layout_gravity="left"
+                                android:gravity="center_vertical"
+                                android:text="设置下载线程数"
+                                android:textSize="@dimen/f4"
+                                android:scaleType="centerInside"
+                        />
+                        <ImageView
+                                android:id="@+id/setting_download_multi_count"
+                                android:layout_width="@dimen/item_height"
+                                android:layout_height="match_parent"
+                                android:src="@mipmap/icon_arrow_right"
+                                android:scaleType="center"/>
+                    </LinearLayout>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="#ff000000"
+                            android:layout_gravity="left"
+                            android:gravity="center_vertical"
+                            android:text="数值越高下载越快，最快速度取决于你的手机网络及其服务器网络，建议为4-6，多于此值可能会下载失败"
+                            android:textSize="@dimen/f6"
+                    />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -125,8 +241,53 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
+                        android:gravity="center_vertical"
                         android:layout_height="25dp"
                 />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical"
+                >
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:id="@+id/setting_debug_appcenter_root"
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:textColor="#ff000000"
+                                android:layout_gravity="left"
+                                android:gravity="center_vertical"
+                                android:text="开启AppCenter统计"
+                                android:textSize="@dimen/f4"
+                        />
+                        <Switch
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:gravity="right"
+                                android:id="@+id/setting_debug_appcenter"
+                                android:thumb="@drawable/style_switch_thumb"
+                                android:track="@drawable/style_switch_track_selector"
+                        />
+                    </LinearLayout>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="#ff000000"
+                            android:layout_gravity="left"
+                            android:gravity="center_vertical"
+                            android:text="此选项用于帮助开发者更好的改进应用"
+                            android:textSize="@dimen/f6"
+                    />
+                </LinearLayout>
 
 
             </LinearLayout>

@@ -76,4 +76,14 @@ public class ConfigManager {
         if (baseHook.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) return true;
         return mmkv.decodeBool(baseHook, true);
     }
+
+    public static int getInt(String key, int i) {
+        if (!inited || Objects.isNull(mmkv)) return i;
+        return mmkv.decodeInt(key, i);
+    }
+
+    public static void setInt(String key, int i) {
+        if (!inited || Objects.isNull(mmkv)) return;
+        mmkv.encode(key, i);
+    }
 }
