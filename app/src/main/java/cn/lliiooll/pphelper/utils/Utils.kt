@@ -8,10 +8,7 @@ import android.net.Uri
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Switch
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import cn.lliiooll.pphelper.R
 import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.download.DownloadCallback
@@ -193,7 +190,7 @@ fun Long.parseDate(): String {
 }
 
 fun BaseHook.addSetting(ctx: Context, parent: LinearLayout) {
-    val setting_child = LayoutInflater.from(ctx).inflate(R.layout.settings_child, parent, false) as LinearLayout
+    val setting_child = LayoutInflater.from(ctx).inflate(R.layout.settings_child, parent, false) as RelativeLayout
     val title = setting_child.findViewById<TextView>(R.id.setting_child_title)
     val content = setting_child.findViewById<Switch>(R.id.setting_child_content)
     title.id = Random.nextInt()

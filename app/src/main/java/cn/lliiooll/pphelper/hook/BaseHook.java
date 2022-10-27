@@ -20,7 +20,7 @@ public abstract class BaseHook {
      *
      * @return hook是否加载成功
      */
-    public abstract boolean init();
+    public abstract boolean init() throws Throwable;
 
     /**
      * @return hook是否启用

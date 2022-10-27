@@ -30,6 +30,6 @@ object AccountHook : BaseHook("account", "账号hook") {
                 }
             })
         }
-        return true
+        return false
     }
 }

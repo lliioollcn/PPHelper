@@ -4,6 +4,7 @@ import cn.lliiooll.pphelper.utils.DexKit;
 import cn.lliiooll.pphelper.utils.PLog;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Hooks {
 
@@ -62,11 +63,23 @@ public class Hooks {
         } else {
             for (BaseHook hook : hooks) {
                 if (hook.isEnable()) {
-                    PLog.log("初始化hook: {}({})@{}", hook.getLabel(), hook.getName(), hook.init());
+                    try {
+                        PLog.log("初始化hook: {}({})@{}", hook.getLabel(), hook.getName(), hook.init());
+                    } catch (Throwable e) {
+                        PLog.log("初始化hook: {}({})@失败", hook.getLabel(), hook.getName());
+                        PLog.log(e);
+                        Hooks.initFailed(hook, e);
+                    }
                 } else
                     PLog.log("hook被禁用: {}({})@{}", hook.getLabel(), hook.getName());
             }
         }
         inited = true;
+    }
+
+    private static Map<BaseHook, Throwable> failed = new ConcurrentHashMap<>();
+
+    public static void initFailed(BaseHook hook, Throwable e) {
+        failed.put(hook, e);
     }
 }

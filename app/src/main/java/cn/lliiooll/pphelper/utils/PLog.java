@@ -1,16 +1,23 @@
 package cn.lliiooll.pphelper.utils;
 
 import android.util.Log;
+import androidx.activity.result.contract.ActivityResultContracts;
 import cn.lliiooll.pphelper.BuildConfig;
+import cn.lliiooll.pphelper.config.ConfigManager;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.WeakHashMap;
 
 public class PLog {
+
     public static void log(String str, Object... replaces) {
-        if (BuildConfig.DEBUG) {
+        if (ConfigManager.isEnable("setting_debug_log", BuildConfig.DEBUG)) {
             String s = str;
             for (Object replace : replaces) {
                 s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
@@ -31,6 +38,19 @@ public class PLog {
                 s = "[PPHelper] >> " + s;
                 //XposedBridge.log(s);
                 Log.d("PPHelper", s);
+            }
+            try {
+                File dir = Utils.getApplication().getExternalFilesDir("log");
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                File file = new File(dir, "log.txt");
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                IoUtil.writeLine(s, file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }

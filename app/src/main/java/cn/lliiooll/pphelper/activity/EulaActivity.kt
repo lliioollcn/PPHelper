@@ -6,7 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import cn.lliiooll.pphelper.R
 
-class EulaActivity : Activity() {
+class EulaActivity : AppCompatTransferActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -72,9 +72,17 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(String baseHook) {
+        return isEnable(baseHook,true);
+    }
+
+    /**
+     * @param baseHook 要获取的hook
+     * @return hook启用(true)/禁用(false)
+     */
+    public static boolean isEnable(String baseHook,boolean def) {
         if (!inited || Objects.isNull(mmkv)) return false;
         if (baseHook.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) return true;
-        return mmkv.decodeBool(baseHook, true);
+        return mmkv.decodeBool(baseHook, def);
     }
 
     public static int getInt(String key, int i) {
