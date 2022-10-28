@@ -33,10 +33,11 @@ object SettingHook : BaseHook("setting","设置界面") {
                     //"点击了检查更新".showShortToast()
                     val intent = Intent(activity, SettingsActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    Utils.getApplication().startActivity(intent)
+                    Utils.getApplication()?.startActivity(intent)
                 }
             }
         })
+
         return true
     }
 }

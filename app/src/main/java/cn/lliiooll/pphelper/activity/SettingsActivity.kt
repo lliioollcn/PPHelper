@@ -103,6 +103,7 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         RemoveADHook.addSetting(this, app_setting_base_parent)
         // 调试功能
         TestHook.addSetting(this, app_setting_debug_parent)
+        AntiHotfixHook.addSetting(this, app_setting_debug_parent)
         // 娱乐功能
         CustomVoiceHook.setClickListener {
             "还没写呢".showShortToast()
@@ -110,10 +111,8 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         CustomVoiceHook.addSetting(this, app_setting_play_parent)
         ShowHideHook.addSetting(this, app_setting_play_parent)
         // 净化功能
-        RemoveLiveHook.setClickListener {
-            "还没写呢".showShortToast()
-        }
         RemoveLiveHook.addSetting(this, app_setting_clean_parent)
+        RemoveGameHook.addSetting(this, app_setting_clean_parent)
         RemoveVoiceRoomHook.addSetting(this, app_setting_clean_parent)
         RemoveVoiceRoomHook.setClickListener {
             "此功能需要重启皮皮搞笑生效".showLongToast()

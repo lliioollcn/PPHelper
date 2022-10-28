@@ -8,31 +8,9 @@ import cn.lliiooll.pphelper.utils.loadClass
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 
-object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
+object RemoveGameHook : BaseHook("removeGameCenter", "移除首页推荐小游戏") {
     override fun init(): Boolean {
-        this.desc = "移除语音房"
-        val clazz1 = "com.youyisia.voices.sdk.api.HYVoiceRoomSdk".loadClass()
-        for (m in clazz1?.declaredMethods!!) {
-            m.hookAfter {
-                if (m.name == "isInited") {
-                    it?.result = true
-                }
-                /*
-                PLog.log("========================================\n")
-                PLog.log(
-                    "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
-                    clazz1.name,
-                    m.name,
-                    m.parameterTypes.size,
-                    Arrays.toString(m.parameterTypes),
-                    Arrays.toString(it?.args)
-                )
-                //PLog.printStacks()
-                PLog.log("========================================\n")
-
-                 */
-            }
-        }
+        this.desc = "移除首页推荐小游戏"
         val clazz2 = "cn.xiaochuankeji.zuiyouLite.ui.recommend.RecommendListAdapter".loadClass()
         XposedHelpers.findAndHookMethod(
             clazz2,
@@ -42,7 +20,7 @@ object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
             object : XC_MethodHook() {
                 override fun beforeHookedMethod(param: MethodHookParam?) {
                     val i = param?.args?.get(1) as Int
-                    if (i == 212 || i == 214) {
+                    if (i == 216) {
                         param.args[1] = 666999
                     }
                 }

@@ -7,14 +7,17 @@ import android.os.Build;
 import android.os.Process;
 import android.system.Os;
 import android.system.StructUtsname;
+import androidx.recyclerview.widget.RecyclerView;
 import cn.lliiooll.pphelper.config.ConfigManager;
 import cn.lliiooll.pphelper.startup.HookEntry;
 import cn.lliiooll.pphelper.startup.HybridClassLoader;
 import io.luckypray.dexkit.DexKitBridge;
 import io.luckypray.dexkit.descriptor.member.DexClassDescriptor;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,10 +28,15 @@ public class DexKit {
     public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
     public static String OBF_LIVE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/live/LiveManager";
 
+    public static String OBF_HOTFIX_ROBUSTTASK = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustTask";
+    public static String OBF_HOTFIX_ROBUSTUTILS = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustUtils";
+    public static String OBF_HOTFIX_INIT = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustStater";
+
     private static Map<String, String> caches = new ConcurrentHashMap<>();
     public static final Class<?> clazz_long = long.class;
     public static final Class<?> clazz_boolean = boolean.class;
     public static final Class<?> clazz_void = void.class;
+    public static final Class<?> clazz_int = int.class;
 
     public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
         DexKitBridge helper = DexKitBridge.create(loader);
@@ -42,6 +50,7 @@ public class DexKit {
             });
             finds.put(key, res.toArray(new String[0]));
         });
+
         return finds;
     }
 
@@ -229,4 +238,5 @@ public class DexKit {
         }
         throw new IllegalStateException("No supported ABI in " + Arrays.toString(supported));
     }
+
 }

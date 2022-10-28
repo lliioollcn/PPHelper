@@ -1,10 +1,12 @@
 package cn.lliiooll.pphelper.config;
 
+import cn.lliiooll.pphelper.hook.AntiHotfixHook;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.hook.SettingHook;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.utils.Utils;
 import com.tencent.mmkv.MMKV;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Objects;
@@ -72,14 +74,14 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(String baseHook) {
-        return isEnable(baseHook,true);
+        return isEnable(baseHook, true);
     }
 
     /**
      * @param baseHook 要获取的hook
      * @return hook启用(true)/禁用(false)
      */
-    public static boolean isEnable(String baseHook,boolean def) {
+    public static boolean isEnable(String baseHook, boolean def) {
         if (!inited || Objects.isNull(mmkv)) return false;
         if (baseHook.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) return true;
         return mmkv.decodeBool(baseHook, def);
@@ -93,5 +95,15 @@ public class ConfigManager {
     public static void setInt(String key, int i) {
         if (!inited || Objects.isNull(mmkv)) return;
         mmkv.encode(key, i);
+    }
+
+    public static boolean isFirst(@NotNull BaseHook hook) {
+        if (!inited || Objects.isNull(mmkv)) return false;
+        return mmkv.decodeBool(hook.getLabel() + "_first", true);
+    }
+
+    public static void setFirst(@NotNull BaseHook hook) {
+        if (!inited || Objects.isNull(mmkv)) return;
+        mmkv.encode(hook.getLabel() + "_first", false);
     }
 }

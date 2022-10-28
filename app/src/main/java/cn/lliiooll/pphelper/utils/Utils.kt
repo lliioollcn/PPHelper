@@ -44,10 +44,14 @@ object Utils {
     }
 
     @JvmStatic
-    fun getApplication(): Application {
-        return XposedHelpers.callStaticMethod(
-            loadClass("cn.xiaochuankeji.zuiyouLite.app.AppController"), "instance"
-        ) as Application
+    fun getApplication(): Application? {
+        val clazz = loadClass("cn.xiaochuankeji.zuiyouLite.app.AppController")
+        if (clazz != null){
+            return XposedHelpers.callStaticMethod(
+                clazz, "instance"
+            ) as Application
+        }
+        return null;
     }
 
     @JvmStatic
@@ -59,7 +63,7 @@ object Utils {
 
     @JvmStatic
     fun loadClass(name: String): Class<*>? {
-        return XposedHelpers.findClass(name, HybridClassLoader.clLoader)
+        return HybridClassLoader.load(name)
     }
 
     @JvmStatic
@@ -72,6 +76,12 @@ object Utils {
 
 fun String.loadClass(): Class<*>? {
     return Utils.loadClass(this)
+}
+
+fun Class<*>.allMethod(function: (Method) -> Unit) {
+    for (m in this.declaredMethods) {
+        function.invoke(m)
+    }
 }
 
 fun String.openUrl(context: Context) {
@@ -132,7 +142,7 @@ fun Any?.download() {
                 }
             }
             ("无水印链接获取成功: " + urlSrc).log()
-            val dir = Utils.getApplication().getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+            val dir = Utils.getApplication()?.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
             if (!dir!!.exists()) {
                 dir.mkdirs()
             }

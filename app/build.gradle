@@ -17,7 +17,7 @@ android {
         targetSdk 33
         versionCode Common.getBuildVersionCode(rootProject)
         //versionCode Common.getTimeStamp()
-        versionName "1.0.1${Common.getGitHeadRefsSuffix(rootProject)}"
+        versionName "1.0.2${Common.getGitHeadRefsSuffix(rootProject)}"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = false
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
@@ -114,6 +114,7 @@ dependencies {
 
     implementation 'com.tencent:mmkv-static:1.1.1'
     implementation 'com.github.LuckyPray:DexKit:1.0.1'
+    //implementation "cn.hutool:hutool-all:5.8.5"
 
     //compileOnly fileTree('lib')
     compileOnly project(":stub")

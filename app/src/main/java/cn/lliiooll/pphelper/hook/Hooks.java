@@ -11,11 +11,13 @@ public class Hooks {
     private static boolean inited = false;
     public static boolean sDisableHooks = false;
     private static final BaseHook[] hooks = new BaseHook[]{
+            AntiHotfixHook.INSTANCE,
             SettingHook.INSTANCE,
             RemoveADHook.INSTANCE,
             NoMarkHook.INSTANCE,
             CustomVoiceHook.INSTANCE,
             RemoveLiveHook.INSTANCE,
+            RemoveGameHook.INSTANCE,
             RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,
             AccountHook.INSTANCE,
@@ -45,6 +47,25 @@ public class Hooks {
             }});
             put(DexKit.OBF_LIVE_MANAGER, new HashSet<String>() {{
                 add("liveendpage");
+            }});
+
+            put(DexKit.OBF_HOTFIX_ROBUSTTASK, new HashSet<String>() {{
+                add("class:PatchExecutor method:applyPatchList line:69");
+                add("robustPatch");
+                add(",apply result ");
+                add("patch LocalPath:");
+                add("try download,but still failed.");
+                add("com.izuiyou.robust.patch.PatchesInfoImpl");
+            }});
+            put(DexKit.OBF_HOTFIX_ROBUSTUTILS, new HashSet<String>() {{
+                add("responseBody.byteStream()");
+                add("robust_patch_cache_");
+                add("configHot.config.robustPatch");
+            }});
+            put(DexKit.OBF_HOTFIX_INIT, new HashSet<String>() {{
+                add("event_on_load_hot_config_success");
+                add("app_config_json_parse");
+                add("local config cold/get json data parse failed.");
             }});
         }});
 

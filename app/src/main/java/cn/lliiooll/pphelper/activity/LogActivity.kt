@@ -51,7 +51,7 @@ class LogActivity : AppCompatTransferActivity() {
             this.onBackPressed()
         }
 
-        val dir = Utils.getApplication().getExternalFilesDir("log")
+        val dir = Utils.getApplication()?.getExternalFilesDir("log")
         if (!dir?.exists()!!) {
             dir.mkdirs()
         }
@@ -83,7 +83,7 @@ class LogActivity : AppCompatTransferActivity() {
             this.launcher.launch("log-${SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(Date())}.zip")
         }
         log_save.setOnLongClickListener {
-            val dir = Utils.getApplication().getExternalFilesDir("log")
+            val dir = Utils.getApplication()?.getExternalFilesDir("log")
             if (!dir?.exists()!!) {
                 dir.mkdirs()
             }

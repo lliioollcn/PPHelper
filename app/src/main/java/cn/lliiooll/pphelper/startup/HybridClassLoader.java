@@ -1,6 +1,9 @@
 package cn.lliiooll.pphelper.startup;
 
 import cn.lliiooll.pphelper.utils.UtilsKt;
+import de.robv.android.xposed.XposedHelpers;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 混合类加载器
@@ -87,4 +90,13 @@ public class HybridClassLoader extends ClassLoader {
         }
     }
 
+    @Nullable
+    public static Class<?> load(@NotNull String name) {
+        try {
+            return XposedHelpers.findClass(name,clLoader);
+        }catch (Throwable e){
+            return null;
+        }
+
+    }
 }

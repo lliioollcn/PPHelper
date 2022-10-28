@@ -19,10 +19,13 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
                     for (field in objClazz?.declaredFields!!) {
                         if (field.type == commentBeanClazz) {
                             val commentBean = XposedHelpers.getObjectField(param.thisObject, field.name)
-                            val replays = XposedHelpers.getObjectField(commentBean, "replyReviews") as List<*>
-                            XposedHelpers.setIntField(commentBean, "isHide", 0)
-                            for (replay in replays) {
-                                XposedHelpers.setIntField(replay, "isHide", 0)
+                            val replaysObj = XposedHelpers.getObjectField(commentBean, "replyReviews")
+                            if (replaysObj != null) {
+                                val replays = replaysObj as List<*>
+                                XposedHelpers.setIntField(commentBean, "isHide", 0)
+                                for (replay in replays) {
+                                    XposedHelpers.setIntField(replay, "isHide", 0)
+                                }
                             }
                             //PLog.log(JSONUtil.toJsonStr(commentBean))
                         }
@@ -42,17 +45,22 @@ object ShowHideHook : BaseHook("comment_show_hide", "评论区显示隐藏评论
                         if (field.type == postDataBeanClazz) {
                             val postDataBean = XposedHelpers.getObjectField(param.thisObject, field.name)
                             val godReviewsObj = XposedHelpers.getObjectField(postDataBean, "godReviews")
-                            var godReviews: List<*>
                             if (godReviewsObj != null) {
-                                godReviews = godReviewsObj as List<*>;
-                                val myReviews = XposedHelpers.getObjectField(postDataBean, "myReviews") as List<*>
-                                val reviewList = XposedHelpers.getObjectField(postDataBean, "reviewList") as List<*>
+                                val godReviews = godReviewsObj as List<*>
                                 for (replay in godReviews) {
                                     XposedHelpers.setIntField(replay, "isHide", 0)
                                 }
+                            }
+                            val myReviewsObj = XposedHelpers.getObjectField(postDataBean, "myReviews")
+                            if (myReviewsObj != null) {
+                                val myReviews = myReviewsObj as List<*>
                                 for (replay in myReviews) {
                                     XposedHelpers.setIntField(replay, "isHide", 0)
                                 }
+                            }
+                            val reviewListObj = XposedHelpers.getObjectField(postDataBean, "reviewList")
+                            if (reviewListObj != null) {
+                                val reviewList = reviewListObj as List<*>
                                 for (replay in reviewList) {
                                     XposedHelpers.setIntField(replay, "isHide", 0)
                                 }
