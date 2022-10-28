@@ -48,6 +48,7 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         val app_setting_clean_parent = findViewById<LinearLayout>(R.id.app_setting_clean_parent)// 净化功能
         val app_setting_debug_parent = findViewById<LinearLayout>(R.id.app_setting_debug_parent)// 调试功能
         val setting_download_multi_root = findViewById<LinearLayout>(R.id.setting_download_multi_root)
+        val setting_voice_root = findViewById<LinearLayout>(R.id.setting_voice_root)
         val setting_log_root = findViewById<LinearLayout>(R.id.setting_log_root)
         val setting_debug_appcenter = findViewById<Switch>(R.id.setting_debug_appcenter)// appcenter调试
         val setting_download_multi = findViewById<Switch>(R.id.setting_download_multi)// 多线程下载
@@ -91,7 +92,10 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
 
 
         setting_download_multi_root.setOnClickListener {
-            PPInputDialog(this).show()
+            PPInputDialog(this).setA(0).show()
+        }
+        setting_voice_root.setOnClickListener {
+            PPInputDialog(this).setA(1).show()
         }
 
         setting_download_multi.setOnClickListener {
@@ -105,9 +109,6 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         TestHook.addSetting(this, app_setting_debug_parent)
         AntiHotfixHook.addSetting(this, app_setting_debug_parent)
         // 娱乐功能
-        CustomVoiceHook.setClickListener {
-            "还没写呢".showShortToast()
-        }
         CustomVoiceHook.addSetting(this, app_setting_play_parent)
         ShowHideHook.addSetting(this, app_setting_play_parent)
         // 净化功能

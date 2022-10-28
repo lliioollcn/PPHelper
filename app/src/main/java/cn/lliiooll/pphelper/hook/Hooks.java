@@ -45,27 +45,16 @@ public class Hooks {
                 add("avatar");
                 add("third_force_bind_phone");
             }});
-            put(DexKit.OBF_LIVE_MANAGER, new HashSet<String>() {{
-                add("liveendpage");
-            }});
-
-            put(DexKit.OBF_HOTFIX_ROBUSTTASK, new HashSet<String>() {{
-                add("class:PatchExecutor method:applyPatchList line:69");
-                add("robustPatch");
-                add(",apply result ");
-                add("patch LocalPath:");
-                add("try download,but still failed.");
-                add("com.izuiyou.robust.patch.PatchesInfoImpl");
-            }});
-            put(DexKit.OBF_HOTFIX_ROBUSTUTILS, new HashSet<String>() {{
-                add("responseBody.byteStream()");
-                add("robust_patch_cache_");
-                add("configHot.config.robustPatch");
-            }});
             put(DexKit.OBF_HOTFIX_INIT, new HashSet<String>() {{
                 add("event_on_load_hot_config_success");
                 add("app_config_json_parse");
                 add("local config cold/get json data parse failed.");
+            }});
+            put(DexKit.OBF_PUBLISH_BUS, new HashSet<String>() {{
+                add("仅可同时进行3个图片视频或语音发布任务");
+            }});
+            put(DexKit.OBF_PUBLISH_DATA, new HashSet<String>() {{
+                add("距你-18cm");
             }});
         }});
 

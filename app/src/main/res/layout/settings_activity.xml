@@ -57,7 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                 />
-                
+
 
             </LinearLayout>
             <LinearLayout
@@ -81,8 +81,46 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                 />
+                <View
+                        android:background="@drawable/bg_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                />
 
-
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical"
+                        android:id="@+id/setting_voice_root"
+                >
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:textColor="#ff000000"
+                                android:layout_gravity="left"
+                                android:gravity="center_vertical"
+                                android:text="设置自定义语音秒数"
+                                android:textSize="@dimen/f4"
+                                android:scaleType="centerInside"
+                        />
+                        <ImageView
+                                android:layout_width="@dimen/item_height"
+                                android:layout_height="match_parent"
+                                android:src="@mipmap/icon_arrow_right"
+                                android:scaleType="center"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

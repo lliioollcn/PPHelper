@@ -26,11 +26,10 @@ public class DexKit {
 
     public static String OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;";
     public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
-    public static String OBF_LIVE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/live/LiveManager";
-
-    public static String OBF_HOTFIX_ROBUSTTASK = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustTask";
-    public static String OBF_HOTFIX_ROBUSTUTILS = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustUtils";
     public static String OBF_HOTFIX_INIT = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustStater";
+
+    public static String OBF_PUBLISH_BUS = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishBus";
+    public static String OBF_PUBLISH_DATA = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishData";
 
     private static Map<String, String> caches = new ConcurrentHashMap<>();
     public static final Class<?> clazz_long = long.class;
@@ -81,6 +80,9 @@ public class DexKit {
 
     public static String doFilter(String key, List<String> classes) {
         if (!classes.isEmpty() && Utils.isNotBlank(key)) {
+            if (key.equalsIgnoreCase(OBF_PUBLISH_BUS)) {
+                return doReplace(classes.get(0)).split("\\$")[0];
+            }
             if (classes.size() == 1) {
                 return doReplace(classes.get(0));
             }

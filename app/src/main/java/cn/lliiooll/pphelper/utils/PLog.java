@@ -4,6 +4,9 @@ import android.util.Log;
 import androidx.activity.result.contract.ActivityResultContracts;
 import cn.lliiooll.pphelper.BuildConfig;
 import cn.lliiooll.pphelper.config.ConfigManager;
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,8 +39,8 @@ public class PLog {
                 }
             } else {
                 s = "[PPHelper] >> " + s;
-                //XposedBridge.log(s);
-                Log.d("PPHelper", s);
+                XposedBridge.log(s);
+                //Log.d("PPHelper", s);
             }
 
             if (!BuildConfig.DEBUG) {
@@ -114,5 +117,9 @@ public class PLog {
             }
         }
         log("======================================================");
+    }
+
+    public static String toJson(@Nullable Object obj) {
+        return XposedHelpers.callStaticMethod(Utils.loadClass("com.alibaba.fastjson.JSON"), "toJSONString", obj).toString();
     }
 }
