@@ -17,50 +17,47 @@ import java.util.WeakHashMap;
 public class PLog {
 
     public static void log(String str, Object... replaces) {
-        // if (ConfigManager.isEnable("setting_debug_log", BuildConfig.DEBUG)) {
-        String s = str;
-        for (Object replace : replaces) {
-            s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
-        }
-        int limit = 500;
-        if (s.length() >= limit) {
-            String q = s;
-            int c = 0;
-            for (int i = 0; i < s.length(); i += limit) {
-
-                if (i != 0 && q.length() > limit) {
-                    q = q.substring(limit);
-                }
-                Log.d("PPHelper", "[PPHelper] @" + c + " >> " + q);
-                c++;
+        if (ConfigManager.isEnable("setting_debug_log", BuildConfig.DEBUG)) {
+            String s = str;
+            for (Object replace : replaces) {
+                s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
             }
-        } else {
-            s = "[PPHelper] >> " + s;
-            //XposedBridge.log(s);
-            Log.d("PPHelper", s);
-        }
+            int limit = 500;
+            if (s.length() >= limit) {
+                String q = s;
+                int c = 0;
+                for (int i = 0; i < s.length(); i += limit) {
 
-        /*
-        try {
-            if (Utils.getApplication()!=null){
-                File dir = Utils.getApplication().getExternalFilesDir("log");
-                if (!dir.exists()) {
-                    dir.mkdirs();
+                    if (i != 0 && q.length() > limit) {
+                        q = q.substring(limit);
+                    }
+                    Log.d("PPHelper", "[PPHelper] @" + c + " >> " + q);
+                    c++;
                 }
-                File file = new File(dir, "log.txt");
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                IoUtil.writeLine(s, file);
+            } else {
+                s = "[PPHelper] >> " + s;
+                //XposedBridge.log(s);
+                Log.d("PPHelper", s);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            if (!BuildConfig.DEBUG) {
+                try {
+                    if (Utils.getApplication() != null) {
+                        File dir = Utils.getApplication().getExternalFilesDir("log");
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        }
+                        File file = new File(dir, "log.txt");
+                        if (!file.exists()) {
+                            file.createNewFile();
+                        }
+                        IoUtil.writeLine(s, file);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
-
-         */
-
-
-        // }
     }
 
     public static void log(Throwable e2) {
