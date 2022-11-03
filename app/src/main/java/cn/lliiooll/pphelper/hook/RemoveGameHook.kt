@@ -20,7 +20,7 @@ object RemoveGameHook : BaseHook("removeGameCenter", "移除首页推荐小游�
             object : XC_MethodHook() {
                 override fun beforeHookedMethod(param: MethodHookParam?) {
                     val i = param?.args?.get(1) as Int
-                    if (i == 216) {
+                    if (i == 216 || i == 215) {
                         param.args[1] = 666999
                     }
                 }
