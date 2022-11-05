@@ -156,7 +156,7 @@ fun Any?.download() {
             val dw = DownloadManager(urlSrc, file);
             dw.download(object : DownloadCallback {
                 override fun onFinished(url: URL?, file: File?) {
-                    StoreUtils.saveToVideoStore(file?.name, file?.absolutePath!!, "pipi")
+                    StoreUtils.saveToVideoStore(file?.name, file?.absolutePath!!, Environment.DIRECTORY_MOVIES)
                     "无水印视频下载完毕".showShortToast()
                 }
 

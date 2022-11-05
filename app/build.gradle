@@ -31,15 +31,15 @@ android {
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                "-DMODULE_SIGNATURE=C1FC52C2B136A8A2EC782326AA09293755FEDDB4"
-                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                //"-DMODULE_SIGNATURE=C1FC52C2B136A8A2EC782326AA09293755FEDDB4"
+                "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
                 cFlags "-std=c18", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                "-DMODULE_SIGNATURE=C1FC52C2B136A8A2EC782326AA09293755FEDDB4"
-                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                //"-DMODULE_SIGNATURE=C1FC52C2B136A8A2EC782326AA09293755FEDDB4"
+                "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
 
 
             }

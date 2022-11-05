@@ -50,7 +50,7 @@ object VoiceDownloadHook : BaseHook("voice_download", "语音下载") {
                                 DownloadManager(url, file).download(object : DownloadCallback {
                                     override fun onFinished(url: URL?, file: File?) {
                                         "语音下载完毕".showShortToast()
-                                        StoreUtils.saveToAudioStore(file?.name, file?.absolutePath!!, "Alarms")
+                                        StoreUtils.saveToAudioStore(file?.name, file?.absolutePath!!, Environment.DIRECTORY_ALARMS)
                                     }
 
                                     override fun onFailed(url: URL?, file: File?, e: Throwable?) {
