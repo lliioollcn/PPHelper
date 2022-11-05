@@ -30,6 +30,7 @@ public class DexKit {
 
     public static String OBF_PUBLISH_BUS = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishBus";
     public static String OBF_PUBLISH_DATA = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishData";
+    public static String OBF_CONFIG_PARSER = "Lcn/xiaochuankeji/zuiyouLite/config/PPConfigParser";
 
     private static Map<String, String> caches = new ConcurrentHashMap<>();
     public static final Class<?> clazz_long = long.class;

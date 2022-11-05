@@ -20,6 +20,7 @@ public class Hooks {
             HidePostHook.INSTANCE,
             RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,
+            FixQuitHook.INSTANCE,
             SimpleMeHook.INSTANCE,
             AutoTaskHook.INSTANCE,
             VoiceDownloadHook.INSTANCE,
@@ -58,6 +59,9 @@ public class Hooks {
             }});
             put(DexKit.OBF_PUBLISH_DATA, new HashSet<String>() {{
                 add("距你-18cm");
+            }});
+            put(DexKit.OBF_CONFIG_PARSER, new HashSet<String>() {{
+                add("server config Hot/get json data parse failed.");
             }});
         }});
 
