@@ -40,4 +40,8 @@ object SettingHook : BaseHook("setting","设置界面") {
 
         return true
     }
+
+    override fun isEnable(): Boolean {
+        return true
+    }
 }

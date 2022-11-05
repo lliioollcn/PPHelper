@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.config.ConfigManager;
-import cn.lliiooll.pphelper.utils.PostTypes;
+import cn.lliiooll.pphelper.utils.HideList;
 import cn.lliiooll.pphelper.utils.Utils;
 
 public class PPInputDialog extends Dialog {
@@ -99,18 +99,37 @@ public class PPInputDialog extends Dialog {
             Button button = findViewById(R.id.pp_dialog_button);
             LinearLayout root = findViewById(R.id.select_root);
             title.setText("选择你要屏蔽的帖子类型");
-            PostTypes.types.forEach((lab, type) -> {
+            HideList.postTypes.forEach((lab, type) -> {
                 View child = LayoutInflater.from(this.getContext()).inflate(R.layout.pp_dialog_select_child, root, false);
                 TextView content = child.findViewById(R.id.dialog_select_child_content);
                 CheckBox check = child.findViewById(R.id.dialog_select_child_check);
                 content.setText(lab);
-                check.setChecked(PostTypes.isHide(type));
-                check.setOnCheckedChangeListener((buttonView, isChecked) -> PostTypes.hide(type, isChecked));
-                root.addView(child,0);
+                check.setChecked(HideList.isHidePost(type));
+                check.setOnCheckedChangeListener((buttonView, isChecked) -> HideList.hidePost(type, isChecked));
+                root.addView(child, 0);
             });
             button.setOnClickListener(v -> {
                 this.hide();
                 Toast.makeText(Utils.getApplication(), "保存完毕", Toast.LENGTH_SHORT).show();
+            });
+        } else if (a == 3) {
+            setContentView(R.layout.pp_dialog_select);
+            TextView title = findViewById(R.id.pp_dialog_title);
+            Button button = findViewById(R.id.pp_dialog_button);
+            LinearLayout root = findViewById(R.id.select_root);
+            title.setText("选择你要屏蔽的功能类型");
+            HideList.myTypes.forEach((lab, type) -> {
+                View child = LayoutInflater.from(this.getContext()).inflate(R.layout.pp_dialog_select_child, root, false);
+                TextView content = child.findViewById(R.id.dialog_select_child_content);
+                CheckBox check = child.findViewById(R.id.dialog_select_child_check);
+                content.setText(lab);
+                check.setChecked(HideList.isHideMy(type));
+                check.setOnCheckedChangeListener((buttonView, isChecked) -> HideList.hideMy(type, isChecked));
+                root.addView(child, 0);
+            });
+            button.setOnClickListener(v -> {
+                this.hide();
+                Toast.makeText(Utils.getApplication(), "保存完毕，重启皮皮搞笑生效", Toast.LENGTH_SHORT).show();
             });
         }
 

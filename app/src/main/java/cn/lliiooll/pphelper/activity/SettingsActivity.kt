@@ -18,7 +18,7 @@ import cn.lliiooll.pphelper.utils.*
 
 class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
 
-    private val requestId: Int = 0x7c0c8cf
+    private val requestId: Int = 0x7c
     lateinit var _binding: SettingsActivityBinding;
 
 
@@ -50,6 +50,7 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         val setting_voice_root = findViewById<LinearLayout>(R.id.setting_voice_root)
         val setting_log_root = findViewById<LinearLayout>(R.id.setting_log_root)
         val setting_remove_recommend_root = findViewById<LinearLayout>(R.id.setting_remove_recommend_root)
+        val setting_remove_my_root = findViewById<LinearLayout>(R.id.setting_remove_my_root)
         val setting_debug_appcenter = findViewById<Switch>(R.id.setting_debug_appcenter)// appcenter调试
         val setting_download_multi = findViewById<Switch>(R.id.setting_download_multi)// 多线程下载
         val setting_debug_log = findViewById<Switch>(R.id.setting_debug_log)// 日志输出
@@ -102,6 +103,9 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         setting_remove_recommend_root.setOnClickListener {
             PPInputDialog(this).setA(2).show()
         }
+        setting_remove_my_root.setOnClickListener {
+            PPInputDialog(this).setA(3).show()
+        }
 
         setting_download_multi.setOnClickListener {
             ConfigManager.setEnable("pp_download_multi_thread", setting_download_multi.isChecked)
@@ -116,9 +120,9 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         // 娱乐功能
         CustomVoiceHook.addSetting(this, app_setting_play_parent)
         ShowHideHook.addSetting(this, app_setting_play_parent)
+        VoiceDownloadHook.addSetting(this, app_setting_play_parent)
         // 净化功能
         RemoveLiveHook.addSetting(this, app_setting_clean_parent)
-        HidePostHook.addSetting(this, app_setting_clean_parent)
         RemoveVoiceRoomHook.addSetting(this, app_setting_clean_parent)
         RemoveVoiceRoomHook.setClickListener {
             "此功能需要重启皮皮搞笑生效".showLongToast()

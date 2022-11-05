@@ -1,6 +1,5 @@
 package cn.lliiooll.pphelper.hook
 
-import android.app.Application
 import android.os.Bundle
 import cn.lliiooll.pphelper.utils.CliOper
 import cn.lliiooll.pphelper.utils.Utils

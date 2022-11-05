@@ -20,6 +20,9 @@ public class Hooks {
             HidePostHook.INSTANCE,
             RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,
+            SimpleMeHook.INSTANCE,
+            AutoTaskHook.INSTANCE,
+            VoiceDownloadHook.INSTANCE,
             AccountHook.INSTANCE,
             ShowHideHook.INSTANCE,
     };
