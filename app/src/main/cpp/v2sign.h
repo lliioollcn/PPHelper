@@ -129,6 +129,9 @@ namespace {
         std::string currSignature = getV2Signature(block);
         std::string md5 = getBlockMd5(currSignature);
         std::string str(STRING(MODULE_SIGNATURE));
+
+          //LOGD("verify -> %s", md5.c_str());
+          //LOGD("sign -> %s", str.c_str());
         return str == md5;
     }
 }

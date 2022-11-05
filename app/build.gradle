@@ -15,8 +15,8 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 33
-        versionCode Common.getBuildVersionCode(rootProject)
-        //versionCode Common.getTimeStamp()
+        //versionCode Common.getBuildVersionCode(rootProject)
+        versionCode Common.getTimeStamp()
         versionName "1.0.3${Common.getGitHeadRefsSuffix(rootProject)}"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = false
@@ -31,15 +31,15 @@ android {
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                //"-DMODULE_SIGNATURE=C1FC52C2B136A8A2EC782326AA09293755FEDDB4"
-                "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
+                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
                 cFlags "-std=c18", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                //"-DMODULE_SIGNATURE=C1FC52C2B136A8A2EC782326AA09293755FEDDB4"
-                "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
+                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
 
 
             }
@@ -122,7 +122,7 @@ dependencies {
     //implementation 'com.tencent:mmkv-static:1.1.1'
     implementation project(":mmkv")
     implementation project(":dexkit")
-   // implementation 'com.github.LuckyPray:DexKit:1.0.1'
+    // implementation 'com.github.LuckyPray:DexKit:1.0.1'
     //implementation "cn.hutool:hutool-all:5.8.5"
 
     //compileOnly fileTree('lib')
