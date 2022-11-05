@@ -1,6 +1,5 @@
 package cn.lliiooll.pphelper.config;
 
-import cn.lliiooll.pphelper.hook.AntiHotfixHook;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.hook.SettingHook;
 import cn.lliiooll.pphelper.utils.PLog;
@@ -9,7 +8,9 @@ import com.tencent.mmkv.MMKV;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class ConfigManager {
     private static boolean inited = false;
@@ -106,4 +107,15 @@ public class ConfigManager {
         if (!inited || Objects.isNull(mmkv)) return;
         mmkv.encode(hook.getLabel() + "_first", false);
     }
+
+    public static Set<String> getSet(String label) {
+        if (!inited || Objects.isNull(mmkv)) return null;
+        return mmkv.decodeStringSet(label, new HashSet<>());
+    }
+
+    public static void setSet(String label, Set<String> set) {
+        if (!inited || Objects.isNull(mmkv)) return;
+        mmkv.encode(label, set);
+    }
+
 }

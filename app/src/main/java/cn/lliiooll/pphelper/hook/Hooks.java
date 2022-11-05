@@ -17,7 +17,7 @@ public class Hooks {
             NoMarkHook.INSTANCE,
             CustomVoiceHook.INSTANCE,
             RemoveLiveHook.INSTANCE,
-            RemoveGameHook.INSTANCE,
+            HidePostHook.INSTANCE,
             RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,
             AccountHook.INSTANCE,

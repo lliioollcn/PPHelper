@@ -145,7 +145,53 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                 />
-
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical"
+                        android:id="@+id/setting_remove_recommend_root"
+                >
+                    <View
+                            android:background="@drawable/bg_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                    />
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:textColor="#ff000000"
+                                android:layout_gravity="left"
+                                android:gravity="center_vertical"
+                                android:text="选择隐藏帖子类型"
+                                android:textSize="@dimen/f4"
+                                android:scaleType="centerInside"
+                        />
+                        <ImageView
+                                android:id="@+id/setting_remove_recommend_img"
+                                android:layout_width="@dimen/item_height"
+                                android:layout_height="match_parent"
+                                android:src="@mipmap/icon_arrow_right"
+                                android:scaleType="center"/>
+                    </LinearLayout>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="#ff000000"
+                            android:layout_gravity="left"
+                            android:gravity="center_vertical"
+                            android:text="需要开启隐藏对应帖子类型才会生效"
+                            android:textSize="@dimen/f6"
+                    />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -224,14 +270,6 @@
                     />
                 </LinearLayout>
 
-                <View
-                        android:background="@drawable/bg_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="5dp"
-                />
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -242,6 +280,11 @@
                         android:orientation="vertical"
                         android:id="@+id/setting_download_multi_root"
                 >
+                    <View
+                            android:background="@drawable/bg_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                    />
                     <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
@@ -402,14 +445,7 @@
                             android:textSize="@dimen/f6"
                     />
                 </LinearLayout>
-                <View
-                        android:background="@drawable/bg_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="5dp"
-                />
+
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -419,6 +455,11 @@
                         android:orientation="vertical"
                         android:id="@+id/setting_log_root"
                 >
+                    <View
+                            android:background="@drawable/bg_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                    />
                     <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"

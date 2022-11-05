@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Switch
 import cn.lliiooll.pphelper.BuildConfig
 import cn.lliiooll.pphelper.R
@@ -50,6 +49,7 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         val setting_download_multi_root = findViewById<LinearLayout>(R.id.setting_download_multi_root)
         val setting_voice_root = findViewById<LinearLayout>(R.id.setting_voice_root)
         val setting_log_root = findViewById<LinearLayout>(R.id.setting_log_root)
+        val setting_remove_recommend_root = findViewById<LinearLayout>(R.id.setting_remove_recommend_root)
         val setting_debug_appcenter = findViewById<Switch>(R.id.setting_debug_appcenter)// appcenter调试
         val setting_download_multi = findViewById<Switch>(R.id.setting_download_multi)// 多线程下载
         val setting_debug_log = findViewById<Switch>(R.id.setting_debug_log)// 日志输出
@@ -94,8 +94,13 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         setting_download_multi_root.setOnClickListener {
             PPInputDialog(this).setA(0).show()
         }
+
         setting_voice_root.setOnClickListener {
             PPInputDialog(this).setA(1).show()
+        }
+
+        setting_remove_recommend_root.setOnClickListener {
+            PPInputDialog(this).setA(2).show()
         }
 
         setting_download_multi.setOnClickListener {
@@ -113,7 +118,7 @@ class SettingsActivity : AppCompatTransferActivity(), OnClickListener {
         ShowHideHook.addSetting(this, app_setting_play_parent)
         // 净化功能
         RemoveLiveHook.addSetting(this, app_setting_clean_parent)
-        RemoveGameHook.addSetting(this, app_setting_clean_parent)
+        HidePostHook.addSetting(this, app_setting_clean_parent)
         RemoveVoiceRoomHook.addSetting(this, app_setting_clean_parent)
         RemoveVoiceRoomHook.setClickListener {
             "此功能需要重启皮皮搞笑生效".showLongToast()

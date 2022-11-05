@@ -27,4 +27,11 @@ public class HostInfo {
     public static boolean isInHostProcess() {
         return Utils.getApplication().getPackageName().equals(PACKAGE_ZUIYOU_LITE);
     }
+
+    public static class Version {
+
+        public static final int PP_2_36_0 = 2360000;
+        public static final int PP_2_36_1 = 2360100;
+
+    }
 }
