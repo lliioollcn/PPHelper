@@ -14,6 +14,7 @@ import cn.lliiooll.pphelper.utils.Utils;
 
 public class PPInputDialog extends Dialog {
     private int a = 0;
+    private Runnable r;
 
     public PPInputDialog(@NonNull Context context) {
         super(context);
@@ -29,6 +30,11 @@ public class PPInputDialog extends Dialog {
 
     public PPInputDialog setA(int a) {
         this.a = a;
+        return this;
+    }
+
+    public PPInputDialog setCall(Runnable r) {
+        this.r = r;
         return this;
     }
 
@@ -68,6 +74,9 @@ public class PPInputDialog extends Dialog {
                 ConfigManager.setInt("pp_download_multi_thread_count", tCount[0]);
                 this.hide();
                 Toast.makeText(Utils.getApplication(), "保存完毕", Toast.LENGTH_SHORT).show();
+                if (this.r != null) {
+                    this.r.run();
+                }
             });
         } else if (a == 1) {
             setContentView(R.layout.pp_dialog_number);
@@ -92,6 +101,9 @@ public class PPInputDialog extends Dialog {
                 ConfigManager.setInt("pp_play_voice_time", tCount[0]);
                 this.hide();
                 Toast.makeText(Utils.getApplication(), "保存完毕", Toast.LENGTH_SHORT).show();
+                if (this.r != null) {
+                    this.r.run();
+                }
             });
         } else if (a == 2) {
             setContentView(R.layout.pp_dialog_select);
@@ -111,6 +123,9 @@ public class PPInputDialog extends Dialog {
             button.setOnClickListener(v -> {
                 this.hide();
                 Toast.makeText(Utils.getApplication(), "保存完毕", Toast.LENGTH_SHORT).show();
+                if (this.r != null) {
+                    this.r.run();
+                }
             });
         } else if (a == 3) {
             setContentView(R.layout.pp_dialog_select);
@@ -130,6 +145,21 @@ public class PPInputDialog extends Dialog {
             button.setOnClickListener(v -> {
                 this.hide();
                 Toast.makeText(Utils.getApplication(), "保存完毕，重启皮皮搞笑生效", Toast.LENGTH_SHORT).show();
+            });
+        } else if (a == 4) {
+            setContentView(R.layout.pp_dialog_confirm);
+            TextView title = findViewById(R.id.pp_dialog_title);
+            Button button_ok = findViewById(R.id.pp_dialog_button_ok);
+            Button button_back = findViewById(R.id.pp_dialog_button_back);
+            title.setText("你确定要下载这个语音吗？");
+            button_ok.setOnClickListener(l -> {
+                this.hide();
+                if (this.r != null) {
+                    this.r.run();
+                }
+            });
+            button_back.setOnClickListener(l -> {
+                this.hide();
             });
         }
 

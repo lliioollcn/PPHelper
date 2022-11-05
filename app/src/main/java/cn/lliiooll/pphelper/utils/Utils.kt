@@ -23,6 +23,7 @@ import java.io.File
 import java.lang.reflect.Member
 import java.lang.reflect.Method
 import java.net.URL
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
@@ -46,7 +47,7 @@ object Utils {
     @JvmStatic
     fun getApplication(): Application? {
         val clazz = loadClass("cn.xiaochuankeji.zuiyouLite.app.AppController")
-        if (clazz != null){
+        if (clazz != null) {
             return XposedHelpers.callStaticMethod(
                 clazz, "instance"
             ) as Application
@@ -155,7 +156,7 @@ fun Any?.download() {
             val dw = DownloadManager(urlSrc, file);
             dw.download(object : DownloadCallback {
                 override fun onFinished(url: URL?, file: File?) {
-                    StoreUtils.saveToStore(file?.name, file?.absolutePath!!)
+                    StoreUtils.saveToVideoStore(file?.name, file?.absolutePath!!, "pipi")
                     "无水印视频下载完毕".showShortToast()
                 }
 
@@ -224,4 +225,17 @@ fun BaseHook.addSetting(ctx: Context, parent: LinearLayout) {
 
 fun String.isConnected(): Boolean {
     return SyncUtils.isConnected(this)
+}
+
+fun Method.invokeStatic(vararg args: Any?): Any? {
+    return call(null, args)
+}
+
+fun Method.call(ins: Any?, vararg args: Any?): Any? {
+    this.isAccessible = true
+    return this.invoke(ins, args)
+}
+
+fun String.md5(): String {
+    return MD5Util.md5(this)
 }

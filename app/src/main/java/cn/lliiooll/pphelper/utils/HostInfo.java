@@ -32,6 +32,7 @@ public class HostInfo {
 
         public static final int PP_2_36_0 = 2360000;
         public static final int PP_2_36_1 = 2360100;
+        public static final int PP_2_37_0 = 2370000;
 
     }
 }

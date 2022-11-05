@@ -2,6 +2,7 @@ package cn.lliiooll.pphelper.utils;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Process;
@@ -31,6 +32,49 @@ public class DexKit {
     public static String OBF_PUBLISH_BUS = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishBus";
     public static String OBF_PUBLISH_DATA = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishData";
     public static String OBF_CONFIG_PARSER = "Lcn/xiaochuankeji/zuiyouLite/config/PPConfigParser";
+    public static String OBF_POST_REVIEW_AIO1 = "Lcn/xiaochuankeji/zuiyouLite/post/review/AIO1";// m.g.l.a
+    public static String OBF_POST_REVIEW_AIO2 = "Lcn/xiaochuankeji/zuiyouLite/post/review/AIO2";
+    public final static Map<String, Set<String>> obfMap = new HashMap<String, Set<String>>() {{
+        put(DexKit.OBF_POST_REVIEW_AIO1, new HashSet<String>() {{
+            add("^%d:%02d:%02d$");
+            add("^%02d:%02d$");
+            add("00:00");
+        }});
+        put(DexKit.OBF_POST_REVIEW_AIO2, new HashSet<String>() {{
+            add("巡查举报");
+            add("开启存储权限才能正常下载");
+            add("去设置");
+            add("举报成功，感谢你对家园的贡献!");
+        }});
+
+        put(DexKit.OBF_COMMENT_VIDEO, new HashSet<String>() {{
+            add("event_media_play_observer");
+            add("event_on_play_review_comment");
+            add("post");
+            add("review");
+            add("+%d");
+            add("http://alfile.ippzone.com/img/mp4/id/");
+            add("videocomment");
+        }});
+        put(DexKit.OBF_ACCOUNT_SERVICE_MANAGER, new HashSet<String>() {{
+            add("avatar");
+            add("third_force_bind_phone");
+        }});
+        put(DexKit.OBF_HOTFIX_INIT, new HashSet<String>() {{
+            add("event_on_load_hot_config_success");
+            add("app_config_json_parse");
+            add("local config cold/get json data parse failed.");
+        }});
+        put(DexKit.OBF_PUBLISH_BUS, new HashSet<String>() {{
+            add("仅可同时进行3个图片视频或语音发布任务");
+        }});
+        put(DexKit.OBF_PUBLISH_DATA, new HashSet<String>() {{
+            add("距你-18cm");
+        }});
+        put(DexKit.OBF_CONFIG_PARSER, new HashSet<String>() {{
+            add("server config Hot/get json data parse failed.");
+        }});
+    }};
 
     private static Map<String, String> caches = new ConcurrentHashMap<>();
     public static final Class<?> clazz_long = long.class;
@@ -40,7 +84,8 @@ public class DexKit {
 
     public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
         DexKitBridge helper = DexKitBridge.create(loader);
-        Map<String, List<DexClassDescriptor>> results = helper.batchFindClassesUsingStrings(input, false, new int[0]);
+
+        Map<String, List<DexClassDescriptor>> results = helper.batchFindClassesUsingStrings(input, true, new int[0]);
         helper.close();
         Map<String, String[]> finds = new HashMap<>();
         results.forEach((key, value) -> {
@@ -96,6 +141,21 @@ public class DexKit {
                     if (cls != null) {
                         for (Method m : cls.getDeclaredMethods()) {
                             if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == commentBeanCls) {
+                                PLog.log("过滤完毕: " + replace);
+                                return replace;
+                            }
+                        }
+                    }
+                }
+            }
+            if (key.equalsIgnoreCase(OBF_POST_REVIEW_AIO1)){
+                for (String clazz : classes) {
+                    String replace = doReplace(clazz);
+                    PLog.log("正在过滤类: " + replace);
+                    Class<?> cls = Utils.loadClass(replace);
+                    if (cls != null) {
+                        for (Method m : cls.getDeclaredMethods()) {
+                            if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == Context.class && m.getReturnType() == Activity.class) {
                                 PLog.log("过滤完毕: " + replace);
                                 return replace;
                             }

@@ -35,35 +35,8 @@ public class Hooks {
         if (inited) return;
         PLog.log("正在初始化hook...");
         PLog.log("正在寻找被混淆的类...");
-        Map<String, String[]> result = DexKit.find(instance.getClass().getClassLoader(), new HashMap<String, Set<String>>() {{
-            put(DexKit.OBF_COMMENT_VIDEO, new HashSet<String>() {{
-                add("event_media_play_observer");
-                add("event_on_play_review_comment");
-                add("post");
-                add("review");
-                add("+%d");
-                add("http://alfile.ippzone.com/img/mp4/id/");
-                add("videocomment");
-            }});
-            put(DexKit.OBF_ACCOUNT_SERVICE_MANAGER, new HashSet<String>() {{
-                add("avatar");
-                add("third_force_bind_phone");
-            }});
-            put(DexKit.OBF_HOTFIX_INIT, new HashSet<String>() {{
-                add("event_on_load_hot_config_success");
-                add("app_config_json_parse");
-                add("local config cold/get json data parse failed.");
-            }});
-            put(DexKit.OBF_PUBLISH_BUS, new HashSet<String>() {{
-                add("仅可同时进行3个图片视频或语音发布任务");
-            }});
-            put(DexKit.OBF_PUBLISH_DATA, new HashSet<String>() {{
-                add("距你-18cm");
-            }});
-            put(DexKit.OBF_CONFIG_PARSER, new HashSet<String>() {{
-                add("server config Hot/get json data parse failed.");
-            }});
-        }});
+        Map<String, String[]> result = DexKit.find(instance.getClass().getClassLoader(), DexKit.obfMap);
+
 
         result.forEach((key, value) -> {
             PLog.log("========================================");

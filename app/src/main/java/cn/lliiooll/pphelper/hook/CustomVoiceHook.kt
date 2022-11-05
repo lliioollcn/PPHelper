@@ -19,7 +19,7 @@ import java.util.*
 
 object CustomVoiceHook : BaseHook("custom_voice", "自定义评论区语音") {
     override fun init(): Boolean {
-        this.desc = "启用后将显示一个悬浮窗，在帖子界面点击悬浮窗使用语音并发送"
+        this.desc = "长按评论界面麦克风按钮选择语音并发送"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.input.ActivityInputReview".loadClass()
         XposedHelpers.findAndHookMethod(clazz, "onCreate", Bundle::class.java, object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam?) {

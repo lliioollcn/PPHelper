@@ -3,6 +3,7 @@ package cn.lliiooll.pphelper.utils;
 import android.util.Log;
 import androidx.activity.result.contract.ActivityResultContracts;
 import cn.lliiooll.pphelper.BuildConfig;
+import cn.lliiooll.pphelper.app.PPHelperImpl;
 import cn.lliiooll.pphelper.config.ConfigManager;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -20,7 +21,7 @@ import java.util.WeakHashMap;
 public class PLog {
 
     public static void log(String str, Object... replaces) {
-        if (ConfigManager.isEnable("setting_debug_log", BuildConfig.DEBUG)) {
+        if (ConfigManager.isEnable("setting_debug_log", BuildConfig.DEBUG) || PPHelperImpl.debug) {
             String s = str;
             for (Object replace : replaces) {
                 s = s.replaceFirst("\\{\\}", replace == null ? "null" : replace.toString());
