@@ -18,7 +18,7 @@ import java.util.StringJoiner
 
 object VoiceDownloadHook : BaseHook("voice_download", "语音下载") {
     override fun init(): Boolean {
-        this.desc = "评论语音下载"
+        this.desc = "开启后长按评论区语音使用"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.slide.ab.holder.PostReviewHolder".loadClass()
         val aio_clazz1 = DexKit.load(DexKit.OBF_POST_REVIEW_AIO1)
         val aio_clazz2 = DexKit.load(DexKit.OBF_POST_REVIEW_AIO2)

@@ -8,7 +8,7 @@ import java.util.*
 
 object RemoveLiveHook : BaseHook("remove_live", "去除直播") {
     override fun init(): Boolean {
-        this.desc = "启用后将关闭皮皮搞笑的直播"
+        this.desc = "启用后将去除皮皮搞笑的直播功能"
         //val clazz = "cn.xiaochuankeji.live.bridge.Live".loadClass()
         //val clazz = "cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity".loadClass()
         val clazz = "cn.xiaochuankeji.zuiyouLite.live.FragmentLiveSquare".loadClass()

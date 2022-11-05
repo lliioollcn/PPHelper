@@ -10,7 +10,7 @@ import de.robv.android.xposed.XposedHelpers
 
 object RemoveVoiceRoomHook : BaseHook("removeVoiceRoom", "移除语音房") {
     override fun init(): Boolean {
-        this.desc = "移除语音房"
+        this.desc = "启用后将禁用语音房"
         val clazz1 = "com.youyisia.voices.sdk.api.HYVoiceRoomSdk".loadClass()
         for (m in clazz1?.declaredMethods!!) {
             m.hookAfter {
