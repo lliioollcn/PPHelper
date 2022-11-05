@@ -1,0 +1,34 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.tencent.mmkv.test" >
+4
+5    <uses-sdk
+5-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:5:5-74
+6        android:minSdkVersion="26"
+6-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:5:15-41
+7        android:targetSdkVersion="33" />
+7-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:5:42-71
+8
+9    <instrumentation
+9-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:11:5-15:71
+10        android:name="android.test.InstrumentationTestRunner"
+10-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:11:22-75
+11        android:functionalTest="false"
+11-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:14:22-52
+12        android:handleProfiling="false"
+12-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:13:22-53
+13        android:label="Tests for com.tencent.mmkv.test"
+13-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:15:22-69
+14        android:targetPackage="com.tencent.mmkv.test" />
+14-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:12:22-67
+15
+16    <application
+16-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:7:5-9:19
+17        android:debuggable="true"
+18        android:extractNativeLibs="false" >
+19        <uses-library android:name="android.test.runner" />
+19-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:8:9-60
+19-->D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest8674813017212813708.xml:8:23-57
+20    </application>
+21
+22</manifest>

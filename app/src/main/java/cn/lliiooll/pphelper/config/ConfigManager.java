@@ -24,6 +24,9 @@ public class ConfigManager {
         if (inited) return;
         PLog.log("正在初始化配置文件...");
         File mmkvDir = new File(Utils.getApplication().getFilesDir(), "pp_mmkv");
+        if (mmkvDir.isFile()) {
+            mmkvDir.delete();
+        }
         if (!mmkvDir.exists()) {
             mmkvDir.mkdirs();
         }
@@ -32,7 +35,7 @@ public class ConfigManager {
         if (!cacheDir.exists()) {
             cacheDir.mkdir();
         }
-        MMKV.initialize(mmkvDir.getAbsolutePath(), s -> {
+        MMKV.initialize(Utils.getApplication(), mmkvDir.getAbsolutePath(), s -> {
 
         });
         ConfigManager.mmkv = MMKV.mmkvWithID(ConfigManager.MMKV_MODULES, MMKV.MULTI_PROCESS_MODE);

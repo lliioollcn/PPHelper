@@ -1,0 +1,8 @@
+com.tencent.mmkv.test.mmkv-androidTest-0 D:\0aDevelops\xposed\PPHelper\mmkv\build\generated\res\resValues\androidTest\debug
+com.tencent.mmkv.test.mmkv-androidTest-1 D:\0aDevelops\xposed\PPHelper\mmkv\build\generated\res\rs\androidTest\debug
+com.tencent.mmkv.test.mmkv-mergeDebugAndroidTestResources-2 D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.tencent.mmkv.test.mmkv-mergeDebugAndroidTestResources-3 D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.tencent.mmkv.test.mmkv-merged_res-4 D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\merged_res\debugAndroidTest
+com.tencent.mmkv.test.mmkv-packaged_res-5 D:\0aDevelops\xposed\PPHelper\mmkv\build\intermediates\packaged_res\debug
+com.tencent.mmkv.test.mmkv-androidTest-6 D:\0aDevelops\xposed\PPHelper\mmkv\src\androidTest\res
+com.tencent.mmkv.test.mmkv-androidTestDebug-7 D:\0aDevelops\xposed\PPHelper\mmkv\src\androidTestDebug\res

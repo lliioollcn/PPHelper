@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.18.1)
 project("pp_native")
+add_subdirectory(../../../../mmkv mmkv)
+add_subdirectory(../../../../dexkit dexkit)
 
 add_library(pp_native SHARED
              dexkit.cpp )
@@ -33,10 +35,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,--exclude-libs,ALL")
 
 
 find_library(log-lib log)
-find_package(dexkit REQUIRED CONFIG)
 
 target_link_libraries(pp_native
-                       dexkit::dex_kit_static
+                       dexkit
+                       mmkv
                        z
                        ${log-lib} )
 

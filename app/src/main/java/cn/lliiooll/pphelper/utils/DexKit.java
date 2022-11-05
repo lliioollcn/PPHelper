@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import cn.lliiooll.pphelper.config.ConfigManager;
 import cn.lliiooll.pphelper.startup.HookEntry;
 import cn.lliiooll.pphelper.startup.HybridClassLoader;
+import com.tencent.mmkv.MMKV;
 import io.luckypray.dexkit.DexKitBridge;
 import io.luckypray.dexkit.descriptor.member.DexClassDescriptor;
 import org.jetbrains.annotations.Nullable;
@@ -83,7 +84,7 @@ public class DexKit {
     public static final Class<?> clazz_int = int.class;
 
     public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
-        DexKitBridge helper = DexKitBridge.create(loader);
+        DexKitBridge helper = DexKitBridge.create(getHostPath(Utils.getApplication()));
 
         Map<String, List<DexClassDescriptor>> results = helper.batchFindClassesUsingStrings(input, true, new int[0]);
         helper.close();
@@ -148,7 +149,7 @@ public class DexKit {
                     }
                 }
             }
-            if (key.equalsIgnoreCase(OBF_POST_REVIEW_AIO1)){
+            if (key.equalsIgnoreCase(OBF_POST_REVIEW_AIO1)) {
                 for (String clazz : classes) {
                     String replace = doReplace(clazz);
                     PLog.log("正在过滤类: " + replace);
@@ -180,20 +181,33 @@ public class DexKit {
             // in host process
             try {
                 String modulePath = HookEntry.getModulePath();
+                String hostPath = getHostPath(ctx);
+                PLog.log("宿主app路径: " + hostPath);
                 if (modulePath != null) {
                     // try direct memory map
-                    PLog.log("尝试加载libpp_native.so ......");
-                    System.load(modulePath + "!/lib/" + abi + "/libpp_native.so");
+                    /*
                     PLog.log("尝试加载libmmkv.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/libmmkv.so");
                     PLog.log("尝试加载liblog.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/liblog.so");
                     PLog.log("尝试加载libdexkit.so ......");
                     System.load(modulePath + "!/lib/" + abi + "/libdexkit.so");
+
+                     */
+                    File mmkvDir = new File(Utils.getApplication().getFilesDir(), "pp_mmkv");
+                    if (mmkvDir.isFile()) {
+                        mmkvDir.delete();
+                    }
+                    if (!mmkvDir.exists()) {
+                        mmkvDir.mkdirs();
+                    }
+                    MMKV.initialize(ctx, mmkvDir.getAbsolutePath(), s -> {
+                        PLog.log("尝试加载libpp_native.so ......");
+                        System.load(modulePath + "!/lib/" + abi + "/libpp_native.so");
+                    });
                     PLog.log("dlopen by mmap success");
                 }
             } catch (UnsatisfiedLinkError e1) {
-
                 // give enough information to help debug
                 // Is this CPU_ABI bad?
                 PLog.log("Build.SDK_INT=" + Build.VERSION.SDK_INT);
@@ -226,6 +240,10 @@ public class DexKit {
         ConfigManager.init();
     }
 
+    private static String getHostPath(Context ctx) {
+        return ctx.getClassLoader().getResource("AndroidManifest.xml").getPath().replace("!/AndroidManifest.xml", "").replaceFirst("file:", "");
+    }
+
     public static void load2(Context ctx) {
         String abi = getAbiForLibrary();
         File dir = ctx.getExternalFilesDir("helper_lib");
@@ -245,22 +263,40 @@ public class DexKit {
         if (log.exists()) {
             log.delete();
         }
+        if (dexkit.exists()) {
+            dexkit.delete();
+        }
         try {
             pp_native.createNewFile();
             mmkv.createNewFile();
             log.createNewFile();
+            dexkit.createNewFile();
             FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libpp_native.so"), pp_native);
-            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libmmkv.so"), mmkv);
+            FileUtil.writeFromStream(ctx.getClassLoader().getResourceAsStream("/lib/" + abi + "/libmmkv.so"), mmkv);
             FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/liblog.so"), log);
-            PLog.log("尝试加载libpp_native.so ......");
-            System.load(pp_native.getAbsolutePath());
+            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libdexkit.so"), dexkit);
+            /*
             PLog.log("尝试加载libmmkv.so ......");
             System.load(mmkv.getAbsolutePath());
             PLog.log("尝试加载liblog.so ......");
             System.load(log.getAbsolutePath());
             PLog.log("尝试加载libdexkit.so ......");
             System.load(dexkit.getAbsolutePath());
-            PLog.log("加载成功");
+
+             */
+            File mmkvDir = new File(Utils.getApplication().getFilesDir(), "pp_mmkv");
+            if (mmkvDir.isFile()) {
+                mmkvDir.delete();
+            }
+            if (!mmkvDir.exists()) {
+                mmkvDir.mkdirs();
+            }
+            MMKV.initialize(ctx, mmkvDir.getAbsolutePath(), s -> {
+                PLog.log("尝试加载libpp_native.so ......");
+                System.load(pp_native.getAbsolutePath());
+                PLog.log("加载成功");
+            });
+
             ConfigManager.init();
         } catch (IOException e) {
             PLog.log(e);
@@ -293,7 +329,7 @@ public class DexKit {
         if (supported == null || supported.length == 0) {
             throw new IllegalStateException("No supported ABI in this device");
         }
-        List<String> abis = Arrays.asList("armeabi-v7a", "arm64-v8a");
+        List<String> abis = Arrays.asList(/*"armeabi-v7a",*/ "arm64-v8a");
         for (String abi : supported) {
             if (abis.contains(abi)) {
                 return abi;
