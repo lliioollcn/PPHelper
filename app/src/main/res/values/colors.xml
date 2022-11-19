@@ -15,4 +15,10 @@
     <color name="ct_3">#ff999999</color>
     <color name="ct_3_night">#4dffffff</color>
 
+    <color name="color_text_level1">#333333</color>
+    <color name="color_text_white">#ffffff</color>
+    <color name="color_text_level3">#999999</color>
+    <color name="color_brand_pink">#fe698d</color>
+    <color name="divide_line">#eeeeee</color>
+
 </resources>

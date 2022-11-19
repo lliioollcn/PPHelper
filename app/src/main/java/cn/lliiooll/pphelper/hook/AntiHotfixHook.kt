@@ -1,11 +1,14 @@
 package cn.lliiooll.pphelper.hook
 
+import android.app.Activity
+import android.content.Context
 import cn.lliiooll.pphelper.config.ConfigManager
-import cn.lliiooll.pphelper.utils.DexKit
-import cn.lliiooll.pphelper.utils.allMethod
-import cn.lliiooll.pphelper.utils.replace
+import cn.lliiooll.pphelper.utils.*
+import java.util.*
 
 object AntiHotfixHook : BaseHook("anti_hotfix", "禁用热补丁") {
+
+    var OBF_HOTFIX_INIT = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustStater"
     override fun init(): Boolean {
         this.desc = "禁用热补丁"
         if (ConfigManager.isFirst(this)) {
@@ -13,7 +16,7 @@ object AntiHotfixHook : BaseHook("anti_hotfix", "禁用热补丁") {
             ConfigManager.setFirst(this)
         }
 
-        DexKit.load(DexKit.OBF_HOTFIX_INIT).allMethod { it ->
+        DexKit.load(OBF_HOTFIX_INIT).allMethod { it ->
             val m = it
             if (m.name == "F0") {
                 it.replace {
@@ -41,5 +44,30 @@ object AntiHotfixHook : BaseHook("anti_hotfix", "禁用热补丁") {
             }
         }
         return true
+    }
+
+    override fun doStep() {
+        val result = DexKit.find(buildMap {
+            put(OBF_HOTFIX_INIT, object : HashSet<String?>() {
+                init {
+                    add("event_on_load_hot_config_success")
+                    add("app_config_json_parse")
+                    add("local config cold/get json data parse failed.")
+                }
+            })
+        })
+
+        result.forEach { (key: String?, value: Array<String?>?) ->
+            PLog.log("========================================")
+            PLog.log("查找结果")
+            PLog.log(key)
+            PLog.log(Arrays.toString(value))
+            PLog.log("========================================")
+        }
+        DexKit.cache(OBF_HOTFIX_INIT, result[OBF_HOTFIX_INIT]?.get(0))
+    }
+
+    override fun needStep(): Boolean {
+        return !ConfigManager.hasCache(OBF_HOTFIX_INIT) || DexKit.load(OBF_HOTFIX_INIT) == null
     }
 }

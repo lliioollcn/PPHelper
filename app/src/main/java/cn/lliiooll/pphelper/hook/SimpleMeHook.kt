@@ -10,11 +10,9 @@ object SimpleMeHook : BaseHook("simple_me", "精简\"我的\"页面") {
         this.desc = "精简\"我的\"页面"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.me.FragmentMyTab".loadClass()
         clazz?.allMethod {
-            PLog.log("hook my 方法: " + it.name)
             if (it.name == "onCreateView") {
                 PLog.log("找到方法: " + it.name)
                 it.hookAfter {
-                    PLog.log("MyFragment创建视图")
                     val obj = it?.thisObject
                     val root = it?.result
                     HideList.myTypes.forEach { (name, key) ->

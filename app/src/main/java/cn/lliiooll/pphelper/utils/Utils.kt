@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.view.LayoutInflater
@@ -23,7 +24,6 @@ import java.io.File
 import java.lang.reflect.Member
 import java.lang.reflect.Method
 import java.net.URL
-import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
@@ -196,6 +196,15 @@ fun Int.findView(activity: Any?): View {
     return XposedHelpers.callMethod(activity, "findViewById", this) as View
 }
 
+fun Int.findDrawable(activity: Any?): Drawable {
+    return XposedHelpers.callMethod(activity, "getDrawable", this) as Drawable
+}
+
+fun Int.findDimen(activity: Any?): Float {
+    val obj = XposedHelpers.callMethod(activity, "getResources")
+    return XposedHelpers.callMethod(obj, "getDimension", this) as Float
+}
+
 fun Long.parseDate(): String {
     return SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Date(this))
 }
@@ -227,15 +236,20 @@ fun String.isConnected(): Boolean {
     return SyncUtils.isConnected(this)
 }
 
-fun Method.invokeStatic(vararg args: Any?): Any? {
-    return call(null, args)
-}
-
-fun Method.call(ins: Any?, vararg args: Any?): Any? {
-    this.isAccessible = true
-    return this.invoke(ins, args)
-}
-
 fun String.md5(): String {
     return MD5Util.md5(this)
+}
+
+fun Any.toMap(): Map<String, Any?> {
+    val map = hashMapOf<String, Any?>()
+    val clazz = this.javaClass
+    for (f in clazz.declaredFields) {
+        f.isAccessible = true
+        if (f.type.isPrimitive || f.type == String::class.java || f.type == CharSequence::class.java) {
+            map[f.name] = f.get(this)
+        } else {
+            map[f.name] = f.get(this)?.toMap()
+        }
+    }
+    return map
 }

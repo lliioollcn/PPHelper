@@ -31,15 +31,15 @@ android {
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
-                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        //"-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
+                        "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
                 cFlags "-std=c18", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
-                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        //"-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
+                        "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
 
 
             }
@@ -123,7 +123,8 @@ dependencies {
     implementation project(":mmkv")
     implementation project(":dexkit")
     // implementation 'com.github.LuckyPray:DexKit:1.0.1'
-    //implementation "cn.hutool:hutool-all:5.8.5"
+    // implementation "cn.hutool:hutool-all:5.8.5"
+    implementation 'com.google.code.gson:gson:2.10'
 
     //compileOnly fileTree('lib')
     compileOnly project(":stub")

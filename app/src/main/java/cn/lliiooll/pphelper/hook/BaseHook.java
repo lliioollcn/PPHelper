@@ -79,4 +79,13 @@ public abstract class BaseHook {
     public String getDesc() {
         return this.desc;
     }
+
+
+    public void doStep() {
+
+    }
+
+    public boolean needStep() {
+        return false;
+    }
 }

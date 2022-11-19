@@ -28,12 +28,14 @@ EXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         LOGI("not jni ok");
         return -1;
     }
+
     // 模块签名不正确拒绝加载 jni
     if (checkSignature(env) != JNI_TRUE) {
     LOGI("signature failed");
         return -2;
     }
     LOGI("signature pass");
+
     auto ret = MMKV_JNI_OnLoad(vm, reserved);
     if (ret != JNI_VERSION_1_6) {
         return -3;

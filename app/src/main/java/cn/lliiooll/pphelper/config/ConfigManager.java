@@ -15,7 +15,9 @@ import java.util.Set;
 public class ConfigManager {
     private static boolean inited = false;
     public static final String MMKV_MODULES = "helper_modules";
+    public static final String MMKV_CACHES = "helper_caches";
     private static MMKV mmkv;
+    private static MMKV mmkvCache;
 
     /**
      * 初始化配置文件加载器
@@ -39,6 +41,7 @@ public class ConfigManager {
 
         });
         ConfigManager.mmkv = MMKV.mmkvWithID(ConfigManager.MMKV_MODULES, MMKV.MULTI_PROCESS_MODE);
+        ConfigManager.mmkvCache = MMKV.mmkvWithID(ConfigManager.MMKV_CACHES, MMKV.MULTI_PROCESS_MODE);
         inited = true;
     }
 
@@ -121,4 +124,20 @@ public class ConfigManager {
         mmkv.encode(label, set);
     }
 
+    public static void cache(String token, String filter) {
+        if (!inited || Objects.isNull(mmkvCache)) return;
+        mmkvCache.encode(token, filter);
+    }
+
+    public static boolean hasCache(String key) {
+        if (!inited || Objects.isNull(mmkvCache)) return false;
+        boolean has = mmkvCache.decodeString(key, null) != null;
+        PLog.log("缓存 {} 是否存在: {}",key,has);
+        return has;
+    }
+
+    public static String cache(String key) {
+        if (!inited || Objects.isNull(mmkvCache) || !hasCache(key)) return "";
+        return mmkvCache.decodeString(key);
+    }
 }

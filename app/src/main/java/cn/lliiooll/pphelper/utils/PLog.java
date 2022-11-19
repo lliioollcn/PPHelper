@@ -123,4 +123,23 @@ public class PLog {
     public static String toJson(@Nullable Object obj) {
         return XposedHelpers.callStaticMethod(Utils.loadClass("com.alibaba.fastjson.JSON"), "toJSONString", obj).toString();
     }
+
+    public static void json(@Nullable String jstr) {
+        try {
+            if (Utils.getApplication() != null) {
+                File dir = Utils.getApplication().getExternalFilesDir("log");
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                File file = new File(dir, "json.txt");
+                if (file.exists()) {
+                    file.delete();
+                }
+                file.createNewFile();
+                IoUtil.writeLine(jstr, file);
+            }
+        } catch (IOException e) {
+            PLog.log(e);
+        }
+    }
 }

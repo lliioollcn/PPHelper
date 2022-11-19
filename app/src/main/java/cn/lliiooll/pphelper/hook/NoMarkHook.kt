@@ -1,11 +1,14 @@
 package cn.lliiooll.pphelper.hook
 
 import android.app.Activity
+import cn.lliiooll.pphelper.config.ConfigManager
 import cn.lliiooll.pphelper.utils.*
+import cn.lliiooll.pphelper.utils.Utils.loadClass
 import de.robv.android.xposed.XC_MethodReplacement
 import java.util.*
 
 object NoMarkHook : BaseHook("no_mark", "去水印") {
+    var OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;"
     override fun init(): Boolean {
         this.desc = "启用后将替换帖子右下角的保存至相册按钮，评论视频请点击右上角下载按钮"
         val clazz = "cn.xiaochuankeji.zuiyouLite.ui.postlist.holder.PostOperator".loadClass()
@@ -19,47 +22,11 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                     }
                 })
                 break
-            } else {
-                /*
-                m.hook(object : XC_MethodHook() {
-                    override fun afterHookedMethod(param: MethodHookParam?) {
-                        PLog.log("\n========================================")
-                        PLog.log(
-                            "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
-                            param?.thisObject?.javaClass?.simpleName,
-                            m.name,
-                            m.parameterTypes.size,
-                            Arrays.toString(m.parameterTypes),
-                            Arrays.toString(param?.args)
-                        )
-                        PLog.printStacks()
-                        PLog.log("========================================\n")
-                    }
-                })
-
-                 */
             }
-
         }
-        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.download.MediaFileDownloadListener".loadClass()
-        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.control.main2.MainSchedulerControl".loadClass()
-
-        val clazz1 = DexKit.load(DexKit.OBF_COMMENT_VIDEO)
-        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.postdetail.comment.CommentDetailActivity".loadClass()
-        //val clazz1 = "cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail".loadClass()
-
+        val clazz1 = DexKit.load(OBF_COMMENT_VIDEO)
         val commentBeanClass = "cn.xiaochuankeji.zuiyouLite.data.CommentBean".loadClass()
         for (m in clazz1?.declaredMethods!!) {
-            /*
-            PLog.log(
-                "寻找方法: {},{}:{}@({})",
-                m.name,
-                m.parameterCount,
-                m.returnType.name,
-                Arrays.toString(m.parameterTypes)
-            )
-
-             */
             if (m.name == "u0" && m.parameterCount == 1 && m.parameterTypes[0] == commentBeanClass) {
                 PLog.log(
                     "找到方法: {},{}:{}@({})",
@@ -84,129 +51,52 @@ object NoMarkHook : BaseHook("no_mark", "去水印") {
                 }
                 break
             }
-            /*
-            if (m.name == "w0" && m.parameterCount == 2) {
-                m.replace {
-                    PLog.log("开始下载视频")
-                    val obj = it?.thisObject
-                    val serverImages = it?.args?.get(0)
-                    serverImages.download()
+        }
+        return true
+    }
+
+    override fun doStep() {
+        val result = DexKit.find(buildMap {
+            put(OBF_COMMENT_VIDEO, object : HashSet<String?>() {
+                init {
+                    add("event_media_play_observer")
+                    add("event_on_play_review_comment")
+                    add("post")
+                    add("review")
+                    add("+%d")
+                    add("http://alfile.ippzone.com/img/mp4/id/")
+                    add("videocomment")
                 }
-            }
+            })
+        })
+        val commentBeanCls = loadClass("cn.xiaochuankeji.zuiyouLite.data.CommentBean")
 
-             */
-        }
-
-        /*
-        val clazz2 = "com.google.android.exoplayer2.upstream.cache.SimpleCache".loadClass()
-        val clazz3 = "com.google.android.exoplayer2.upstream.DataSpec".loadClass()
-        for (c in clazz3?.declaredConstructors!!) {
-            c.hookAfter {
-                val param = it
-                PLog.log("\n========================================")
-                PLog.log(
-                    "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {},\n堆栈: ",
-                    clazz3.name,
-                    c.name,
-                    c.parameterCount,
-                    Arrays.toString(c.parameterTypes),
-                    Arrays.toString(param?.args)
-                )
-                //PLog.printStacks()
-                PLog.log("========================================\n")
-            }
-        }
-        for (m in clazz2?.declaredMethods!!) {
-            if (m.name == "commitFile")
-                m.hookAfter {
-                    val param = it
-                    PLog.log("\n========================================")
-                    PLog.log(
-                        "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}",
-                        clazz2.name,
-                        m.name,
-                        m.parameterCount,
-                        Arrays.toString(m.parameterTypes),
-                        Arrays.toString(param?.args)
-                    )
-                    //PLog.printStacks()
-                    PLog.log("========================================\n")
-                }
-
-        }
-
-         */
-
-        /*
-          if ((m.name == "b" || m.name == "v") && m.parameterCount == 1 && m.parameterTypes[0] == View::class.java) {
-                PLog.log("找到方法!")
-                m.hook(object : XC_MethodHook() {
-                    override fun afterHookedMethod(param: MethodHookParam?) {
-                        PLog.log("\n========================================")
-                        PLog.log(
-                            "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
-                            param?.thisObject?.javaClass?.name,
-                            m.name,
-                            m.parameterCount,
-                            Arrays.toString(m.parameterTypes),
-                            Arrays.toString(param?.args)
-                        )
-                        //PLog.printStacks()
-                        PLog.log("========================================\n")
-                        val dwBtn: View = XposedHelpers.getObjectField(param?.thisObject, "downloadBtn") as View
-                        val listenerInfo = XposedHelpers.callMethod(dwBtn, "getListenerInfo")
-                        val mOnClickListener = XposedHelpers.getObjectField(listenerInfo, "mOnClickListener")
-                        if (mOnClickListener != null) {
-                            dwBtn.setOnClickListener {
-                                PLog.log("下载按钮被点击")
-                                val clazz = mOnClickListener.javaClass
-                                //PLog.log(clazz, mOnClickListener)
-                                for (m in clazz1.declaredMethods) {
-                                    if (m.name == "n0" && m.parameterCount == 1) {
-                                        val type = m.parameterTypes[0];
-                                        PLog.log(type)
-                                    }
-                                }
-                                /*
-                                for (f in clazz.declaredFields) {
-                                    if (f.name == "a") {
-                                        f.isAccessible = true
-                                        PLog.log(f.type, f.get(mOnClickListener))
-                                    }
-                                }
-
-                                 */
-                                val click: OnClickListener = XposedHelpers.newInstance(
-                                    clazz,
-                                    param?.thisObject
-                                ) as OnClickListener
-                                click.onClick(it)
+        result.forEach { (key: String?, value: Array<String?>?) ->
+            PLog.log("========================================")
+            PLog.log("查找结果")
+            PLog.log(key)
+            PLog.log(Arrays.toString(value))
+            PLog.log("========================================")
+            if (value.isNotEmpty()) {
+                for (clazz in value) {
+                    val replace = DexKit.doReplace(clazz)
+                    PLog.log("正在过滤类: $replace")
+                    val cls = loadClass(replace)
+                    if (cls != null) {
+                        for (m in cls.declaredMethods) {
+                            if (m.parameterTypes.size == 1 && m.parameterTypes[0] == commentBeanCls) {
+                                PLog.log("过滤完毕: $replace")
+                                DexKit.cache(key, replace)
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
 
-                    }
-                })
-            }
-            if (m.name == "n0" && m.parameterCount == 1) {
-                m.hook(object : XC_MethodHook() {
-                    override fun afterHookedMethod(param: MethodHookParam?) {
-                        PLog.log("\n========================================")
-                        PLog.log(
-                            "\n来自{}的方法被调用；" + "\n方法名称: {}" + "\n参数数量: {}" + "\n参数类型: {}" + "\n参数内容: {}\n当前堆栈: ",
-                            param?.thisObject?.javaClass?.name,
-                            m.name,
-                            m.parameterCount,
-                            Arrays.toString(m.parameterTypes),
-                            Arrays.toString(param?.args)
-                        )
-                        //PLog.printStacks()
-                        PLog.log("========================================\n")
-                        PLog.printStacks()
-                    }
-                })
-            }
-         */
-        return true
+    override fun needStep(): Boolean {
+        return !ConfigManager.hasCache(OBF_COMMENT_VIDEO) || DexKit.load(OBF_COMMENT_VIDEO) == null
     }
 }
 

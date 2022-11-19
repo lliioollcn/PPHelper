@@ -20,11 +20,9 @@ public class Hooks {
             HidePostHook.INSTANCE,
             RemoveVoiceRoomHook.INSTANCE,
             TestHook.INSTANCE,
-            FixQuitHook.INSTANCE,
             SimpleMeHook.INSTANCE,
             AutoTaskHook.INSTANCE,
             VoiceDownloadHook.INSTANCE,
-            AccountHook.INSTANCE,
             ShowHideHook.INSTANCE,
     };
 
@@ -34,19 +32,6 @@ public class Hooks {
     public static void init(Object instance) {
         if (inited) return;
         PLog.log("正在初始化hook...");
-        PLog.log("正在寻找被混淆的类...");
-        Map<String, String[]> result = DexKit.find(instance.getClass().getClassLoader(), DexKit.obfMap);
-
-
-        result.forEach((key, value) -> {
-            PLog.log("========================================");
-            PLog.log("查找结果");
-            PLog.log(key);
-            PLog.log(Arrays.toString(value));
-            PLog.log("========================================");
-        });
-
-        DexKit.cache(result);
         if (sDisableHooks) {
             PLog.log("禁用了所有的hook...");
             SettingHook.INSTANCE.init();
@@ -54,6 +39,11 @@ public class Hooks {
             for (BaseHook hook : hooks) {
                 if (hook.isEnable()) {
                     try {
+                        PLog.log("hook {}({}) 是否需要进行反混淆: {}", hook.getLabel(),hook.getName(), hook.needStep());
+                        if (hook.needStep()) {
+                            PLog.log("为hook进行反混淆操作: {}({})", hook.getLabel(), hook.getName());
+                            hook.doStep();
+                        }
                         PLog.log("初始化hook: {}({})@{}", hook.getLabel(), hook.getName(), hook.init());
                     } catch (Throwable e) {
                         PLog.log("初始化hook: {}({})@失败", hook.getLabel(), hook.getName());

@@ -8,5 +8,6 @@
     <dimen name="f4">14dp</dimen>
     <dimen name="f5">12dp</dimen>
     <dimen name="f6">10dp</dimen>
+    <dimen name="divide_space_10">10dp</dimen>
 
 </resources>

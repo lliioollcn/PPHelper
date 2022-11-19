@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.appcompat.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/divider_line"
+        android:showDividers="middle">
+    <LinearLayout android:gravity="center_vertical"
+                  android:id="@+id/pp_setting_root"
+                  android:orientation="horizontal"
+                  android:paddingLeft="20dp"
+                  android:visibility="visible"
+                  android:clickable="true"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/item_height">
+        <TextView android:textSize="@dimen/f4"
+                  android:textColor="@color/color_text_level1"
+                  android:id="@+id/pp_setting_title"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="皮皮助手"
+                  android:layout_centerVertical="true"/>
+        <TextView android:textSize="@dimen/f6" android:textColor="@color/color_text_white"
+                  android:id="@+id/pp_setting_hasNew"
+                  android:background="@drawable/bg_new_version"
+                  android:paddingLeft="5dp"
+                  android:paddingRight="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/divide_space_10"
+                  android:text="NEW"
+                  android:layout_toRightOf="@+id/pp_setting_title"
+                  android:layout_centerVertical="true"/>
+        <TextView android:textSize="@dimen/f5"
+                  android:textColor="@color/color_text_level3"
+                  android:gravity="right"
+                  android:id="@+id/pp_setting_version"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="1.0.0"
+                  android:layout_weight="1"/>
+        <ImageView android:paddingStart="9dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginRight="20dp"
+                   android:id="@+id/pp_setting_arrow"
+                   android:contentDescription="image"
+                   android:layout_marginEnd="20dp"/>
+    </LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

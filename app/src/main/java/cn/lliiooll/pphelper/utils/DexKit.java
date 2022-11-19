@@ -26,64 +26,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DexKit {
 
-    public static String OBF_COMMENT_VIDEO = "Lcn/xiaochuankeji/zuiyouLite/common/CommentVideo;";
-    public static String OBF_ACCOUNT_SERVICE_MANAGER = "Lcn/xiaochuankeji/zuiyouLite/api/account/AccountServiceManager";
-    public static String OBF_HOTFIX_INIT = "Lcn/xiaochuankeji/zuiyouLite/common/robust/RobustStater";
-
-    public static String OBF_PUBLISH_BUS = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishBus";
-    public static String OBF_PUBLISH_DATA = "Lcn/xiaochuankeji/zuiyouLite/publish/PublishData";
-    public static String OBF_CONFIG_PARSER = "Lcn/xiaochuankeji/zuiyouLite/config/PPConfigParser";
-    public static String OBF_POST_REVIEW_AIO1 = "Lcn/xiaochuankeji/zuiyouLite/post/review/AIO1";// m.g.l.a
-    public static String OBF_POST_REVIEW_AIO2 = "Lcn/xiaochuankeji/zuiyouLite/post/review/AIO2";
-    public final static Map<String, Set<String>> obfMap = new HashMap<String, Set<String>>() {{
-        put(DexKit.OBF_POST_REVIEW_AIO1, new HashSet<String>() {{
-            add("^%d:%02d:%02d$");
-            add("^%02d:%02d$");
-            add("00:00");
-        }});
-        put(DexKit.OBF_POST_REVIEW_AIO2, new HashSet<String>() {{
-            add("巡查举报");
-            add("开启存储权限才能正常下载");
-            add("去设置");
-            add("举报成功，感谢你对家园的贡献!");
-        }});
-
-        put(DexKit.OBF_COMMENT_VIDEO, new HashSet<String>() {{
-            add("event_media_play_observer");
-            add("event_on_play_review_comment");
-            add("post");
-            add("review");
-            add("+%d");
-            add("http://alfile.ippzone.com/img/mp4/id/");
-            add("videocomment");
-        }});
-        put(DexKit.OBF_ACCOUNT_SERVICE_MANAGER, new HashSet<String>() {{
-            add("avatar");
-            add("third_force_bind_phone");
-        }});
-        put(DexKit.OBF_HOTFIX_INIT, new HashSet<String>() {{
-            add("event_on_load_hot_config_success");
-            add("app_config_json_parse");
-            add("local config cold/get json data parse failed.");
-        }});
-        put(DexKit.OBF_PUBLISH_BUS, new HashSet<String>() {{
-            add("仅可同时进行3个图片视频或语音发布任务");
-        }});
-        put(DexKit.OBF_PUBLISH_DATA, new HashSet<String>() {{
-            add("距你-18cm");
-        }});
-        put(DexKit.OBF_CONFIG_PARSER, new HashSet<String>() {{
-            add("server config Hot/get json data parse failed.");
-        }});
-    }};
-
-    private static Map<String, String> caches = new ConcurrentHashMap<>();
     public static final Class<?> clazz_long = long.class;
     public static final Class<?> clazz_boolean = boolean.class;
     public static final Class<?> clazz_void = void.class;
     public static final Class<?> clazz_int = int.class;
 
-    public static Map<String, String[]> find(ClassLoader loader, Map<String, Set<String>> input) {
+    public static Map<String, String[]> find(Map<String, Set<String>> input) {
         DexKitBridge helper = DexKitBridge.create(getHostPath(Utils.getApplication()));
 
         Map<String, List<DexClassDescriptor>> results = helper.batchFindClassesUsingStrings(input, true, new int[0]);
@@ -110,62 +58,7 @@ public class DexKit {
     }
 
     public static Class<?> load(String key) {
-        return caches.containsKey(key) ? Utils.loadClass(caches.get(key)) : null;
-    }
-
-    public static void cache(Map<String, String[]> result) {
-        result.forEach((token, finds) -> {
-            String filter = doFilter(token, Arrays.asList(finds));
-            if (Utils.isNotBlank(filter)) {
-                caches.put(token, filter);
-                PLog.log("找到类: " + token + " -> " + filter);
-            } else {
-                PLog.log("未找到合适的类(NoFilter): " + Arrays.toString(finds));
-            }
-        });
-    }
-
-    public static String doFilter(String key, List<String> classes) {
-        if (!classes.isEmpty() && Utils.isNotBlank(key)) {
-            if (key.equalsIgnoreCase(OBF_PUBLISH_BUS)) {
-                return doReplace(classes.get(0)).split("\\$")[0];
-            }
-            if (classes.size() == 1) {
-                return doReplace(classes.get(0));
-            }
-            if (key.equalsIgnoreCase(OBF_COMMENT_VIDEO)) {
-                Class<?> commentBeanCls = Utils.loadClass("cn.xiaochuankeji.zuiyouLite.data.CommentBean");
-                for (String clazz : classes) {
-                    String replace = doReplace(clazz);
-                    PLog.log("正在过滤类: " + replace);
-                    Class<?> cls = Utils.loadClass(replace);
-                    if (cls != null) {
-                        for (Method m : cls.getDeclaredMethods()) {
-                            if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == commentBeanCls) {
-                                PLog.log("过滤完毕: " + replace);
-                                return replace;
-                            }
-                        }
-                    }
-                }
-            }
-            if (key.equalsIgnoreCase(OBF_POST_REVIEW_AIO1)) {
-                for (String clazz : classes) {
-                    String replace = doReplace(clazz);
-                    PLog.log("正在过滤类: " + replace);
-                    Class<?> cls = Utils.loadClass(replace);
-                    if (cls != null) {
-                        for (Method m : cls.getDeclaredMethods()) {
-                            if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == Context.class && m.getReturnType() == Activity.class) {
-                                PLog.log("过滤完毕: " + replace);
-                                return replace;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return "";
+        return ConfigManager.hasCache(key) ? Utils.loadClass(ConfigManager.cache(key)) : null;
     }
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
@@ -184,16 +77,6 @@ public class DexKit {
                 String hostPath = getHostPath(ctx);
                 PLog.log("宿主app路径: " + hostPath);
                 if (modulePath != null) {
-                    // try direct memory map
-                    /*
-                    PLog.log("尝试加载libmmkv.so ......");
-                    System.load(modulePath + "!/lib/" + abi + "/libmmkv.so");
-                    PLog.log("尝试加载liblog.so ......");
-                    System.load(modulePath + "!/lib/" + abi + "/liblog.so");
-                    PLog.log("尝试加载libdexkit.so ......");
-                    System.load(modulePath + "!/lib/" + abi + "/libdexkit.so");
-
-                     */
                     File mmkvDir = new File(Utils.getApplication().getFilesDir(), "pp_mmkv");
                     if (mmkvDir.isFile()) {
                         mmkvDir.delete();
@@ -244,46 +127,34 @@ public class DexKit {
         return ctx.getClassLoader().getResource("AndroidManifest.xml").getPath().replace("!/AndroidManifest.xml", "").replaceFirst("file:", "");
     }
 
+    private static List<String> libList = new ArrayList<String>() {{
+        add("libpp_native");
+        add("libmmkv");
+        add("liblog");
+        add("libdexkit");
+    }};
+
     public static void load2(Context ctx) {
         String abi = getAbiForLibrary();
         File dir = ctx.getExternalFilesDir("helper_lib");
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File pp_native = new File(dir, ".\\" + abi + "\\libpp_native.so");
-        File mmkv = new File(dir, ".\\" + abi + "\\libmmkv.so");
-        File log = new File(dir, ".\\" + abi + "\\liblog.so");
-        File dexkit = new File(dir, ".\\" + abi + "\\libdexkit.so");
-        if (pp_native.exists()) {
-            pp_native.delete();
-        }
-        if (mmkv.exists()) {
-            mmkv.delete();
-        }
-        if (log.exists()) {
-            log.delete();
-        }
-        if (dexkit.exists()) {
-            dexkit.delete();
-        }
-        try {
-            pp_native.createNewFile();
-            mmkv.createNewFile();
-            log.createNewFile();
-            dexkit.createNewFile();
-            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libpp_native.so"), pp_native);
-            FileUtil.writeFromStream(ctx.getClassLoader().getResourceAsStream("/lib/" + abi + "/libmmkv.so"), mmkv);
-            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/liblog.so"), log);
-            FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/libdexkit.so"), dexkit);
-            /*
-            PLog.log("尝试加载libmmkv.so ......");
-            System.load(mmkv.getAbsolutePath());
-            PLog.log("尝试加载liblog.so ......");
-            System.load(log.getAbsolutePath());
-            PLog.log("尝试加载libdexkit.so ......");
-            System.load(dexkit.getAbsolutePath());
+        libList.forEach(lib -> {
+            File fileLib = new File(dir, ".\\" + abi + "\\" + lib + ".so");
+            if (fileLib.exists()) {
+                fileLib.delete();
+            }
 
-             */
+            try {
+                fileLib.createNewFile();
+                //FileUtil.writeFromStream(ctx.getClassLoader().getResourceAsStream("/lib/" + abi + "/libmmkv.so"), mmkv);
+                FileUtil.writeFromStream(DexKit.class.getClassLoader().getResourceAsStream("/lib/" + abi + "/" + lib + ".so"), fileLib);
+            } catch (Throwable e) {
+                PLog.log(e);
+            }
+        });
+        try {
             File mmkvDir = new File(Utils.getApplication().getFilesDir(), "pp_mmkv");
             if (mmkvDir.isFile()) {
                 mmkvDir.delete();
@@ -291,15 +162,15 @@ public class DexKit {
             if (!mmkvDir.exists()) {
                 mmkvDir.mkdirs();
             }
+
+            File ppNativeFile = new File(dir, ".\\" + abi + "\\" + libList.get(0) + ".so");
             MMKV.initialize(ctx, mmkvDir.getAbsolutePath(), s -> {
                 PLog.log("尝试加载libpp_native.so ......");
-                System.load(pp_native.getAbsolutePath());
+                System.load(ppNativeFile.getAbsolutePath());
                 PLog.log("加载成功");
             });
 
             ConfigManager.init();
-        } catch (IOException e) {
-            PLog.log(e);
         } catch (UnsatisfiedLinkError e) {
             PLog.log(">>>>>>>>>> 又nm得失败了！！！ <<<<<<<<<");
             PLog.log(e);
@@ -338,4 +209,7 @@ public class DexKit {
         throw new IllegalStateException("No supported ABI in " + Arrays.toString(supported));
     }
 
+    public static void cache(@Nullable String key, @Nullable String replace) {
+        ConfigManager.cache(key, replace);
+    }
 }
