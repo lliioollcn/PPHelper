@@ -17,11 +17,10 @@ android {
         targetSdk 33
         //versionCode Common.getBuildVersionCode(rootProject)
         versionCode Common.getTimeStamp()
-        versionName "1.0.3${Common.getGitHeadRefsSuffix(rootProject)}"
+        versionName "1.0.3${Common.getGitHeadRefsSuffix(rootProject)}.$versionCode"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = false
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
-
         externalNativeBuild {
             cmake {
                 targets "pp_native"
@@ -31,15 +30,15 @@ android {
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                        //"-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
-                        "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
+                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
                 cFlags "-std=c18", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
                         "-Wno-unused-command-line-argument",
-                        //"-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
-                        "-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
+                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
 
 
             }

@@ -1,5 +1,8 @@
 package cn.lliiooll.pphelper.config;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import cn.lliiooll.pphelper.app.PPHelperImpl;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.hook.SettingHook;
 import cn.lliiooll.pphelper.utils.PLog;
@@ -62,7 +65,10 @@ public class ConfigManager {
      * @param enable   启用(true)/禁用(false)
      */
     public static void setEnable(String hookName, boolean enable) {
-        if (!inited || Objects.isNull(mmkv)) return;
+        if (!inited || Objects.isNull(mmkv)) {
+            setEnableModule(hookName, enable);
+            return;
+        }
         if (hookName.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) enable = true;
         mmkv.encode(hookName, enable);
 
@@ -89,9 +95,27 @@ public class ConfigManager {
      * @return hook启用(true)/禁用(false)
      */
     public static boolean isEnable(String baseHook, boolean def) {
-        if (!inited || Objects.isNull(mmkv)) return false;
+        if (!inited || Objects.isNull(mmkv)) return isEnableModule(baseHook, def);
         if (baseHook.equalsIgnoreCase(SettingHook.INSTANCE.getLabel())) return true;
         return mmkv.decodeBool(baseHook, def);
+    }
+
+    public static boolean isEnableModule(String baseHook, boolean def) {
+        if (PPHelperImpl.getInstance() != null) {
+            SharedPreferences sp = PPHelperImpl.getInstance().getSharedPreferences("pphelper", Context.MODE_PRIVATE);
+            return sp.getBoolean(baseHook, def);
+        }
+        return def;
+    }
+
+    public static void setEnableModule(String baseHook, boolean def) {
+        if (PPHelperImpl.getInstance() != null) {
+            SharedPreferences sp = PPHelperImpl.getInstance().getSharedPreferences("pphelper", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(baseHook, def);
+            editor.apply();
+        }
+
     }
 
     public static int getInt(String key, int i) {
@@ -132,7 +156,7 @@ public class ConfigManager {
     public static boolean hasCache(String key) {
         if (!inited || Objects.isNull(mmkvCache)) return false;
         boolean has = mmkvCache.decodeString(key, null) != null;
-        PLog.log("缓存 {} 是否存在: {}",key,has);
+        PLog.log("缓存 {} 是否存在: {}", key, has);
         return has;
     }
 

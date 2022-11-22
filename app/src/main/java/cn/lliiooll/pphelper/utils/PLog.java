@@ -40,8 +40,8 @@ public class PLog {
                 }
             } else {
                 s = "[PPHelper] >> " + s;
-                XposedBridge.log(s);
-                //Log.d("PPHelper", s);
+                //XposedBridge.log(s);
+                Log.d("PPHelper", s);
             }
 
             if (!BuildConfig.DEBUG) {
