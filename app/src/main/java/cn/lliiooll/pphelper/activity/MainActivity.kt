@@ -54,7 +54,7 @@ class MainActivity : Activity(), OnClickListener {
             val hide = ConfigManager.isEnable("icon_hide", false)
             val popMenu = PopupMenu(this, main_more)
             popMenu.menuInflater.inflate(R.menu.main_menu, popMenu.menu)
-            popMenu.menu[0].title = if (hide) "隐藏图标" else "显示图标"
+            popMenu.menu[0].title = if (hide) "显示图标" else "隐藏图标"
             popMenu.setOnMenuItemClickListener {
                 if (it.itemId == R.id.main_menu_hide) {
                     PLog.log("隐藏图标: $hide")
