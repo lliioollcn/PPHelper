@@ -67,7 +67,7 @@ class MainActivity : Activity(), OnClickListener {
                         } else {
                             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         },
-                        0
+                        PackageManager.DONT_KILL_APP
                     )
                 }
                 false
