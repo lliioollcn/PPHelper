@@ -49,23 +49,23 @@ class MainActivity : Activity(), OnClickListener {
         main_select_group.setOnClickListener(this)
         main_select_about.setOnClickListener(this)
 
+
         val main_more = findViewById<ImageView>(R.id.main_more)
         main_more.setOnClickListener {
             val hide = ConfigManager.isEnable("icon_hide", false)
             val popMenu = PopupMenu(this, main_more)
             popMenu.menuInflater.inflate(R.menu.main_menu, popMenu.menu)
-            popMenu.menu[0].title = if (hide) "显示图标" else "隐藏图标"
+            popMenu.menu[0].title = if (hide) "隐藏图标" else "显示图标"
             popMenu.setOnMenuItemClickListener {
                 if (it.itemId == R.id.main_menu_hide) {
                     PLog.log("隐藏图标: $hide")
                     val pkManager = packageManager
+                    ConfigManager.setEnable("icon_hide", !hide)
                     pkManager.setComponentEnabledSetting(
                         ComponentName(this, alias),
                         if (hide) {
-                            ConfigManager.setEnable("icon_hide", true)
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED
                         } else {
-                            ConfigManager.setEnable("icon_hide", false)
                             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         },
                         PackageManager.DONT_KILL_APP
