@@ -58,13 +58,14 @@ class MainActivity : Activity(), OnClickListener {
             popMenu.setOnMenuItemClickListener {
                 if (it.itemId == R.id.main_menu_hide) {
                     PLog.log("隐藏图标: $hide")
-                    ConfigManager.setEnable("icon_hide", !hide)
                     val pkManager = packageManager
                     pkManager.setComponentEnabledSetting(
                         ComponentName(this, alias),
                         if (hide) {
+                            ConfigManager.setEnable("icon_hide", true)
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED
                         } else {
+                            ConfigManager.setEnable("icon_hide", false)
                             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         },
                         PackageManager.DONT_KILL_APP
