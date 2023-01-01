@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/main_root"
+                android:background="#fdfbfb"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <!-- 状态栏占位符 -->
+    <View
+            android:fitsSystemWindows="true"
+            android:id="@+id/statusBarView"
+            android:background="#00FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+    </View>
+
+
+    <!-- 主界面bar -->
+    <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/main_bar"
+
+            android:layout_below="@+id/statusBarView"
+            android:background="#00FFFFFF"
+            android:layout_width="match_parent"
+
+            android:layout_height="@dimen/barHeight">
+        <TextView
+                android:text="@string/app_name"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginStart="10dp"
+                android:id="@+id/main_bar_title"/>
+
+
+        <ImageView
+                android:layout_width="20dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_more"
+                android:id="@+id/main_bar_more"
+        />
+
+    </LinearLayout>
+    <cn.lliiooll.pphelper.view.BlurRelativeLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_below="@+id/main_bar"
+            android:id="@+id/status_info"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:layout_centerInParent="true">
+
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_round_status"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="300dp"
+                android:layout_height="185dp">
+
+
+            <ImageView
+                    android:background="@drawable/ic_round_close"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="20dp"
+                    android:id="@+id/status_icon"/>
+            <TextView
+
+                    android:text="模块似乎没有正常启用。请在xposed管理器中启用本模块后重新尝试。"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="#000000"
+                    android:id="@+id/status_text"/>
+        </LinearLayout>
+    </cn.lliiooll.pphelper.view.BlurRelativeLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:background="@drawable/bg_round_info"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/main_info"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+        <ImageView
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_up"
+                android:id="@+id/main_info_slide"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_round_normal"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="模块信息"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            />
+            <View android:background="#000000" android:layout_width="match_parent" android:layout_height="1dp"/>
+            <TextView
+                    android:text="模块版本: "
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_info_version"
+            />
+            <TextView
+                    android:text="构建时间: "
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_info_time"
+            />
+            <TextView
+                    android:text="模块作者: lliiooll"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            />
+            <TextView
+                    android:text="适配版本: 默认最新版皮皮搞笑"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            />
+            <TextView
+                    android:text="联系方式: 点击加入频道"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_info_chat"
+            />
+            <TextView
+                    android:text="模块设置: 皮皮搞笑->我的->设置->皮皮助手"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_info_setting"
+                    android:layout_marginBottom="10dp"
+            />
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_round_normal"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="开源许可"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            />
+            <View android:background="#000000" android:layout_width="match_parent" android:layout_height="1dp"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_round_normal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/main_info_dexkit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="DexKit"
+                        android:textSize="15sp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                />
+                <View android:background="#000000" android:layout_width="match_parent" android:layout_height="1dp"/>
+                <TextView
+                        android:text="LGPL-3.0 license, LuckPray"
+                        android:textSize="10sp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                />
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_round_normal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/main_info_qa"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="QAuxiliary"
+                        android:textSize="15sp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                />
+                <View android:background="#000000" android:layout_width="match_parent" android:layout_height="1dp"/>
+                <TextView
+                        android:text="AGPL-3.0 License with EULA"
+                        android:textSize="10sp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_round_normal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/main_info_xd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="XAutoDaily"
+                        android:textSize="15sp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                />
+                <View android:background="#000000" android:layout_width="match_parent" android:layout_height="1dp"/>
+                <TextView
+                        android:text="Copyright (C) 2022, teble LGPL-3.0 License"
+                        android:textSize="10sp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_round_normal"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="用户协议"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            />
+            <View android:background="#000000" android:layout_width="match_parent" android:layout_height="1dp"/>
+
+            <TextView
+                    android:text="GPL-3.0 License with EULA"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/main_info_eula"
+            />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

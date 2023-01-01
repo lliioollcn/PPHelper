@@ -2,12 +2,11 @@ import cn.lliiooll.dhl.plugin.Common
 
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'cn.lliiooll.dhl.plugin'
-    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
+    namespace 'cn.lliiooll.pphelper'
     compileSdk 33
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
@@ -15,93 +14,52 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 33
-        //versionCode Common.getBuildVersionCode(rootProject)
-        versionCode Common.getTimeStamp()
-        versionName "1.0.3${Common.getGitHeadRefsSuffix(rootProject)}.$versionCode"
+        versionCode 7
+        versionName "1.0"
+        resConfigs "zh"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = false
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
+
+        ndk {
+            abiFilters /*"armeabi-v7a",*/ "arm64-v8a"
+        }
+
         externalNativeBuild {
             cmake {
-                targets "pp_native"
+                targets "pphelper"
                 arguments "-DANDROID_STL=c++_static"
                 cppFlags "-std=c++17", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
-                        "-Wno-unused-command-line-argument",
-                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
-                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
+                        "-Wno-unused-command-line-argument"
                 cFlags "-std=c18", "-Wall",
                         "-Qunused-arguments",
                         "-Wno-unused-value",
                         "-Wno-unused-variable",
-                        "-Wno-unused-command-line-argument",
-                        "-DMODULE_SIGNATURE=6D0A029248E8048EAB84F17A623B3572"
-                //"-DMODULE_SIGNATURE=07548766CBB02757825DDC9CA25F7856" //DEBUG
-
-
-            }
-        }
-
-        ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a"
-        }
-
-
-    }
-    buildFeatures {
-        prefab true
-        viewBinding true
-    }
-
-
-    aaptOptions {
-        additionalParameters("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0xcf")
-    }
-
-    if (System.getenv("KEYSTORE_PATH") != null) {
-        System.out.println("start sign")
-        signingConfigs {
-            release {
-                storeFile = file(System.getenv("KEYSTORE_PATH"))
-                storePassword = System.getenv("KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("KEY_ALIAS")
-                keyPassword = System.getenv("KEY_PASSWORD")
-                enableV1Signing = true
-                enableV2Signing = true
-                enableV3Signing = true
+                        "-Wno-unused-command-line-argument"
             }
         }
     }
 
     buildTypes {
         release {
-            if (System.getenv("KEYSTORE_PATH") != null) {
-                signingConfig signingConfigs.release
-            }
             minifyEnabled false
-            shrinkResources = false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            kotlinOptions.suppressWarnings = true
-        }
-        debug {
-            minifyEnabled false
-            shrinkResources = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding false
+    }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-        compileOptions {
-            kotlinOptions.freeCompilerArgs += "-Xmulti-platform"
-        }
+    aaptOptions {
+        additionalParameters("--no-version-vectors", "--allow-reserved-package-id", "--package-id", "0xcf")
     }
 
     externalNativeBuild {
@@ -110,27 +68,29 @@ android {
             version "3.22.1"
         }
     }
+
+    packagingOptions {
+        jniLibs.excludes.add("lib/**/liblog.so")
+        jniLibs.excludes.add("lib/**/libz.so")
+        jniLibs.excludes.add("lib/**/libmmkv.so")
+        resources.excludes.addAll(
+                "META-INF/**",
+                "kotlin/**",
+                "**.bin",
+                "kotlin-tooling-metadata.json"
+        )
+    }
+
+    lint {
+        checkDependencies = true
+    }
 }
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.preference:preference:1.2.0'
+    //implementation 'com.google.android.material:material:1.7.0'
+    //implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    //implementation 'com.tencent:mmkv-static:1.1.1'
-    implementation project(":mmkv")
     implementation project(":dexkit")
-    // implementation 'com.github.LuckyPray:DexKit:1.0.1'
-    // implementation "cn.hutool:hutool-all:5.8.5"
-    implementation 'com.google.code.gson:gson:2.10'
-
-    //compileOnly fileTree('lib')
-    compileOnly project(":stub")
     compileOnly 'de.robv.android.xposed:api:82'
-
-    def appCenterSdkVersion = '4.4.5'
-    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
-    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
-
 }

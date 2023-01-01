@@ -1,14 +1,18 @@
 package cn.lliiooll.pphelper.hook;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
-import cn.lliiooll.pphelper.config.ConfigManager;
+import cn.lliiooll.pphelper.utils.PConfig;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class BaseHook {
 
     private final String name;
     private final String label;
-    private View.OnClickListener clickListener = null;
-    private String desc = "该功能未启用，如果启用后仍然显示此消息，请重启皮皮搞笑后再试";
 
     public BaseHook(String name, String label) {
         this.name = name;
@@ -16,76 +20,53 @@ public abstract class BaseHook {
     }
 
     /**
-     * 初始化hook
+     * 初始化操作
      *
-     * @return hook是否加载成功
+     * @return 初始化是否成功
      */
-    public abstract boolean init() throws Throwable;
+    public abstract boolean init();
 
     /**
-     * @return hook是否启用
-     */
-    public boolean isEnable() {
-        return ConfigManager.isEnable(this);
-    }
-
-    /**
-     * 设置hook是否启用
+     * 反混淆操作
      *
-     * @param enable 启用(true)/禁用(false)
+     * @param finds 找到的类
      */
-    public void setEnable(boolean enable) {
-        ConfigManager.setEnable(this, enable);
+    public void doObf(Map<String, List<String>> finds) {
+
     }
 
     /**
-     * @return Hook标签
+     * @return 反混淆条件
      */
-    public String getLabel() {
-        return this.name;
+    public Map<String, List<String>> obf() {
+        return new HashMap<>();
     }
 
     /**
-     * Hook的设置点击事件
+     * @return 是否需要进行反混淆操作
      */
-    public void setClickListener(View.OnClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    /**
-     * 设置Hook的设置点击事件
-     */
-    public View.OnClickListener getClickListener() {
-        return this.clickListener;
-    }
-
-    /**
-     * @return Hook名称
-     */
-    public String getName() {
-        return this.label;
-    }
-
-    /**
-     * 设置Hook的介绍
-     */
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    /**
-     * Hook的介绍
-     */
-    public String getDesc() {
-        return this.desc;
-    }
-
-
-    public void doStep() {
-
-    }
-
-    public boolean needStep() {
+    public boolean needObf() {
         return false;
+    }
+
+    public boolean isEnable() {
+        return PConfig.isEnable(getLabel(), true);
+    }
+
+    public void setEnable(boolean enable) {
+        PConfig.setEnable(getLabel(), enable);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public View getSettingsView(Context ctx) {
+        //View view = LayoutInflater.from(ctx).inflate();
+        return null;
     }
 }

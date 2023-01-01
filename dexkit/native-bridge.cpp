@@ -28,11 +28,13 @@ extern "C" JNIEXPORT JNICALL jint DexKit_JNI_OnLoad(JavaVM *vm, void *reserved) 
     if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
         return -1;
     }
+
     dex_kit_class = env->FindClass("io/luckypray/dexkit/DexKitBridge");
     int ret = registerNativeMethods(env, dex_kit_class);
     if (ret != 0) {
         return -3;
     }
+
     return JNI_VERSION_1_6;
 }
 

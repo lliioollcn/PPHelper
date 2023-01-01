@@ -3,7 +3,7 @@ project(dexkit)
 
 add_subdirectory(./DexKit/Core Core)
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} STATIC
         native-bridge.cpp)
 
 find_library(log-lib log)

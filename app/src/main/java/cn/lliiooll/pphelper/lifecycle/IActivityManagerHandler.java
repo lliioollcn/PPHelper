@@ -3,7 +3,7 @@ package cn.lliiooll.pphelper.lifecycle;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import cn.lliiooll.pphelper.utils.Utils;
+import cn.lliiooll.pphelper.utils.AppUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +30,7 @@ public class IActivityManagerHandler implements InvocationHandler {
             if (index != -1) {
                 Intent raw = (Intent) args[index];
                 ComponentName component = raw.getComponent();
-                Context hostApp = Utils.getApplication();
+                Context hostApp = AppUtils.getHostAppInstance();
                 if (hostApp != null && component != null
                         && hostApp.getPackageName().equals(component.getPackageName())
                         && ActProxyMgr.isModuleProxyActivity(component.getClassName())) {

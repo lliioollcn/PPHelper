@@ -27,24 +27,20 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import cn.lliiooll.pphelper.R;
-import cn.lliiooll.pphelper.utils.Utils;
+import cn.lliiooll.pphelper.utils.AppUtils;
 
 public class CounterfeitActivityInfoFactory {
 
-    @Nullable
-    public static ActivityInfo makeProxyActivityInfo(@NonNull String className, long flags) {
+    public static ActivityInfo makeProxyActivityInfo(String className, long flags) {
         try {
-            Context ctx = Utils.getApplication();
+            Context ctx = AppUtils.getHostAppInstance();
             Class<?> cl = Class.forName(className);
             try {
                 // TODO: 2022-02-11 cast flags from long to int loses information
                 ActivityInfo proto = ctx.getPackageManager().getActivityInfo(new ComponentName(
                         ctx.getPackageName(), "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity"), (int) flags);
                 // init style here, comment it out if it crashes on Android >= 10
-                proto.theme = androidx.appcompat.R.style.Base_Theme_AppCompat;
+                proto.theme = android.R.style.Theme;
                 return initCommon(proto, className);
             } catch (PackageManager.NameNotFoundException e) {
                 throw new IllegalStateException(

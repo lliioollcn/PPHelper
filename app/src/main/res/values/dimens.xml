@@ -1,13 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="navbar_height">44dp</dimen>
-    <dimen name="item_height">44dp</dimen>
-    <dimen name="f2">18dp</dimen>
-    <dimen name="divide_space_5">5dp</dimen>
-    <dimen name="f3">16dp</dimen>
-    <dimen name="f4">14dp</dimen>
-    <dimen name="f5">12dp</dimen>
-    <dimen name="f6">10dp</dimen>
-    <dimen name="divide_space_10">10dp</dimen>
 
+    <dimen name="barHeight">50dp</dimen>
 </resources>

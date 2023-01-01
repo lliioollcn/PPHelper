@@ -1,16 +1,22 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
+        maven { url 'https://jitpack.io' }
+    }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://jitpack.io/' }
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "PPHelper"
 include ':app'
-includeBuild 'versionPlugin'
-include ':stub'
-include ':mmkv'
 include ':dexkit'
-
+includeBuild 'versionPlugin'

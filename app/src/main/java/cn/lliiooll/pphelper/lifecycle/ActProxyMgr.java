@@ -21,18 +21,12 @@
  */
 package cn.lliiooll.pphelper.lifecycle;
 
-import androidx.annotation.NonNull;
-import org.intellij.lang.annotations.MagicConstant;
-
 /**
  * This class is used to cope with Activity
  */
 public class ActProxyMgr {
 
-    public static final String STUB_DEFAULT_ACTIVITY = "com.tencent.mobileqq.activity.photo.CameraPreviewActivity";
-    public static final String STUB_TRANSLUCENT_ACTIVITY = "cooperation.qlink.QlinkStandardDialogActivity";
-    @MagicConstant
-    public static final String ACTIVITY_PROXY_INTENT = "io.github.qauxv.lifecycle.ActProxyMgr.ACTIVITY_PROXY_INTENT";
+    public static final String ACTIVITY_PROXY_INTENT = "cn.lliiooll.pphelper.lifecycle.ActProxyMgr.ACTIVITY_PROXY_INTENT";
 
     private ActProxyMgr() {
         throw new AssertionError("No instance for you!");
@@ -40,14 +34,14 @@ public class ActProxyMgr {
 
     // NOTICE: ** If you have created your own package, add it to proguard-rules.pro.**
 
-    public static boolean isModuleProxyActivity(@NonNull String className) {
+    public static boolean isModuleProxyActivity(String className) {
         if (className == null) {
             return false;
         }
         return className.startsWith("cn.lliiooll.pphelper.activity.");
     }
 
-    public static boolean isModuleBundleClassLoaderRequired(@NonNull String className) {
+    public static boolean isModuleBundleClassLoaderRequired( String className) {
         return isModuleProxyActivity(className);
     }
 }

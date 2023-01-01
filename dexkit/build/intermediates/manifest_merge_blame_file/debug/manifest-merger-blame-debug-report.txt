@@ -4,8 +4,8 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="26"
-6-->D:\0aDevelops\xposed\PPHelper\dexkit\DexKit\Android\dexkit\src\main\AndroidManifest.xml
-7        android:targetSdkVersion="33" />
-7-->D:\0aDevelops\xposed\PPHelper\dexkit\DexKit\Android\dexkit\src\main\AndroidManifest.xml
+6-->D:\IntelliJIDEAProjects\PPHelper\dexkit\DexKit\Android\dexkit\src\main\AndroidManifest.xml
+7        android:targetSdkVersion="32" />
+7-->D:\IntelliJIDEAProjects\PPHelper\dexkit\DexKit\Android\dexkit\src\main\AndroidManifest.xml
 8
 9</manifest>

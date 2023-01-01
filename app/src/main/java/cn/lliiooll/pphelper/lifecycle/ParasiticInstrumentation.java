@@ -12,9 +12,9 @@ import android.content.pm.ActivityInfo;
 import android.os.*;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import androidx.annotation.Nullable;
-import cn.lliiooll.pphelper.activity.SettingsActivity;
-import cn.lliiooll.pphelper.startup.StartupHook;
+import cn.lliiooll.pphelper.activity.MainActivity;
+import cn.lliiooll.pphelper.startup.ModuleLauncher;
+import cn.lliiooll.pphelper.startup.ResourcesInjector;
 import cn.lliiooll.pphelper.utils.PLog;
 
 public class ParasiticInstrumentation extends Instrumentation {
@@ -27,24 +27,24 @@ public class ParasiticInstrumentation extends Instrumentation {
     @Override
     public Activity newActivity(ClassLoader cl, String className, Intent intent)
             throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        PLog.log("==================================================");
-        PLog.log("新的界面被创建: {},intent: {}", className, intent);
+        PLog.d("==================================================");
+        PLog.d("新的界面被创建: " + className + ",intent: " + intent);
         if (intent.getExtras() != null) {
             Bundle data = intent.getExtras();
             data.keySet().forEach(key -> {
-                PLog.log("@额外数据(" + key + "): " + data.get(key));
+                PLog.d("@额外数据(" + key + "): " + data.get(key));
             });
         }
-        PLog.log("当前堆栈: ");
+        PLog.d("当前堆栈: ");
         PLog.printStacks();
-        PLog.log("==================================================");
+        PLog.d("==================================================");
 
 
         try {
             return mBase.newActivity(cl, className, intent);
         } catch (Exception e) {
             if (ActProxyMgr.isModuleProxyActivity(className)) {
-                return (Activity) SettingsActivity.class.getClassLoader().loadClass(className)
+                return (Activity) MainActivity.class.getClassLoader().loadClass(className)
                         .newInstance();
             }
             throw e;
@@ -264,11 +264,11 @@ public class ParasiticInstrumentation extends Instrumentation {
                                 Application application, Intent intent, ActivityInfo info, CharSequence title,
                                 Activity parent, String id, Object lastNonConfigurationInstance)
             throws IllegalAccessException, InstantiationException {
-        PLog.log("==================================================");
-        PLog.log("新的界面被创建: {},intent: {}", clazz.getName(), intent);
-        PLog.log("当前堆栈: ");
+        PLog.d("==================================================");
+        PLog.d("新的界面被创建: " + clazz.getName() + ",intent: " + intent);
+        PLog.d("当前堆栈: ");
         PLog.printStacks();
-        PLog.log("==================================================");
+        PLog.d("==================================================");
         return mBase
                 .newActivity(clazz, context, token, application, intent, info, title, parent, id,
                         lastNonConfigurationInstance);
@@ -279,10 +279,10 @@ public class ParasiticInstrumentation extends Instrumentation {
         if (icicle != null) {
             String className = activity.getClass().getName();
             if (ActProxyMgr.isModuleBundleClassLoaderRequired(className)) {
-                icicle.setClassLoader(StartupHook.class.getClassLoader());
+                icicle.setClassLoader(ModuleLauncher.class.getClassLoader());
             }
         }
-        Parasitics.injectModuleResources(activity.getResources());
+        ResourcesInjector.inject(activity.getResources());
         mBase.callActivityOnCreate(activity, icicle);
     }
 
@@ -292,10 +292,10 @@ public class ParasiticInstrumentation extends Instrumentation {
         if (icicle != null) {
             String className = activity.getClass().getName();
             if (ActProxyMgr.isModuleBundleClassLoaderRequired(className)) {
-                icicle.setClassLoader(StartupHook.class.getClassLoader());
+                icicle.setClassLoader(ModuleLauncher.class.getClassLoader());
             }
         }
-        Parasitics.injectModuleResources(activity.getResources());
+        ResourcesInjector.inject(activity.getResources());
         mBase.callActivityOnCreate(activity, icicle, persistentState);
     }
 
@@ -323,8 +323,8 @@ public class ParasiticInstrumentation extends Instrumentation {
     }
 
     @Override
-    public void callActivityOnPostCreate(Activity activity, @Nullable Bundle savedInstanceState,
-                                         @Nullable PersistableBundle persistentState) {
+    public void callActivityOnPostCreate(Activity activity, Bundle savedInstanceState,
+                                         PersistableBundle persistentState) {
         mBase.callActivityOnPostCreate(activity, savedInstanceState, persistentState);
     }
 

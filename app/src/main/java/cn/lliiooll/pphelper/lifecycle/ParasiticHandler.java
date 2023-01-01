@@ -2,7 +2,7 @@ package cn.lliiooll.pphelper.lifecycle;
 
 import android.content.Intent;
 import android.os.*;
-import cn.lliiooll.pphelper.startup.HybridClassLoader;
+import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
 
 import java.lang.reflect.Field;
@@ -31,7 +31,7 @@ public class ParasiticHandler implements Handler.Callback {
                     fExtras.setAccessible(true);
                     bundle = (Bundle) fExtras.get(intent);
                 } catch (Exception e) {
-                    PLog.log(e);
+                    PLog.e(e);
                 }
                 if (bundle != null) {
                     bundle.setClassLoader(HybridClassLoader.clLoader);
@@ -43,7 +43,7 @@ public class ParasiticHandler implements Handler.Callback {
                     }
                 }
             } catch (Exception e) {
-                PLog.log(e);
+                PLog.e(e);
             }
         } else if (msg.what == 159) {
             // EXECUTE_TRANSACTION
@@ -68,7 +68,7 @@ public class ParasiticHandler implements Handler.Callback {
                                     fExtras.setAccessible(true);
                                     bundle = (Bundle) fExtras.get(wrapper);
                                 } catch (Exception e) {
-                                    PLog.log(e);
+                                    PLog.e(e);
                                 }
                                 if (bundle != null) {
                                     bundle.setClassLoader(HybridClassLoader.clLoader);
@@ -103,7 +103,7 @@ public class ParasiticHandler implements Handler.Callback {
                     }
                 }
             } catch (Exception e) {
-                PLog.log(e);
+                PLog.e(e);
             }
         }
         if (mDefault != null) {

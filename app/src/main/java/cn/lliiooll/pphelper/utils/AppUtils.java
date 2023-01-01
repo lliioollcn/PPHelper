@@ -1,0 +1,66 @@
+package cn.lliiooll.pphelper.utils;
+
+import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import cn.lliiooll.pphelper.activity.MainActivity;
+import de.robv.android.xposed.XposedHelpers;
+
+import java.lang.reflect.Field;
+
+/**
+ * Application工具类
+ */
+public class AppUtils {
+
+
+    private static Application hostApp = null;// 宿主app实例
+
+    /**
+     * 初始化工具类
+     *
+     * @param hostApp 宿主app实例
+     */
+    public static void init(Application hostApp) {
+        AppUtils.hostApp = hostApp;
+    }
+
+    /**
+     * @return 宿主Application对象，如果初始化未完成或者初始化失败则返回null
+     */
+    public static Application getHostAppInstance() {
+        return hostApp;
+    }
+
+    public static void hideIcon(Context ctx, String alias) {
+        PackageManager pkM = ctx.getPackageManager();
+        boolean hide = isHide();
+        PConfig.setEnable("app_hide", !hide);
+        pkM.setComponentEnabledSetting(new ComponentName(ctx, alias), hide ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+    }
+
+    public static boolean isHide() {
+//        return true;
+        return PConfig.isEnable("app_hide", false);
+    }
+
+    public static void openUrl(String url, Context ctx) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        ctx.startActivity(intent);
+    }
+
+    public static int findId(String type, String name) {
+        int id = 0;
+        try {
+            Class<?> clazz = HybridClassLoader.clLoader.loadClass("cn.xiaochuankeji.zuiyouLite.R$" + type);
+            id = XposedHelpers.getStaticIntField(clazz, name);
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
+        return id;
+    }
+}
