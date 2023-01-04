@@ -12,10 +12,15 @@ import android.content.pm.ActivityInfo;
 import android.os.*;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import cn.lliiooll.pphelper.activity.MainActivity;
+import cn.lliiooll.pphelper.activity.ConfigActivity;
 import cn.lliiooll.pphelper.startup.ModuleLauncher;
 import cn.lliiooll.pphelper.startup.ResourcesInjector;
+import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ParasiticInstrumentation extends Instrumentation {
     private final Instrumentation mBase;
@@ -29,11 +34,20 @@ public class ParasiticInstrumentation extends Instrumentation {
             throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         PLog.d("==================================================");
         PLog.d("新的界面被创建: " + className + ",intent: " + intent);
+        AtomicReference<Activity> act = new AtomicReference<>(null);
         if (intent.getExtras() != null) {
             Bundle data = intent.getExtras();
             data.keySet().forEach(key -> {
                 PLog.d("@额外数据(" + key + "): " + data.get(key));
+                if (key.equalsIgnoreCase(ActProxyMgr.ACTIVITY_PROXY_INTENT)) {
+                    PLog.d("强制跳转配置界面");
+                    act.set(new ConfigActivity());
+                }
+
             });
+        }
+        if (act.get() != null) {
+            //return act.get();
         }
         PLog.d("当前堆栈: ");
         PLog.printStacks();
@@ -44,11 +58,13 @@ public class ParasiticInstrumentation extends Instrumentation {
             return mBase.newActivity(cl, className, intent);
         } catch (Exception e) {
             if (ActProxyMgr.isModuleProxyActivity(className)) {
-                return (Activity) MainActivity.class.getClassLoader().loadClass(className)
+                return (Activity) ConfigActivity.class.getClassLoader().loadClass(className)
                         .newInstance();
             }
             throw e;
         }
+
+
     }
 
     @Override

@@ -25,14 +25,14 @@ public class DexUtils {
         if (PConfig.cache().isEmpty()) {
             return reCache(obf);
         }
-        return PConfig.cache();
+        return PConfig.cache().size() != obf.size() ? reCache(obf) : PConfig.cache();
     }
 
     public static Map<String, List<String>> reCache(Map<String, List<String>> obf) {
         DexKitBridge dexkit = DexKitBridge.create(getHostPath(AppUtils.getHostAppInstance()));
         Map<String, List<DexClassDescriptor>> results = dexkit.batchFindClassesUsingStrings(obf, true, new int[0]);
         dexkit.close();
-        Map<String, List<String>> finds = new HashMap<>();
+        Map<String, List<String>> finds = PConfig.cache();
         results.forEach((key, value) -> {
             List<String> res = new ArrayList<>();
             value.forEach(desc -> {

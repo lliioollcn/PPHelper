@@ -1,8 +1,12 @@
 package cn.lliiooll.pphelper.hook;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
+import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
@@ -26,7 +30,7 @@ public class AntiAD extends BaseHook {
         PLog.d("尝试加载类 cn.xiaochuankeji.hermes.core.Hermes");
         Class<?> clazz = HybridClassLoader.load("cn.xiaochuankeji.hermes.core.Hermes");
         for (Method m : clazz.getDeclaredMethods()) {
-            PLog.d("过滤方法: " + m.getName());
+            //PLog.d("过滤方法: " + m.getName());
             if (m.getName().contains("create") && m.getName().contains("AD")) {
                 XposedBridge.hookMethod(m, new XC_MethodReplacement() {
                     @Override
@@ -47,4 +51,5 @@ public class AntiAD extends BaseHook {
         });
         return true;
     }
+
 }

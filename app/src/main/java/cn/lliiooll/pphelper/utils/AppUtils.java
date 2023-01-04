@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import cn.lliiooll.pphelper.activity.MainActivity;
+import cn.lliiooll.pphelper.activity.SimpleMeActivity;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.lang.reflect.Field;
@@ -62,5 +63,16 @@ public class AppUtils {
             PLog.e(e);
         }
         return id;
+    }
+
+
+    public static int getStatusBarHeight(Context ctx) {
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = ctx.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = ctx.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }

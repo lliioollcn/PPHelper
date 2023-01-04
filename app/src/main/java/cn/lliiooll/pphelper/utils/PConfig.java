@@ -4,18 +4,20 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import cn.lliiooll.pphelper.app.PPHelperImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 配置文件管理
  */
 public class PConfig {
+
+    private static final Gson gson = new GsonBuilder().serializeNulls().create();
+
     public static boolean isEnable(String label, boolean def) {
         Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
         File dir = app.getExternalFilesDir("pphelperConfig");
@@ -50,21 +52,7 @@ public class PConfig {
             dir.mkdirs();
         }
         File file = new File(dir, "obfCaches");
-        StringBuilder sb = new StringBuilder();
-        finds.forEach((k, v) -> {
-            if (sb.length() < 1) {
-                sb.append("\n\t");
-            }
-            sb.append(k).append("\t");
-            StringBuilder sb1 = new StringBuilder();
-            v.forEach(f -> {
-                if (sb1.length() < 1) {
-                    sb.append("\n");
-                }
-                sb.append(f);
-            });
-        });
-        IOUtils.write(sb.toString(), file);
+        IOUtils.write(gson.toJson(finds), file);
     }
 
     public static Map<String, List<String>> cache() {
@@ -76,13 +64,36 @@ public class PConfig {
         }
         File file = new File(dir, "obfCaches");
         if (file.exists()) {
-            String content = IOUtils.read(file);
-            String[] all = content.split("\n\t");
-            for (String f : all) {
-                String[] f1 = f.split("\t");
-                finds.put(f1[0], Arrays.asList(f1[1].split("\n")));
+            try {
+                String content = IOUtils.read(file);
+                finds.putAll(gson.fromJson(content, Map.class));
+            } catch (Throwable e) {
+                file.delete();
             }
         }
         return finds;
+    }
+
+    public static Set<String> getSet(String label) {
+        Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
+        File dir = app.getExternalFilesDir("pphelperConfig");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, label);
+        if (file.exists()) {
+            return gson.fromJson(IOUtils.read(file), Set.class);
+        }
+        return new HashSet<>();
+    }
+
+    public static void setSet(String label, Set<String> hides) {
+        Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
+        File dir = app.getExternalFilesDir("pphelperConfig");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, label);
+        IOUtils.write(gson.toJson(hides), file);
     }
 }

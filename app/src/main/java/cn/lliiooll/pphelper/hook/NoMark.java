@@ -1,12 +1,18 @@
 package cn.lliiooll.pphelper.hook;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
+import cn.lliiooll.pphelper.data.CommentBeanData;
+import cn.lliiooll.pphelper.data.ServerImageBeanData;
+import cn.lliiooll.pphelper.download.DownloadManager;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.DexUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.lang.reflect.Method;
@@ -27,7 +33,40 @@ public class NoMark extends BaseHook {
 
     @Override
     public boolean init() {
+        // 替换帖子右下角 “保存至相册”
+        Class<?> clazz = HybridClassLoader.load("cn.xiaochuankeji.zuiyouLite.ui.postlist.holder.PostOperator");
+        for (Method m : clazz.getDeclaredMethods()) {
+            if (m.getParameterTypes().length == 5
+                    && m.getParameterTypes()[0] == Activity.class
+                    && m.getParameterTypes()[1] == String.class) {
+                XposedBridge.hookMethod(m, new XC_MethodReplacement() {
+                    @Override
+                    protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                        Object imageBean = param.args[2];
+                        DownloadManager.download(new ServerImageBeanData(imageBean));
+                        return null;
+                    }
+                });
+            }
+        }
 
+        // 替换评论视频右上角下载图标
+        Class<?> obfClazz = HybridClassLoader.load(DEOBF_COMMENT_VIDEO);
+        Class<?> commentBeanClazz = HybridClassLoader.load("cn.xiaochuankeji.zuiyouLite.data.CommentBean");
+        for (Method m : obfClazz.getDeclaredMethods()) {
+            if (m.getName().equalsIgnoreCase("u0")
+                    && m.getParameterTypes().length == 1
+                    && m.getParameterTypes()[0] == commentBeanClazz) {
+                XposedBridge.hookMethod(m, new XC_MethodReplacement() {
+                    @Override
+                    protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                        Object imageBean = param.args[0];
+                        new CommentBeanData(imageBean).serverImageBean().forEach(DownloadManager::download);
+                        return null;
+                    }
+                });
+            }
+        }
         return true;
     }
 
@@ -56,6 +95,8 @@ public class NoMark extends BaseHook {
                     }
                 }
             });
+        } else {
+            doObf(DexUtils.reCache(obf()));
         }
     }
 

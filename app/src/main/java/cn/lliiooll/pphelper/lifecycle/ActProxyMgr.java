@@ -38,7 +38,7 @@ public class ActProxyMgr {
         if (className == null) {
             return false;
         }
-        return className.startsWith("cn.lliiooll.pphelper.activity.");
+        return className.startsWith("cn.lliiooll.pphelper.");
     }
 
     public static boolean isModuleBundleClassLoaderRequired( String className) {

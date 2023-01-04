@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_marginTop="10dp"
+              android:layout_marginBottom="10dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <TextView
+            android:text="TextView"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/set_nor_title"
+            android:layout_weight="1"/>
+    <Switch
+            android:text=""
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/set_nor_switch"
+            android:thumb="@drawable/style_switch_thumb"
+            android:track="@drawable/style_switch_track_selector"
+            android:layout_weight="1"/>
+</LinearLayout>

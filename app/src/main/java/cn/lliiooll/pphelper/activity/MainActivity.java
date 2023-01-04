@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
         LinearLayout bar = findViewById(R.id.main_bar);
         View statusBarView = findViewById(R.id.statusBarView);
         ViewGroup.LayoutParams params = statusBarView.getLayoutParams();
-        params.height += getStatusBarHeight();
+        params.height += AppUtils.getStatusBarHeight(this);
         statusBarView.setLayoutParams(params);
         statusBarView.setBackground(bar.getBackground());
         // 沉浸式状态栏结束
@@ -152,11 +152,13 @@ public class MainActivity extends Activity {
         TextView version = findViewById(R.id.main_info_version);
         TextView time = findViewById(R.id.main_info_time);
         TextView chat = findViewById(R.id.main_info_chat);
+        TextView code = findViewById(R.id.main_info_code);
         TextView eula = findViewById(R.id.main_info_eula);
         TextView setting = findViewById(R.id.main_info_setting);
         version.setText("模块版本: " + BuildConfig.VERSION_NAME);
         time.setText("构建时间: " + new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date(BuildConfig.BUILD_TIMESTAMP)));
         chat.setOnClickListener(v -> AppUtils.openUrl("https://pd.qq.com/s/iflagazq", this));
+        code.setOnClickListener(v -> AppUtils.openUrl("https://github.com/lliioollcn/PPHelper", this));
         eula.setOnClickListener(v -> AppUtils.openUrl("https://github.com/qwq233/License/blob/master/v2/LICENSE.md", this));
         setting.setOnClickListener(v -> {
             //TODO: 跳转皮皮搞笑设置界面
@@ -183,13 +185,4 @@ public class MainActivity extends Activity {
         main_info_xd.setOnClickListener(v -> AppUtils.openUrl("https://github.com/LuckyPray/XAutoDaily", this));
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        //获取状态栏高度的资源id
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 }

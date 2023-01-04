@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/main_root"
-                android:background="#fdfbfb"
+                android:background="#FDFBFB"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -160,10 +160,17 @@
                     android:id="@+id/main_info_chat"
             />
             <TextView
+                    android:text="开原地址: Github"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_info_code"
+            />
+            <TextView
                     android:text="模块设置: 皮皮搞笑->我的->设置->皮皮助手"
                     android:layout_marginStart="10dp"
                     android:textColor="#000000"
-
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

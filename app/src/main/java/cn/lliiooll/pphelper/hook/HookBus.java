@@ -1,11 +1,9 @@
 package cn.lliiooll.pphelper.hook;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,9 +15,8 @@ import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Hook管理器
@@ -27,10 +24,14 @@ import java.util.Map;
 public class HookBus {
 
     private static final BaseHook[] hooks = {
+            RemoveEvilInstrumentationHook.INSTANCE,
+            RemoveZyBuffHook.INSTANCE,
             AddSetting.INSTANCE,
             TestHook.INSTANCE,
             AntiAD.INSTANCE,
             NoMark.INSTANCE,
+            AntiVoiceRoomHook.INSTANCE,
+            SimpleMe.INSTANCE,
     };
 
     private static int obfs = 0;
@@ -39,6 +40,7 @@ public class HookBus {
      * 初始化hook管理器
      */
     public static void init() {
+
         for (BaseHook hook : hooks) {
             if (hook.isEnable()) {
                 if (hook.needObf()) {
@@ -85,5 +87,9 @@ public class HookBus {
             }
         });
 
+    }
+
+    public static ArrayList<BaseHook> getAllHooks() {
+        return new ArrayList<>(Arrays.asList(hooks));
     }
 }

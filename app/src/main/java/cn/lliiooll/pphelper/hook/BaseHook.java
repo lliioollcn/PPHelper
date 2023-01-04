@@ -3,6 +3,10 @@ package cn.lliiooll.pphelper.hook;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.utils.PConfig;
 
 import java.util.HashMap;
@@ -66,7 +70,12 @@ public abstract class BaseHook {
     }
 
     public View getSettingsView(Context ctx) {
-        //View view = LayoutInflater.from(ctx).inflate();
-        return null;
+        View root = LayoutInflater.from(ctx).inflate(R.layout.pp_setting_normal, null);
+        TextView title = root.findViewById(R.id.set_nor_title);
+        title.setText(getName());
+        Switch sw = root.findViewById(R.id.set_nor_switch);
+        sw.setChecked(isEnable());
+        sw.setOnCheckedChangeListener((buttonView, isChecked) -> setEnable(isChecked));
+        return root;
     }
 }

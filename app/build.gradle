@@ -14,8 +14,8 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 33
-        versionCode 7
-        versionName "1.0"
+        versionCode Common.getBuildVersionCode(rootProject)
+        versionName "2.0${Common.getGitHeadRefsSuffix(rootProject)}"
         resConfigs "zh"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = false
@@ -93,4 +93,6 @@ dependencies {
 
     implementation project(":dexkit")
     compileOnly 'de.robv.android.xposed:api:82'
+
+    implementation 'com.google.code.gson:gson:2.10'
 }
