@@ -1,6 +1,7 @@
 package cn.lliiooll.pphelper.utils;
 
 import android.util.Log;
+import cn.lliiooll.pphelper.BuildConfig;
 import de.robv.android.xposed.XposedBridge;
 
 /**
@@ -20,8 +21,10 @@ public class PLog {
     }
 
     public static void d(String msg) {
-        String m = "[DEBUG]>>> " + msg;
-        Log.i(TAG, m);
+        if (BuildConfig.DEBUG){
+            String m = "[DEBUG]>>> " + msg;
+            Log.i(TAG, m);
+        }
         //XposedBridge.log("[" + TAG + "]  " + m);
     }
 
