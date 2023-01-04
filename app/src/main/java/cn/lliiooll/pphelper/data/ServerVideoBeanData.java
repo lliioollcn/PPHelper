@@ -16,12 +16,24 @@ public class ServerVideoBeanData {
     public List<String> urls() {
         List<String> urls = new ArrayList<>();
         List<Object> h265Sources = (List<Object>) XposedHelpers.getObjectField(this.videoBean, "h265Sources");
-        h265Sources.forEach(src -> {
-            List<Object> videoUrls = (List<Object>) XposedHelpers.getObjectField(src, "urls");
-            videoUrls.forEach(url -> {
-                urls.add((String) XposedHelpers.getObjectField(url, "url"));
+        if (h265Sources != null){
+            h265Sources.forEach(src -> {
+                List<Object> videoUrls = (List<Object>) XposedHelpers.getObjectField(src, "urls");
+                videoUrls.forEach(url -> {
+                    urls.add((String) XposedHelpers.getObjectField(url, "url"));
+                });
             });
-        });
+        }
+
+        List<Object> sources = (List<Object>) XposedHelpers.getObjectField(this.videoBean, "sources");
+        if (sources != null){
+            sources.forEach(src -> {
+                List<Object> videoUrls = (List<Object>) XposedHelpers.getObjectField(src, "urls");
+                videoUrls.forEach(url -> {
+                    urls.add((String) XposedHelpers.getObjectField(url, "url"));
+                });
+            });
+        }
         return urls;
     }
 

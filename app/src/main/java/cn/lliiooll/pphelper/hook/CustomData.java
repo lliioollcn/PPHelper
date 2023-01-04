@@ -1,5 +1,6 @@
 package cn.lliiooll.pphelper.hook;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,5 +47,10 @@ public class CustomData extends BaseHook {
             }
         }
         return true;
+    }
+
+    @Override
+    public View getSettingsView(Context ctx) {
+        return null;
     }
 }

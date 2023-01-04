@@ -1,9 +1,12 @@
 package cn.lliiooll.pphelper.utils;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -94,5 +97,37 @@ public class IOUtils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static Map<String, Object> toMap(Object postBean) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            if (postBean != null) {
+                for (Field f : postBean.getClass().getDeclaredFields()) {
+                    f.setAccessible(true);
+                    Object ins = f.get(postBean);
+                    if (ins == null) {
+                        map.put(f.getName(), null);
+                    } else {
+                        if (ins.getClass().isPrimitive() || ins.getClass().getName().startsWith("java.lang")) {
+                            map.put(f.getName(), ins);
+                        } else {
+                            PLog.d(f.getName() + "是其他类: " + ins.getClass().getName());
+
+                            if (ins.getClass().getName().startsWith("cn.xiaochuankeji")) {
+                                map.put(f.getName(), toMap(ins));
+                            } else if (ins.getClass().getName().startsWith("java.util")) {
+                                map.put(f.getName(), ins);
+                            } else {
+                                map.put(f.getName(), ins.getClass().getName());
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
+        return map;
     }
 }

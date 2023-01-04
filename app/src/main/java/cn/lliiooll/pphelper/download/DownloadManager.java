@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.widget.Toast;
 import cn.lliiooll.pphelper.data.ServerImageBeanData;
 import cn.lliiooll.pphelper.utils.*;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,6 +19,22 @@ public class DownloadManager {
         //TODO: 尝试调用皮皮搞笑自带的下载器下载
         Handler handler = new Handler(Looper.getMainLooper());
         Toast.makeText(AppUtils.getHostAppInstance(), "开始下载无水印视频", Toast.LENGTH_SHORT).show();
+        /*
+        File dir = AppUtils.getHostAppInstance().getExternalFilesDir("helperJson");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, System.currentTimeMillis() + ".json");
+        if (file.exists()) {
+            file.delete();
+        }
+
+        IOUtils.write(new GsonBuilder().serializeNulls().create().toJson(IOUtils.toMap(imageBean)),file);
+
+         */
+
+
+
         String u = imageBean.video().urls().get(0);
         String u1 = u.replace("http://", "").replace("https://", "");
         String url = "http://127.0.0.1:2017/" + u1;

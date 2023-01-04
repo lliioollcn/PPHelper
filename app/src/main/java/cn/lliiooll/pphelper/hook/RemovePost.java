@@ -12,13 +12,14 @@ import android.widget.Toast;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.activity.HidePostActivity;
 import cn.lliiooll.pphelper.activity.SimpleMeActivity;
-import cn.lliiooll.pphelper.utils.AppUtils;
-import cn.lliiooll.pphelper.utils.HideList;
-import cn.lliiooll.pphelper.utils.HybridClassLoader;
+import cn.lliiooll.pphelper.utils.*;
+import com.google.gson.GsonBuilder;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,9 @@ public class RemovePost extends BaseHook {
                 int type = (int) param.args[1];
                 if (HideList.isHidePost(type)) {
                     param.args[1] = 666999;
+                    PLog.d("屏蔽的帖子类型: " + type);
+                } else {
+                    PLog.d("未屏蔽的帖子类型: " + type);
                 }
             }
 
@@ -87,6 +91,47 @@ public class RemovePost extends BaseHook {
                 }
             }
         });
+
+        Class<?> clazz1 = HybridClassLoader.load("cn.xiaochuankeji.zuiyouLite.ui.postlist.holder.PostViewHolderSingleVideo");
+        for (Method m : clazz1.getDeclaredMethods()) {
+            if (m.getParameterTypes().length > 0 && m.getParameterTypes()[0].getName().contains("PostDataBean")) {
+                XposedBridge.hookMethod(m, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        PLog.d("方法: " + m.getName() + " 被调用");
+                        if (HideList.isHidePost(0x3c)){
+                            Object postBean = param.args[0];
+                            File dir = AppUtils.getHostAppInstance().getExternalFilesDir("helperJson");
+                            if (!dir.exists()) {
+                                dir.mkdirs();
+                            }
+
+                            Object activity = XposedHelpers.getObjectField(postBean, "activityBean");
+                            if (activity != null) {
+                                PLog.d("是广告");
+                                //TODO: 广告移除
+                                View view = (View) XposedHelpers.getObjectField(param.thisObject, "itemView");
+                                ViewGroup.LayoutParams params = view.getLayoutParams();
+                                params.width = 0;
+                                params.height = 0;
+                                view.setLayoutParams(params);
+                                view.setPadding(0, 0, 0, 0);
+                                view.setVisibility(View.GONE);
+                                view.setOnClickListener(null);
+                            }
+                        }
+                        /*
+                        IOUtils.write(new GsonBuilder().serializeNulls().create().toJson(IOUtils.toMap(postBean)),
+                                new File(dir, XposedHelpers.getLongField(postBean, "postId") + ".json"));
+                        Thread.sleep(10L);
+
+                         */
+
+                    }
+                });
+
+            }
+        }
         return true;
     }
 

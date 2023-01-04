@@ -21,6 +21,7 @@ public class HideList {
         put("PostViewHolderHermesMix", 27);
         put("FeedActivityHolder", 105);
         put("视频", 11);
+        put("普通帖子带广告", 0x3c);
         put("PostViewHolderOneImage", 12);
         put("PostViewHolderGif", 13);
         put("PostViewHolderGifVideo", 14);
