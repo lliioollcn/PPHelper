@@ -4,8 +4,36 @@ import java.util.*;
 
 public class HideList {
 
-    public static final Map<String, Integer> postTypes = new HashMap<String, Integer>() {{
+    public static final Map<String, Integer> postTypes = new TreeMap<String, Integer>() {{
+        put("HolderStoryTips", -100);
+        put("RecommendTopicHolder", 16);
+        put("PostViewHolderLiveCard", 211);
+        put("LiveCardHolderRoot", 213);
+        put("PostGameCardSingleVH", 216);
+        put("PostVoiceHolderCard", 212);
+        put("PostVoiceRoomHolderCard", 214);
+        put("PostCurrencyHolderCard", 215);
+        put("TopicCardHolder", 17);
+        put("HotEventActivityCard", 299);
+        put("VillageResourceBitsHolder", -101);
+        put("TopicFunHolder", 1);
+        put("PostViewHolderVoice", 2);
+        put("PostViewHolderHermesMix", 27);
+        put("FeedActivityHolder", 105);
+        put("视频", 11);
+        put("PostViewHolderOneImage", 12);
+        put("PostViewHolderGif", 13);
+        put("PostViewHolderGifVideo", 14);
+        put("PostViewHolderNormal", 101);
+        put("PartitionHeadHolder", -10);
+        put("HolderStoryAlert", -102);
+        put("BottomInfoHolder", 101);
+        put("UserTownPostCommentViewHolder", 1);
+        put("FollowedRecommendAuthorHolder", 217);
+        put("Live$j.q", 200);
+        put("HolderPrivacyAlert", AppUtils.findId("layout", "layout_holder_privacy_alert"));
 
+        put("PostViewHolderWeb", 102);
     }};
     public static final Map<String, String> myTypes = new TreeMap<String, String>() {{
         put("功能入口> 共建家园", "my_tab_star_review");

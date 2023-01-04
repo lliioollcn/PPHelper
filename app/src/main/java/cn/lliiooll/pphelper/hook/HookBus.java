@@ -32,6 +32,7 @@ public class HookBus {
             NoMark.INSTANCE,
             AntiVoiceRoomHook.INSTANCE,
             SimpleMe.INSTANCE,
+            RemovePost.INSTANCE,
     };
 
     private static int obfs = 0;
@@ -47,7 +48,12 @@ public class HookBus {
                     obfs += hook.obf().size();
                 } else {
                     PLog.d("尝试加载不需要反混淆的hook " + hook.getName() + "(" + hook.getLabel() + ") ");
-                    hook.init();
+                    try {
+                        hook.init();
+                    }catch (Throwable e){
+                        PLog.e(e);
+                    }
+
                 }
 
             }
@@ -76,8 +82,12 @@ public class HookBus {
                                 obf[0]++;
                                 bar.setProgress(obf[0]);
                             });
-                            hook.doObf(finded);
-                            hook.init();
+                            try {
+                                hook.doObf(finded);
+                                hook.init();
+                            }catch (Throwable e){
+                                PLog.e(e);
+                            }
                         }
                     }
                 }
