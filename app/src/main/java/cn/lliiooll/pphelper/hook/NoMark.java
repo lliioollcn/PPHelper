@@ -39,9 +39,11 @@ public class NoMark extends BaseHook {
             if (m.getParameterTypes().length == 5
                     && m.getParameterTypes()[0] == Activity.class
                     && m.getParameterTypes()[1] == String.class) {
+
                 XposedBridge.hookMethod(m, new XC_MethodReplacement() {
                     @Override
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                        PLog.d("方法执行: " + m.getName());
                         Object imageBean = param.args[2];
                         DownloadManager.download(new ServerImageBeanData(imageBean));
                         return null;
@@ -57,11 +59,14 @@ public class NoMark extends BaseHook {
             if (m.getName().equalsIgnoreCase("u0")
                     && m.getParameterTypes().length == 1
                     && m.getParameterTypes()[0] == commentBeanClazz) {
+
                 XposedBridge.hookMethod(m, new XC_MethodReplacement() {
                     @Override
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                        PLog.d("方法执行: " + m.getName());
                         Object imageBean = param.args[0];
-                        new CommentBeanData(imageBean).serverImageBean().forEach(DownloadManager::download);
+                        DownloadManager.download(new CommentBeanData(imageBean).serverImageBean().get(0));
+
                         return null;
                     }
                 });
