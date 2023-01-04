@@ -1,15 +1,13 @@
 package cn.lliiooll.pphelper.utils;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import cn.lliiooll.pphelper.app.PPHelperImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 配置文件管理
@@ -53,19 +51,21 @@ public class PConfig {
         }
         File file = new File(dir, "obfCachesNew");
         StringBuilder sb = new StringBuilder();
-        int c = 0;
+        AtomicInteger c = new AtomicInteger();
         finds.forEach((k, v) -> {
-            if (c != 0) {
+            if (c.get() != 0) {
                 sb.append("\n");
             }
             sb.append(k).append("###");
-            int q = 0;
+            AtomicInteger q = new AtomicInteger();
             v.forEach(d -> {
-                if (q != 0) {
+                if (q.get() != 0) {
                     sb.append(" ");
                 }
                 sb.append(d);
+                q.getAndIncrement();
             });
+            c.getAndIncrement();
         });
         IOUtils.write(sb.toString(), file);
     }

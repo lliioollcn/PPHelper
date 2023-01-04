@@ -34,6 +34,7 @@ public class HookBus {
             SimpleMe.INSTANCE,
             RemovePost.INSTANCE,
             CustomData.INSTANCE,
+            PPLog.INSTANCE,
     };
 
     private static int obfs = 0;
@@ -51,7 +52,7 @@ public class HookBus {
                     PLog.d("尝试加载不需要反混淆的hook " + hook.getName() + "(" + hook.getLabel() + ") ");
                     try {
                         hook.init();
-                    }catch (Throwable e){
+                    } catch (Throwable e) {
                         PLog.e(e);
                     }
 
@@ -86,7 +87,7 @@ public class HookBus {
                             try {
                                 hook.doObf(finded);
                                 hook.init();
-                            }catch (Throwable e){
+                            } catch (Throwable e) {
                                 PLog.e(e);
                             }
                         }
