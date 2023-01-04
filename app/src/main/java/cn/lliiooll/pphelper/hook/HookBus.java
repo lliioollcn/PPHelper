@@ -33,6 +33,7 @@ public class HookBus {
             AntiVoiceRoomHook.INSTANCE,
             SimpleMe.INSTANCE,
             RemovePost.INSTANCE,
+            CustomData.INSTANCE,
     };
 
     private static int obfs = 0;
