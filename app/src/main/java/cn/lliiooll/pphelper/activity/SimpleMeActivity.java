@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HideList;
@@ -34,6 +31,8 @@ public class SimpleMeActivity extends Activity {
         params.height += AppUtils.getStatusBarHeight(this);
         statusBarView.setLayoutParams(params);
         statusBarView.setBackground(bar.getBackground());
+        ImageView back = findViewById(R.id.set_back);
+        back.setOnClickListener(v->onBackPressed());
         // 沉浸式状态栏结束
 
         LinearLayout content = findViewById(R.id.sm_content);

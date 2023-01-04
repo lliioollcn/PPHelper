@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.hook.BaseHook;
@@ -29,6 +30,8 @@ public class ConfigActivity extends Activity {
         params.height += AppUtils.getStatusBarHeight(this);
         statusBarView.setLayoutParams(params);
         statusBarView.setBackground(bar.getBackground());
+        ImageView back = findViewById(R.id.set_back);
+        back.setOnClickListener(v->onBackPressed());
         // 沉浸式状态栏结束
 
         LinearLayout content = findViewById(R.id.set_content);

@@ -61,8 +61,8 @@ public class HideList {
         put("个人数据> 下载", "!my_data_download");
     }};
 
-    private static final String label_post = "PP_POST_HIDE";
-    private static final String label_my = "PP_MY_HIDE";
+    private static final String label_post = "ppPostHide";
+    private static final String label_my = "ppMyHide";
 
 
     public static boolean isHidePost(Integer type) {

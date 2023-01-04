@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/main_root"
+                android:background="#FDFBFB"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <!-- 状态栏占位符 -->
+    <View
+            android:fitsSystemWindows="true"
+            android:id="@+id/log_statusBarView"
+            android:background="#00FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+    </View>
+
+
+    <!-- 主界面bar -->
+    <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/log_bar"
+            android:layout_below="@+id/log_statusBarView"
+            android:background="#00FFFFFF"
+            android:layout_width="match_parent"
+
+            android:layout_height="@dimen/barHeight">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@mipmap/icon_arrow_left"
+                android:id="@+id/log_back"
+        />
+
+        <TextView
+                android:text="@string/app_name"
+                android:gravity="center_vertical"
+                android:layout_gravity="center"
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:id="@+id/main_bar_title"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_save"
+                android:id="@+id/log_clear"
+        />
+
+    </LinearLayout>
+    <ScrollView
+            android:layout_below="@+id/log_bar"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:text="暂时没有日志"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#000000"
+                android:id="@+id/log_text"/>
+
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -51,8 +51,23 @@ public class PConfig {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File file = new File(dir, "obfCaches");
-        IOUtils.write(gson.toJson(finds), file);
+        File file = new File(dir, "obfCachesNew");
+        StringBuilder sb = new StringBuilder();
+        int c = 0;
+        finds.forEach((k, v) -> {
+            if (c != 0) {
+                sb.append("\n");
+            }
+            sb.append(k).append("###");
+            int q = 0;
+            v.forEach(d -> {
+                if (q != 0) {
+                    sb.append(" ");
+                }
+                sb.append(d);
+            });
+        });
+        IOUtils.write(sb.toString(), file);
     }
 
     public static Map<String, List<String>> cache() {
@@ -62,11 +77,15 @@ public class PConfig {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File file = new File(dir, "obfCaches");
+        File file = new File(dir, "obfCachesNew");
         if (file.exists()) {
             try {
                 String content = IOUtils.read(file);
-                finds.putAll(gson.fromJson(content, Map.class));
+                String[] keys = content.split("\n");
+                for (String k : keys) {
+                    String[] data = k.split("###");
+                    finds.put(data[0], new ArrayList<>(Arrays.asList(data[1].split(" "))));
+                }
             } catch (Throwable e) {
                 file.delete();
             }
@@ -82,7 +101,12 @@ public class PConfig {
         }
         File file = new File(dir, label);
         if (file.exists()) {
-            return gson.fromJson(IOUtils.read(file), Set.class);
+            String sb = IOUtils.read(file);
+            Set<String> set = new HashSet<>();
+            for (String m : sb.split("\n")) {
+                set.add(m);
+            }
+            return set;
         }
         return new HashSet<>();
     }
@@ -94,6 +118,15 @@ public class PConfig {
             dir.mkdirs();
         }
         File file = new File(dir, label);
-        IOUtils.write(gson.toJson(hides), file);
+        StringBuilder sb = new StringBuilder();
+        final int[] c = {0};
+        hides.forEach(v -> {
+            if (c[0] != 0) {
+                sb.append("\n");
+            }
+            sb.append(v);
+            c[0]++;
+        });
+        IOUtils.write(sb.toString(), file);
     }
 }
