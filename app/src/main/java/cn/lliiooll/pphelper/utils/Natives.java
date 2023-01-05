@@ -110,10 +110,7 @@ public class Natives {
     }
 
     private static List<String> libList = new ArrayList<String>() {{
-        add("libpp_native");
-        add("libmmkv");
-        add("liblog");
-        add("libdexkit");
+        add("libpphelper");
     }};
 
     public static void load2(Context ctx) {

@@ -1,10 +1,10 @@
 package cn.lliiooll.pphelper.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.net.Uri;
+import android.os.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +40,10 @@ public class LogActivity extends Activity {
         back.setOnClickListener(v -> onBackPressed());
         // 沉浸式状态栏结束
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
+
         this.text = findViewById(R.id.log_text);
         File dir = AppUtils.getHostAppInstance().getExternalFilesDir("helperLog");
         if (!dir.exists()) {
@@ -49,7 +53,13 @@ public class LogActivity extends Activity {
 
         ImageView save = findViewById(R.id.log_clear);
         save.setOnClickListener(v -> {
-
+            Intent share = new Intent(Intent.ACTION_SEND);
+            Uri content = Uri.fromFile(file);
+            share.putExtra(Intent.EXTRA_STREAM, content);
+            share.setType("text/plain");
+            share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            this.startActivity(Intent.createChooser(share, "分享文件"));
         });
 
         save.setOnLongClickListener(v -> {
