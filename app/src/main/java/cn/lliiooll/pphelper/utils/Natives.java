@@ -6,6 +6,8 @@ import dalvik.system.BaseDexClassLoader;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,11 +23,11 @@ public class Natives {
         BaseDexClassLoader cLoader = (BaseDexClassLoader) Natives.class.getClassLoader();
         PLog.d("尝试获取lib目录...");
         Object pathList = XposedHelpers.getObjectField(cLoader, "pathList");
-        List<File> nativeLibraryDirectories = (List<File>) XposedHelpers.getObjectField(pathList, "nativeLibraryDirectories");
+        List<File> nativeLibraryDirectories = new ArrayList<>((List<File>) XposedHelpers.getObjectField(pathList, "nativeLibraryDirectories"));
         String path = HookEntry.getPackageName() + "!/lib/arm64-v8a";
         PLog.d("尝试注入lib目录...");
         nativeLibraryDirectories.add(new File(path));
-        XposedHelpers.setObjectField(pathList, "nativeLibraryDirectories", nativeLibraryDirectories);
+        XposedHelpers.setObjectField(pathList, "nativeLibraryDirectories", Arrays.asList(nativeLibraryDirectories));
         XposedHelpers.setObjectField(cLoader, "pathList", pathList);
         PLog.d("尝试加载native....");
         System.loadLibrary("pphelper");
