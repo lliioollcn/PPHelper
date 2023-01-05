@@ -136,7 +136,7 @@ public class IOUtils {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            FileWriter fw = new FileWriter(file);
+            FileWriter fw = new FileWriter(file, true);
             fw.append(m);
             fw.close();
         } catch (Throwable e) {

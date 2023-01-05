@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18.1)
 project("pphelper")
 add_subdirectory(../../../../dexkit dexkit)
+add_subdirectory(../../../../mmkv mmkv)
 
 add_library(pphelper SHARED
              native.cpp )
@@ -32,4 +33,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=full")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--exclude-libs,ALL")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,--exclude-libs,ALL")
 
-target_link_libraries(pphelper dexkit z)
+target_link_libraries(pphelper dexkit mmkv z)

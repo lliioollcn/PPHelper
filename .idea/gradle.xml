@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/dexkit" />
+            <option value="$PROJECT_DIR$/mmkv" />
             <option value="$PROJECT_DIR$/versionPlugin" />
           </set>
         </option>

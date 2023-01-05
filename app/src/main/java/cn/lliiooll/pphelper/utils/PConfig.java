@@ -4,6 +4,7 @@ import android.app.Application;
 import cn.lliiooll.pphelper.app.PPHelperImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.tencent.mmkv.MMKV;
 
 import java.io.File;
 import java.util.*;
@@ -15,32 +16,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PConfig {
 
     private static final Gson gson = new GsonBuilder().serializeNulls().create();
+    private static MMKV mmkv = null;
 
     public static boolean isEnable(String label, boolean def) {
-        Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
-        File dir = app.getExternalFilesDir("pphelperConfig");
-        if (!dir.exists()) {
-            dir.mkdirs();
-            return def;
-        }
-        File file = new File(dir, label);
-        if (!file.exists()) {
-            IOUtils.write(def + "", file);
-            return def;
-        }
-        String content = IOUtils.read(file);
-        PLog.d("文件内容: " + content);
-        return content.equalsIgnoreCase("true");
+        if (mmkv == null) return def;
+        return mmkv.decodeBool(label, def);
     }
 
     public static void setEnable(String label, boolean enable) {
-        Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
-        File dir = app.getExternalFilesDir("pphelperConfig");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir, label);
-        IOUtils.write(enable + "", file);
+        if (mmkv == null) return;
+        mmkv.encode(label, enable);
     }
 
     public static void cache(Map<String, List<String>> finds) {
@@ -94,39 +79,19 @@ public class PConfig {
     }
 
     public static Set<String> getSet(String label) {
-        Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
-        File dir = app.getExternalFilesDir("pphelperConfig");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir, label);
-        if (file.exists()) {
-            String sb = IOUtils.read(file);
-            Set<String> set = new HashSet<>();
-            for (String m : sb.split("\n")) {
-                set.add(m);
-            }
-            return set;
-        }
-        return new HashSet<>();
+        if (mmkv == null)
+            return new HashSet<>();
+
+        return mmkv.decodeStringSet(label,new HashSet<>());
     }
 
     public static void setSet(String label, Set<String> hides) {
-        Application app = AppUtils.getHostAppInstance() == null ? PPHelperImpl.getApp() : AppUtils.getHostAppInstance();
-        File dir = app.getExternalFilesDir("pphelperConfig");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir, label);
-        StringBuilder sb = new StringBuilder();
-        final int[] c = {0};
-        hides.forEach(v -> {
-            if (c[0] != 0) {
-                sb.append("\n");
-            }
-            sb.append(v);
-            c[0]++;
-        });
-        IOUtils.write(sb.toString(), file);
+       if (mmkv == null)return;
+       mmkv.encode(label,hides);
+    }
+
+    public static void init() {
+        mmkv = MMKV.defaultMMKV();
+        PLog.d("mmkv加载成功!");
     }
 }

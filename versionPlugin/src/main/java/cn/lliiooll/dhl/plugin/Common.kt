@@ -75,6 +75,6 @@ object Common {
 
     @JvmStatic
     fun getTimeStamp(): Int {
-        return System.currentTimeMillis().toInt()
+        return (System.currentTimeMillis() / 1000).toInt()
     }
 }
