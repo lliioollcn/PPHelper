@@ -161,8 +161,11 @@ public class IOUtils {
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            for (int i =0;i<line;i++){
-                sb.append(br.readLine());
+            for (int i = 0; i < line; i++) {
+                String ct = br.readLine();
+                if (ct != null) {
+                    sb.append(ct).append("\n");
+                }
             }
             br.close();
             fr.close();
