@@ -28,13 +28,11 @@ extern "C" JNIEXPORT JNICALL jint DexKit_JNI_OnLoad(JavaVM *vm, void *reserved) 
     if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
         return -1;
     }
-
     dex_kit_class = env->FindClass("io/luckypray/dexkit/DexKitBridge");
     int ret = registerNativeMethods(env, dex_kit_class);
     if (ret != 0) {
         return -3;
     }
-
     return JNI_VERSION_1_6;
 }
 
@@ -313,21 +311,6 @@ nativeFindMethodUsingString(JNIEnv *env, jclass clazz,
 }
 
 DEXKIT_JNI jobjectArray
-nativeFindMethod(JNIEnv *env, jclass clazz,
-                 jlong native_ptr,
-                 jstring method_declare_class,
-                 jstring method_name,
-                 jstring method_return_type,
-                 jobjectArray method_param_types,
-                 jintArray dex_priority) {
-    if (!native_ptr) {
-        return StrVec2JStrArr(env, std::vector<std::string>());
-    }
-    return FindMethod(env, native_ptr, method_declare_class, method_name, method_return_type,
-                      method_param_types, dex_priority);
-}
-
-DEXKIT_JNI jobjectArray
 nativeFindSubClasses(JNIEnv *env, jclass clazz,
                      jlong native_ptr,
                      jstring parent_class,
@@ -401,7 +384,6 @@ static JNINativeMethod g_methods[]{
         {"nativeFindMethodInvoking",           "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Z[I)Ljava/util/Map;",     (void *) DexKit::nativeFindMethodInvoking},
         {"nativeFindMethodUsingField",         "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Z[I)Ljava/util/Map;",                       (void *) DexKit::nativeFindMethodUsingField},
         {"nativeFindMethodUsingString",        "(JLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Z[I)[Ljava/lang/String;",                                                                         (void *) DexKit::nativeFindMethodUsingString},
-        {"nativeFindMethod",                   "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[I)[Ljava/lang/String;",                                                                                             (void *) DexKit::nativeFindMethod},
         {"nativeFindSubClasses",               "(JLjava/lang/String;[I)[Ljava/lang/String;",                                                                                                                                                    (void *) DexKit::nativeFindSubClasses},
         {"nativeFindMethodUsingOpPrefixSeq",   "(J[ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[I)[Ljava/lang/String;",                                                                                           (void *) DexKit::nativeFindMethodUsingOpPrefixSeq},
         {"nativeFindMethodUsingOpCodeSeq",     "(J[ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[I)[Ljava/lang/String;",                                                                                           (void *) DexKit::nativeFindMethodUsingOpCodeSeq},
