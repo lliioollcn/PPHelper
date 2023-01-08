@@ -1,22 +1,21 @@
 package cn.lliiooll.pphelper.hook;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.lliiooll.pphelper.R;
-import cn.lliiooll.pphelper.utils.AppUtils;
-import cn.lliiooll.pphelper.utils.DexUtils;
-import cn.lliiooll.pphelper.utils.HybridClassLoader;
-import cn.lliiooll.pphelper.utils.PLog;
+import cn.lliiooll.pphelper.utils.*;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Hook管理器
@@ -35,7 +34,9 @@ public class HookBus {
             RemovePost.INSTANCE,
             CustomData.INSTANCE,
             PPLog.INSTANCE,
+            //CustomVideoRecord.INSTANCE,
     };
+    public static boolean inited = false;
 
     private static int obfs = 0;
 
@@ -60,42 +61,77 @@ public class HookBus {
 
             }
         }
+
+        /*
         XposedHelpers.findAndHookMethod("cn.xiaochuankeji.zuiyouLite.ui.splash.SplashActivity", HybridClassLoader.clLoader, "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+
+            }
+        });
+
+         */
+
+        XposedHelpers.findAndHookMethod("cn.xiaochuankeji.zuiyouLite.ui.splash.SplashActivity", HybridClassLoader.clLoader, "onCreate", Bundle.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                PLog.d("广告界面开始加载...");
                 Activity activity = (Activity) param.thisObject;
-                RelativeLayout root = (RelativeLayout) activity.findViewById(AppUtils.findId("id", "splash_open_cover")).getParent();
+                PLog.d("设置界面内容");
+
+                //RelativeLayout root = (RelativeLayout) activity.findViewById(AppUtils.findId("id", "splash_open_cover")).getParent();
                 View custom = LayoutInflater.from(activity).inflate(R.layout.pp_spalsh, null);
-                root.addView(custom);
+                activity.setContentView(custom);
+                //root.addView(custom);
                 TextView text = custom.findViewById(R.id.spalsh_text);
                 ProgressBar bar = custom.findViewById(R.id.spalsh_bar);
                 bar.setMax(obfs);
                 final int[] obf = {0};
-                for (BaseHook hook : hooks) {
-                    if (hook.isEnable()) {
-                        if (hook.needObf()) {
-                            PLog.d("尝试加载需要反混淆的hook " + hook.getName() + "(" + hook.getLabel() + ") ");
-                            Map<String, List<String>> finded = new HashMap<>();
-                            hook.obf().forEach((k, i) -> {
-                                text.setText("正在寻找被混淆的类: " + k);
-                                finded.putAll(DexUtils.obf(new HashMap<String, List<String>>() {{
-                                    put(k, i);
-                                }}));
-                                obf[0]++;
-                                bar.setProgress(obf[0]);
-                            });
-                            try {
-                                hook.doObf(finded);
-                                hook.init();
-                            } catch (Throwable e) {
-                                PLog.e(e);
+                PLog.d("开始加载");
+                SyncUtils.async(() -> {
+                    for (BaseHook hook : hooks) {
+                        if (hook.isEnable()) {
+                            if (hook.needObf()) {
+                                SyncUtils.sync(() -> text.setText("正在加载hook: " + hook.getName()));
+                                PLog.d("尝试加载需要反混淆的hook " + hook.getName() + "(" + hook.getLabel() + ") ");
+                                Map<String, List<String>> finded = new HashMap<>();
+                                hook.obf().forEach((k, i) -> {
+                                    SyncUtils.sync(() -> text.setText("正在寻找被混淆的类: " + k));
+                                    finded.putAll(DexUtils.obf(new HashMap<String, List<String>>() {{
+                                        put(k, i);
+                                    }}));
+                                    obf[0]++;
+                                    SyncUtils.sync(() -> bar.setProgress(obf[0]));
+                                });
+                                try {
+                                    hook.doObf(finded);
+                                    hook.init();
+                                } catch (Throwable e) {
+                                    PLog.e(e);
+                                }
                             }
                         }
                     }
-                }
-                text.setText("加载完毕~");
-                bar.setMax(1);
-                bar.setProgress(1, true);
+                    SyncUtils.sync(() -> {
+                        PLog.d("加载完毕.");
+                        text.setText("加载完毕~");
+                        bar.setMax(1);
+                        bar.setProgress(1, true);
+                        inited = true;
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException e) {
+                            PLog.e(e);
+                        }
+                        for (Field f : activity.getClass().getDeclaredFields()) {
+                            if (f.getType() == Handler.class) {
+                                PLog.d("尝试启动主界面");
+                               Handler handler = (Handler) XposedHelpers.getObjectField(activity, f.getName());
+                               handler.sendEmptyMessage(29);
+                            }
+                        }
+                    });
+                });
             }
         });
 

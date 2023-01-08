@@ -143,4 +143,32 @@ public class IOUtils {
             PLog.e(e);
         }
     }
+
+    public static void copy(File file, File sFile) {
+        try {
+            PLog.d("复制文件: " + file.getAbsolutePath());
+            PLog.d("到文件: " + sFile.getAbsolutePath());
+            FileInputStream fis = new FileInputStream(file);
+            BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(sFile));
+            copy(fis, fos);
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
+    }
+
+    public static String read(File file, int line) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            for (int i =0;i<line;i++){
+                sb.append(br.readLine());
+            }
+            br.close();
+            fr.close();
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
+        return sb.toString();
+    }
 }

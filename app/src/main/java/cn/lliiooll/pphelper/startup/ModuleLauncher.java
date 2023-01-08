@@ -20,6 +20,11 @@ public class ModuleLauncher {
      * @see de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
      */
     public static void init(XC_LoadPackage.LoadPackageParam param) {
+        if (param.processName.contains(":")) {
+            PLog.e("不是主进程，拒绝加载");
+            return;
+        }
+        PLog.d("开始加载,进程名称: " + param.processName);
         XposedHelpers.findAndHookMethod(
                 "cn.xiaochuankeji.zuiyouLite.app.AppController",
                 param.classLoader,

@@ -1,16 +1,20 @@
 package cn.lliiooll.pphelper.utils;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import androidx.core.app.ActivityCompat;
+import cn.lliiooll.pphelper.activity.LogActivity;
 import cn.lliiooll.pphelper.activity.MainActivity;
 import cn.lliiooll.pphelper.activity.SimpleMeActivity;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * Application工具类
@@ -74,5 +78,21 @@ public class AppUtils {
             result = ctx.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    public static boolean hasPermission(Context ctx, String... permissions) {
+        boolean has = true;
+        for (String perm : permissions) {
+            if (ActivityCompat.checkSelfPermission(ctx, perm) != PackageManager.PERMISSION_GRANTED) {
+                has = false;
+                break;
+            }
+        }
+        return has;
+    }
+
+    public static void requestPermission(Activity activity, int id, String... permissions) {
+        PLog.d("尝试请求权限: " + Arrays.toString(permissions));
+        ActivityCompat.requestPermissions(activity, permissions, id);
     }
 }

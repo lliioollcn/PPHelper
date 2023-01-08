@@ -34,7 +34,6 @@ public class DownloadManager {
          */
 
 
-
         String u = imageBean.video().urls().get(0);
         String u1 = u.replace("http://", "").replace("https://", "");
         String url = "http://127.0.0.1:2017/" + u1;
@@ -49,6 +48,13 @@ public class DownloadManager {
                 File dir = AppUtils.getHostAppInstance().getExternalFilesDir("noMarkVideo");
                 if (!dir.exists()) {
                     dir.mkdirs();
+                }else {
+                    if (dir.listFiles() != null){
+                        for (File f : dir.listFiles()){
+                            PLog.d("删除缓存: "+f.getAbsolutePath());
+                            f.delete();
+                        }
+                    }
                 }
                 File file = new File(dir, imageBean.id() + ".mp4");
                 if (file.exists()) {
@@ -61,6 +67,8 @@ public class DownloadManager {
                 handler.post(() -> {
                     MediaStoreUtils.insertVideo(AppUtils.getHostAppInstance(), file);
                     Toast.makeText(AppUtils.getHostAppInstance(), "下载无水印视频完毕", Toast.LENGTH_SHORT).show();
+                    file.delete();
+                    PLog.d("文件删除完毕.");
                 });
             } catch (Throwable e) {
                 PLog.e(e);

@@ -1,25 +1,33 @@
 package cn.lliiooll.pphelper.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.*;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HideList;
 import cn.lliiooll.pphelper.utils.IOUtils;
+import cn.lliiooll.pphelper.utils.PLog;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LogActivity extends Activity {
 
-    private static Handler handler = new Handler(Looper.getMainLooper());
+    private static final Handler handler = new Handler(Looper.getMainLooper());
     private TextView text = null;
 
     @Override
@@ -40,9 +48,11 @@ public class LogActivity extends Activity {
         back.setOnClickListener(v -> onBackPressed());
         // 沉浸式状态栏结束
 
+        // 检查权限
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
+
 
         this.text = findViewById(R.id.log_text);
         File dir = AppUtils.getHostAppInstance().getExternalFilesDir("helperLog");
@@ -54,7 +64,7 @@ public class LogActivity extends Activity {
         ImageView save = findViewById(R.id.log_clear);
         save.setOnClickListener(v -> {
             Intent share = new Intent(Intent.ACTION_SEND);
-            Uri content = Uri.fromFile(file);
+            Uri content = FileProvider.getUriForFile(this, AppUtils.getHostAppInstance().getPackageName() + ".fileprovider", file);
             share.putExtra(Intent.EXTRA_STREAM, content);
             share.setType("text/plain");
             share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -70,12 +80,10 @@ public class LogActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                text.setText(file.exists() ? IOUtils.read(file) : "暂时没有日志");
+                text.setText(file.exists() ? IOUtils.read(file, 100) : "暂时没有日志");
                 handler.postDelayed(this, 100L);
             }
         }, 100L);
-
-
     }
 
     @Override
