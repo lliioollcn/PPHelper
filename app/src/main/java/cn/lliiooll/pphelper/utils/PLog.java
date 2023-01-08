@@ -57,4 +57,8 @@ public class PLog {
             d("    " + stack.toString());
         }
     }
+
+    public static boolean isDebug() {
+        return BuildConfig.DEBUG;
+    }
 }

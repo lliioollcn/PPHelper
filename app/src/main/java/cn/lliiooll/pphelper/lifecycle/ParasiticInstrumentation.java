@@ -32,27 +32,20 @@ public class ParasiticInstrumentation extends Instrumentation {
     @Override
     public Activity newActivity(ClassLoader cl, String className, Intent intent)
             throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        PLog.d("==================================================");
-        PLog.d("新的界面被创建: " + className + ",intent: " + intent);
-        AtomicReference<Activity> act = new AtomicReference<>(null);
-        if (intent.getExtras() != null) {
-            Bundle data = intent.getExtras();
-            data.keySet().forEach(key -> {
-                PLog.d("@额外数据(" + key + "): " + data.get(key));
-                if (key.equalsIgnoreCase(ActProxyMgr.ACTIVITY_PROXY_INTENT)) {
-                    PLog.d("强制跳转配置界面");
-                    act.set(new ConfigActivity());
-                }
-
-            });
+        if (PLog.isDebug()){
+            PLog.d("==================================================");
+            PLog.d("新的界面被创建: " + className + ",intent: " + intent);
+            AtomicReference<Activity> act = new AtomicReference<>(null);
+            if (intent.getExtras() != null) {
+                Bundle data = intent.getExtras();
+                data.keySet().forEach(key -> {
+                    PLog.d("@额外数据(" + key + "): " + data.get(key));
+                });
+            }
+            PLog.d("当前堆栈: ");
+            PLog.printStacks();
+            PLog.d("==================================================");
         }
-        if (act.get() != null) {
-            //return act.get();
-        }
-        PLog.d("当前堆栈: ");
-        PLog.printStacks();
-        PLog.d("==================================================");
-
 
         try {
             return mBase.newActivity(cl, className, intent);
@@ -280,11 +273,13 @@ public class ParasiticInstrumentation extends Instrumentation {
                                 Application application, Intent intent, ActivityInfo info, CharSequence title,
                                 Activity parent, String id, Object lastNonConfigurationInstance)
             throws IllegalAccessException, InstantiationException {
-        PLog.d("==================================================");
-        PLog.d("新的界面被创建: " + clazz.getName() + ",intent: " + intent);
-        PLog.d("当前堆栈: ");
-        PLog.printStacks();
-        PLog.d("==================================================");
+        if (PLog.isDebug()){
+            PLog.d("==================================================");
+            PLog.d("新的界面被创建: " + clazz.getName() + ",intent: " + intent);
+            PLog.d("当前堆栈: ");
+            PLog.printStacks();
+            PLog.d("==================================================");
+        }
         return mBase
                 .newActivity(clazz, context, token, application, intent, info, title, parent, id,
                         lastNonConfigurationInstance);
