@@ -14,8 +14,8 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 31
-        //versionCode Common.getBuildVersionCode(rootProject)
-        versionCode 67
+        versionCode Common.getBuildVersionCode(rootProject)
+        //versionCode 67
         versionName "2.0${Common.getGitHeadRefsSuffix(rootProject)}"
         resConfigs "zh"
         vectorDrawables.useSupportLibrary = true
