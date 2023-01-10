@@ -8,12 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import androidx.core.app.ActivityCompat;
-import cn.lliiooll.pphelper.activity.LogActivity;
-import cn.lliiooll.pphelper.activity.MainActivity;
-import cn.lliiooll.pphelper.activity.SimpleMeActivity;
+import cn.lliiooll.pphelper.startup.HookEntry;
 import de.robv.android.xposed.XposedHelpers;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /**
@@ -94,5 +91,18 @@ public class AppUtils {
     public static void requestPermission(Activity activity, int id, String... permissions) {
         PLog.d("尝试请求权限: " + Arrays.toString(permissions));
         ActivityCompat.requestPermissions(activity, permissions, id);
+    }
+
+    public static String getSettingActivity(String packageName) {
+        String activity = "";
+        if (packageName != null) {
+            PLog.d("当前宿主应用为: " + packageName);
+            if (packageName.equalsIgnoreCase(HostInfo.ZuiyouLite.PACKAGE_NAME)) {
+                activity = "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity";
+            }
+        } else {
+            PLog.d("当前宿主应用为: null");
+        }
+        return activity;
     }
 }

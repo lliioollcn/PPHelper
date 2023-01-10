@@ -48,7 +48,7 @@
         </activity-alias>
 
         <activity
-                android:name=".activity.ConfigActivity"
+                android:name=".activity.zuiyouLite.ConfigActivity"
                 android:exported="true"
                 android:theme="@android:style/Theme.Material.NoActionBar">
             <intent-filter>
@@ -59,7 +59,7 @@
 
 
         <activity
-                android:name=".activity.HidePostActivity"
+                android:name=".activity.zuiyouLite.HidePostActivity"
                 android:exported="true"
                 android:theme="@android:style/Theme.Material.NoActionBar">
             <intent-filter>
@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-                android:name=".activity.SimpleMeActivity"
+                android:name=".activity.zuiyouLite.SimpleMeActivity"
                 android:exported="true"
                 android:theme="@android:style/Theme.Material.NoActionBar">
             <intent-filter>

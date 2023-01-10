@@ -1,4 +1,4 @@
-package cn.lliiooll.pphelper.activity;
+package cn.lliiooll.pphelper.activity.zuiyouLite;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -6,15 +6,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HideList;
 
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SimpleMeActivity extends Activity {
+public class HidePostActivity extends Activity {
 
 
     @Override
@@ -38,7 +40,7 @@ public class SimpleMeActivity extends Activity {
         LinearLayout content = findViewById(R.id.sm_content);
         AtomicInteger q = new AtomicInteger(0);
 
-        HideList.myTypes.forEach((k, v) -> {
+        HideList.postTypes.forEach((k, v) -> {
             if (q.get() != 0) {
                 View line = new View(this);
                 line.setBackgroundResource(R.drawable.bg_line);
@@ -50,8 +52,8 @@ public class SimpleMeActivity extends Activity {
             TextView title = root.findViewById(R.id.sm_t);
             CheckBox checkBox = root.findViewById(R.id.sm_cb);
             title.setText(k);
-            checkBox.setChecked(HideList.isHideMy(v));
-            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> HideList.hideMy(v, isChecked));
+            checkBox.setChecked(HideList.isHidePost(v));
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> HideList.hidePost(v, isChecked));
             content.addView(root);
             q.getAndIncrement();
         });

@@ -1,23 +1,19 @@
-package cn.lliiooll.pphelper.hook;
+package cn.lliiooll.pphelper.hook.zuiyouLite;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.lliiooll.pphelper.R;
-import cn.lliiooll.pphelper.activity.SimpleMeActivity;
+import cn.lliiooll.pphelper.activity.zuiyouLite.SimpleMeActivity;
+import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HideList;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
-import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 

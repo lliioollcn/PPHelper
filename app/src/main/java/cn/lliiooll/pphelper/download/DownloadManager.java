@@ -15,9 +15,10 @@ import java.net.URLConnection;
 
 public class DownloadManager {
 
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+
     public static void download(ServerImageBeanData imageBean) {
         //TODO: 尝试调用皮皮搞笑自带的下载器下载
-        Handler handler = new Handler(Looper.getMainLooper());
         Toast.makeText(AppUtils.getHostAppInstance(), "开始下载无水印视频", Toast.LENGTH_SHORT).show();
         /*
         File dir = AppUtils.getHostAppInstance().getExternalFilesDir("helperJson");
@@ -43,15 +44,13 @@ public class DownloadManager {
         String finalUrl = url;
         SyncUtils.async(() -> {
             try {
-                URL uri = new URL(finalUrl);
-                URLConnection conn = uri.openConnection();
                 File dir = AppUtils.getHostAppInstance().getExternalFilesDir("noMarkVideo");
                 if (!dir.exists()) {
                     dir.mkdirs();
-                }else {
-                    if (dir.listFiles() != null){
-                        for (File f : dir.listFiles()){
-                            PLog.d("删除缓存: "+f.getAbsolutePath());
+                } else {
+                    if (dir.listFiles() != null) {
+                        for (File f : dir.listFiles()) {
+                            PLog.d("删除缓存: " + f.getAbsolutePath());
                             f.delete();
                         }
                     }
@@ -60,13 +59,10 @@ public class DownloadManager {
                 if (file.exists()) {
                     file.delete();
                 }
-                PLog.d("下载到文件: " + file.getAbsolutePath());
-                FileOutputStream fos = new FileOutputStream(file);
-                IOUtils.copy(conn.getInputStream(), fos);
-                PLog.d("下载完毕，开始存库相册");
+                download(finalUrl, file);
                 handler.post(() -> {
                     MediaStoreUtils.insertVideo(AppUtils.getHostAppInstance(), file);
-                    Toast.makeText(AppUtils.getHostAppInstance(), "下载无水印视频完毕", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppUtils.getHostAppInstance(), "无水印视频下载完毕", Toast.LENGTH_SHORT).show();
                     file.delete();
                     PLog.d("文件删除完毕.");
                 });
@@ -74,8 +70,54 @@ public class DownloadManager {
                 PLog.e(e);
             }
         });
+    }
+
+    public static void download(String url, File file) {
+        try {
+            URL uri = new URL(url);
+            URLConnection conn = uri.openConnection();
+            if (file.exists()) {
+                file.delete();
+            }
+            PLog.d("下载到文件: " + file.getAbsolutePath());
+            FileOutputStream fos = new FileOutputStream(file);
+            IOUtils.copy(conn.getInputStream(), fos);
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
 
     }
 
 
+    public static void downloadVoice(String url) {
+        Toast.makeText(AppUtils.getHostAppInstance(), "开始下载语音", Toast.LENGTH_SHORT).show();
+        SyncUtils.async(() -> {
+            try {
+                File dir = AppUtils.getHostAppInstance().getExternalFilesDir("voiceTemp");
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                } else {
+                    if (dir.listFiles() != null) {
+                        for (File f : dir.listFiles()) {
+                            PLog.d("删除缓存: " + f.getAbsolutePath());
+                            f.delete();
+                        }
+                    }
+                }
+                File file = new File(dir, System.currentTimeMillis() + ".wav");
+                if (file.exists()) {
+                    file.delete();
+                }
+                download(url, file);
+                handler.post(() -> {
+                    MediaStoreUtils.insertVoice(AppUtils.getHostAppInstance(), file);
+                    Toast.makeText(AppUtils.getHostAppInstance(), "语音下载完毕", Toast.LENGTH_SHORT).show();
+                    file.delete();
+                    PLog.d("文件删除完毕.");
+                });
+            } catch (Throwable e) {
+                PLog.e(e);
+            }
+        });
+    }
 }

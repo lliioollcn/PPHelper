@@ -100,4 +100,8 @@ public class HybridClassLoader extends ClassLoader {
         }
 
     }
+
+    public static Class<?> loadWithThrow(String name) {
+        return XposedHelpers.findClass(name, clLoader);
+    }
 }

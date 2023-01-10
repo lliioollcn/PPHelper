@@ -1,25 +1,21 @@
-package cn.lliiooll.pphelper.hook;
+package cn.lliiooll.pphelper.hook.zuiyouLite;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.lliiooll.pphelper.R;
-import cn.lliiooll.pphelper.activity.HidePostActivity;
-import cn.lliiooll.pphelper.activity.SimpleMeActivity;
+import cn.lliiooll.pphelper.activity.zuiyouLite.HidePostActivity;
+import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.*;
-import com.google.gson.GsonBuilder;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;

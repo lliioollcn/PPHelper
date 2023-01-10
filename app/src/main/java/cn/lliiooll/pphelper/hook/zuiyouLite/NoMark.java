@@ -1,25 +1,23 @@
-package cn.lliiooll.pphelper.hook;
+package cn.lliiooll.pphelper.hook.zuiyouLite;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.widget.Toast;
 import cn.lliiooll.pphelper.data.CommentBeanData;
 import cn.lliiooll.pphelper.data.ServerImageBeanData;
 import cn.lliiooll.pphelper.download.DownloadManager;
-import cn.lliiooll.pphelper.utils.AppUtils;
+import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.DexUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
+import cn.lliiooll.pphelper.utils.PConfig;
 import cn.lliiooll.pphelper.utils.PLog;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NoMark extends BaseHook {
 
@@ -77,7 +75,24 @@ public class NoMark extends BaseHook {
 
     @Override
     public boolean needObf() {
-        return true;
+        Map<String, List<String>> cache = PConfig.cache();
+        AtomicBoolean need = new AtomicBoolean(false);
+        if (cache.containsKey(OBF_COMMENT_VIDEO)) {
+            if (cache.getOrDefault(OBF_COMMENT_VIDEO, new ArrayList<>()).size() > 0) {
+                cache.get(OBF_COMMENT_VIDEO).forEach(c -> {
+                    try {
+                        HybridClassLoader.loadWithThrow(c);
+                    } catch (Throwable e) {
+                        need.set(true);
+                    }
+                });
+            } else {
+                need.set(true);
+            }
+        } else {
+            need.set(true);
+        }
+        return need.get();
     }
 
     @Override

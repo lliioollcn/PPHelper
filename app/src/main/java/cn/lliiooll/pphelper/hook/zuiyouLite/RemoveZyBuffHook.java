@@ -1,9 +1,11 @@
-package cn.lliiooll.pphelper.hook;
+package cn.lliiooll.pphelper.hook.zuiyouLite;
 
 import android.content.Context;
 import android.view.View;
+import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.DexUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
+import cn.lliiooll.pphelper.utils.PConfig;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
@@ -13,10 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RemoveZyBuffHook extends BaseHook {
 
     private static String DEOBF = "";
+    private static String OBF = "cn.xiaochuankeji.zuiyouLite.control.crashcatch.ZyBuff";
     public static RemoveZyBuffHook INSTANCE = new RemoveZyBuffHook();
 
     public RemoveZyBuffHook() {
@@ -43,13 +47,30 @@ public class RemoveZyBuffHook extends BaseHook {
 
     @Override
     public boolean needObf() {
-        return true;
+        Map<String, List<String>> cache = PConfig.cache();
+        AtomicBoolean need = new AtomicBoolean(false);
+        if (cache.containsKey(OBF)) {
+            if (cache.getOrDefault(OBF, new ArrayList<>()).size() > 0) {
+                cache.get(OBF).forEach(c -> {
+                    try {
+                        HybridClassLoader.loadWithThrow(c);
+                    } catch (Throwable e) {
+                        need.set(true);
+                    }
+                });
+            } else {
+                need.set(true);
+            }
+        } else {
+            need.set(true);
+        }
+        return need.get();
     }
 
     @Override
     public Map<String, List<String>> obf() {
         return new HashMap<String, List<String>>() {{
-            put("cn.xiaochuankeji.zuiyouLite.control.crashcatch.ZyBuff", new ArrayList<String>() {{
+            put(OBF, new ArrayList<String>() {{
                 add("ZyBuff");
                 add("start buff");
                 add("start bless finalizer");
@@ -59,11 +80,11 @@ public class RemoveZyBuffHook extends BaseHook {
 
     @Override
     public void doObf(Map<String, List<String>> finds) {
-        if (!finds.containsKey("cn.xiaochuankeji.zuiyouLite.control.crashcatch.ZyBuff")) {
+        if (!finds.containsKey(OBF)) {
             doObf(DexUtils.reCache(obf()));
             return;
         }
-        finds.get("cn.xiaochuankeji.zuiyouLite.control.crashcatch.ZyBuff").forEach(m -> {
+        finds.get(OBF).forEach(m -> {
             PLog.d("过滤类: " + m);
             DEOBF = m;
         });

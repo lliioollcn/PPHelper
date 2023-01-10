@@ -1,4 +1,4 @@
-package cn.lliiooll.pphelper.hook;
+package cn.lliiooll.pphelper.hook.zuiyouLite;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import cn.lliiooll.pphelper.BuildConfig;
 import cn.lliiooll.pphelper.R;
-import cn.lliiooll.pphelper.activity.ConfigActivity;
+import cn.lliiooll.pphelper.activity.zuiyouLite.ConfigActivity;
+import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;

@@ -36,7 +36,7 @@ public class IActivityManagerHandler implements InvocationHandler {
                         && ActProxyMgr.isModuleProxyActivity(component.getClassName())) {
                     Intent wrapper = new Intent();
                     wrapper.setClassName(component.getPackageName(),
-                            "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity");
+                            AppUtils.getSettingActivity(AppUtils.getHostAppInstance().getPackageName()));
                     wrapper.putExtra(ActProxyMgr.ACTIVITY_PROXY_INTENT, raw);
                     args[index] = wrapper;
                 }

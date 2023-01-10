@@ -38,7 +38,7 @@ public class CounterfeitActivityInfoFactory {
             try {
                 // TODO: 2022-02-11 cast flags from long to int loses information
                 ActivityInfo proto = ctx.getPackageManager().getActivityInfo(new ComponentName(
-                        ctx.getPackageName(), "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity"), (int) flags);
+                        ctx.getPackageName(), AppUtils.getSettingActivity(ctx.getPackageName())), (int) flags);
                 // init style here, comment it out if it crashes on Android >= 10
                 proto.theme = android.R.style.Theme;
                 return initCommon(proto, className);

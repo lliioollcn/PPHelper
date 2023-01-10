@@ -1,11 +1,15 @@
 package cn.lliiooll.pphelper.startup;
 
 import cn.lliiooll.pphelper.R;
+import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.PLog;
 import cn.lliiooll.pphelper.startup.hookstatus.HookStatusInit;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 模块入口
@@ -13,8 +17,11 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
 
-    private final static String PACKAGE_TARGET = "cn.xiaochuankeji.zuiyouLite";// 目标应用包名
+    private final static List<String> PACKAGE_TARGET = new ArrayList<String>(){{
+        add(HostInfo.ZuiyouLite.PACKAGE_NAME);
+    }};// 目标应用包名
     private final static String PACKAGE_SELF = "cn.lliiooll.pphelper";// 模块包名
+    private static String PACKAGE_NAME = "";// 宿主应用包名
 
     public static String getModulePath() {
         return modulePath;
@@ -23,7 +30,7 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
     private static String modulePath = "";
 
     public static String getPackageName() {
-        return PACKAGE_TARGET;
+        return PACKAGE_NAME;
     }
 
     @Override
@@ -32,7 +39,8 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
             PLog.e("包id不能为 0x7f, 拒绝加载...");
             return;
         }
-        if (param.packageName.equalsIgnoreCase(PACKAGE_TARGET)) {
+        PACKAGE_NAME = param.packageName;
+        if (PACKAGE_TARGET.contains(param.packageName)) {
             //TODO: 执行模块初始化
             ModuleLauncher.init(param);
         } else if (param.packageName.equalsIgnoreCase(PACKAGE_SELF)) {

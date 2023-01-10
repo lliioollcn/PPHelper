@@ -12,14 +12,11 @@ import android.content.pm.ActivityInfo;
 import android.os.*;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import cn.lliiooll.pphelper.activity.ConfigActivity;
+import cn.lliiooll.pphelper.activity.zuiyouLite.ConfigActivity;
 import cn.lliiooll.pphelper.startup.ModuleLauncher;
 import cn.lliiooll.pphelper.startup.ResourcesInjector;
-import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ParasiticInstrumentation extends Instrumentation {

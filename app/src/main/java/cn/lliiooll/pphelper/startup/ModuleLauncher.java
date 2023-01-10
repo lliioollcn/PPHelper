@@ -49,6 +49,6 @@ public class ModuleLauncher {
         ClassLoaderInjector.inject();// 注入类加载器
         ResourcesInjector.inject(AppUtils.getHostAppInstance().getResources());// 注入资源
         ActivityProxyInjector.inject();// 注入界面代理
-        HookBus.init();// 初始化hook
+        HookBus.init(param);// 初始化hook
     }
 }

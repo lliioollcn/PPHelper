@@ -13,9 +13,9 @@ android {
     defaultConfig {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
-        targetSdk 31
-        versionCode Common.getBuildVersionCode(rootProject)
-        //versionCode 15
+        targetSdk 32
+        //versionCode Common.getBuildVersionCode(rootProject)
+        versionCode 38
         versionName "2.0${Common.getGitHeadRefsSuffix(rootProject)}"
         resConfigs "zh"
         vectorDrawables.useSupportLibrary = true
@@ -95,6 +95,7 @@ dependencies {
     implementation project(":dexkit")
     implementation project(":mmkv")
     compileOnly 'de.robv.android.xposed:api:82'
+    //compileOnly fileTree('libs')
 
     implementation 'com.google.code.gson:gson:2.10'
     implementation "androidx.appcompat:appcompat:1.5.1"
