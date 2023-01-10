@@ -1,6 +1,9 @@
 package cn.lliiooll.pphelper.hook.zuiyouLite;
 
+import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.Toast;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.AppUtils;

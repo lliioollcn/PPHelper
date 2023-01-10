@@ -35,6 +35,7 @@ public class HookBus {
             CustomData.INSTANCE,
             PPLog.INSTANCE,
             AudioDownloadHook.INSTANCE,
+            AudioSend.INSTANCE,
             //CustomVideoRecord.INSTANCE,
     };
     public static boolean inited = false;

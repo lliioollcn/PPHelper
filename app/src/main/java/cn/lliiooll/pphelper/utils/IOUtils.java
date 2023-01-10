@@ -1,5 +1,10 @@
 package cn.lliiooll.pphelper.utils;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
@@ -173,5 +178,16 @@ public class IOUtils {
             PLog.e(e);
         }
         return sb.toString();
+    }
+
+    public static void copy(Context ctx, Uri uri, File file) {
+        try {
+            ContentResolver resolver = ctx.getContentResolver();
+            InputStream is = resolver.openInputStream(uri);
+            FileOutputStream fos = new FileOutputStream(file);
+            copy(is, fos);
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
     }
 }

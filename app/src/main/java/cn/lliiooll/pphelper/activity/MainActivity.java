@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 // TODO: 手指抬起
                 ViewGroup.LayoutParams layoutParams = mainInfo.getLayoutParams();
-                if (event.getRawY() < srcY || event.getRawY() < (maxY / 2) || mainInfo.getLayoutParams().height < srcH) {
+                if (event.getRawY() < srcY || event.getRawY() < 0 || mainInfo.getLayoutParams().height < srcH) {
                     layoutParams.height = srcH;
                     if (isUp) {
                         Animation animation = AnimationUtils.loadAnimation(this, R.anim.main_info_rotate_anim_back);

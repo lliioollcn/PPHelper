@@ -3,7 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:gravity="center_horizontal"
-        android:background="@drawable/bg_round_info"
+        android:background="@drawable/bg_round_dialog"
         android:orientation="vertical"
         android:paddingTop="10dp"
         android:paddingBottom="20dp"

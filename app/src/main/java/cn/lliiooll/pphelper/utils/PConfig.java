@@ -82,16 +82,32 @@ public class PConfig {
         if (mmkv == null)
             return new HashSet<>();
 
-        return mmkv.decodeStringSet(label,new HashSet<>());
+        return mmkv.decodeStringSet(label, new HashSet<>());
     }
 
     public static void setSet(String label, Set<String> hides) {
-       if (mmkv == null)return;
-       mmkv.encode(label,hides);
+        if (mmkv == null) return;
+        mmkv.encode(label, hides);
     }
 
     public static void init() {
         mmkv = MMKV.defaultMMKV();
         PLog.d("mmkv加载成功!");
+    }
+
+    public static void setNumber(String label, int def) {
+        mmkv.encode(label, def);
+    }
+
+    public static int number(String label, int def) {
+        return mmkv.decodeInt(label, def);
+    }
+
+    public static void setStr(String voicePath, String toString) {
+        mmkv.encode(voicePath, toString);
+    }
+
+    public static String str(String voicePath, String def) {
+        return mmkv.decodeString(voicePath,def);
     }
 }

@@ -105,4 +105,9 @@ public class AppUtils {
         }
         return activity;
     }
+
+    public static float dp2px(Context context, int dpValue) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (dpValue * scale + 0.5f);
+    }
 }
