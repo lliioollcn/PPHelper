@@ -20,7 +20,8 @@ public class PLog {
     }
 
     private static void save(String m) {
-        if (AppUtils.getHostAppInstance() != null){
+
+        if (AppUtils.getHostAppInstance() != null) {
             File dir = AppUtils.getHostAppInstance().getExternalFilesDir("helperLog");
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -38,7 +39,8 @@ public class PLog {
 
     public static void d(String msg) {
         String m = "[DEBUG]>>> " + msg;
-        if (BuildConfig.DEBUG) {
+        if (isDebug()) {
+
             Log.i(TAG, m);
         }
         save(m);
@@ -60,5 +62,6 @@ public class PLog {
 
     public static boolean isDebug() {
         return BuildConfig.DEBUG;
+        //return false;
     }
 }

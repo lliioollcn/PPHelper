@@ -14,8 +14,8 @@ android {
         applicationId "cn.lliiooll.pphelper"
         minSdk 26
         targetSdk 31
-        versionCode Common.getBuildVersionCode(rootProject)
-        //versionCode 67
+        //versionCode Common.getBuildVersionCode(rootProject)
+        versionCode 6
         versionName "2.0${Common.getGitHeadRefsSuffix(rootProject)}"
         resConfigs "zh"
         vectorDrawables.useSupportLibrary = true
@@ -31,16 +31,8 @@ android {
             cmake {
                 targets "pphelper"
                 arguments "-DANDROID_STL=c++_static"
-                cppFlags "-std=c++17", "-Wall",
-                        "-Qunused-arguments",
-                        "-Wno-unused-value",
-                        "-Wno-unused-variable",
-                        "-Wno-unused-command-line-argument"
-                cFlags "-std=c18", "-Wall",
-                        "-Qunused-arguments",
-                        "-Wno-unused-value",
-                        "-Wno-unused-variable",
-                        "-Wno-unused-command-line-argument"
+                cppFlags "-std=c++17"
+                cFlags "-std=c18"
             }
         }
     }

@@ -184,6 +184,10 @@ public class IOUtils {
         try {
             ContentResolver resolver = ctx.getContentResolver();
             InputStream is = resolver.openInputStream(uri);
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
             FileOutputStream fos = new FileOutputStream(file);
             copy(is, fos);
         } catch (Throwable e) {

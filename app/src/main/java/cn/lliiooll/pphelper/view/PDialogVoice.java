@@ -2,17 +2,17 @@ package cn.lliiooll.pphelper.view;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.utils.*;
@@ -20,8 +20,6 @@ import de.robv.android.xposed.XposedHelpers;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 public class PDialogVoice extends Dialog {
 
@@ -71,49 +69,58 @@ public class PDialogVoice extends Dialog {
     }
 
     private void addFiles(LinearLayout list, Uri uri) {
-        DocumentFile dir = DocumentFile.fromTreeUri(getContext(), uri);
-        DocumentFile[] files = dir.listFiles();
-        PLog.d("文件个数: " + files.length + " @" + dir.getUri());
-        for (DocumentFile file : files) {
+        SyncUtils.async(() -> {
+            DocumentFile dir = DocumentFile.fromTreeUri(getContext(), uri);
+            DocumentFile[] files = dir.listFiles();
+            PLog.d("文件个数: " + files.length + " @" + dir.getUri());
+            for (DocumentFile file : files) {
+                PLog.d("文件路径@" + file.canRead() + ": " + file.getUri());
+                if (file.isDirectory()) {
+                    addFiles(list, uri);
+                } else {
+                    SyncUtils.sync(() -> {
+                        TextView text = new TextView(getContext());
+                        text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        text.setText(file.getName());
+                        text.setTextColor(Color.BLACK);
+                        text.setOnClickListener(v -> {
+                            File tempDir = activity.getExternalFilesDir("helperVoiceTemp");
+                            if (!tempDir.exists()) {
+                                tempDir.mkdirs();
+                            }
+                            File tempFile = new File(tempDir, file.getName());
+                            PLog.d("复制到文件: " + tempFile.getAbsolutePath());
+                            IOUtils.copy(activity, file.getUri(), tempFile);
+                            PLog.d("复制完毕: " + tempFile.length());
+                            Class<?> clazz = activity.getClass();
+                            for (Field f : clazz.getDeclaredFields()) {
+                                if (f.getType().getName().contains("AudioBean")) {
+                                    XposedHelpers.setObjectField(activity, f.getName(), AudioBuilder.build(tempFile.getAbsolutePath(), null, PConfig.number("voiceTime", 5201314)));
+                                    PLog.d("语音设置成功，准备发送");
+                                    XposedHelpers.callMethod(activity, "M1");
+                                    PLog.d("语音发送成功: M1");
 
-            PLog.d("文件路径@" + file.canRead() + ": " + file.getUri());
-            if (file.isDirectory()) {
-                addFiles(list, uri);
-            } else {
-                TextView text = new TextView(getContext());
-                text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                text.setText(file.getName());
-                text.setTextColor(Color.BLACK);
-                text.setOnClickListener(v -> {
-                    File tempDir = activity.getExternalFilesDir("helperVoiceTemp");
-                    if (!tempDir.exists()) {
-                        tempDir.mkdirs();
-                    }
-                    File tempFile = new File(tempDir, file.getName());
-                    IOUtils.copy(activity, file.getUri(), tempFile);
-                    Class<?> clazz = activity.getClass();
-                    for (Field f : clazz.getDeclaredFields()) {
-                        if (f.getType().getName().contains("AudioBean")) {
-                            XposedHelpers.setObjectField(activity, f.getName(), AudioBuilder.build(tempFile.getAbsolutePath(), null, PConfig.number("voiceTime", 5201314)));
-                            PLog.d("语音设置成功，准备发送");
-                            //XposedHelpers.callMethod(activity, "N1");
-                            for (Method m : clazz.getDeclaredMethods()) {
-                                if (m.getReturnType() == boolean.class && !Modifier.isStatic(m.getModifiers()) && m.getParameterTypes().length == 0) {
-                                    XposedHelpers.callMethod(activity, m.getName());
-                                    PLog.d("语音发送成功");
-                                    dismiss();
+                                    /*
+                                    for (Method m : clazz.getDeclaredMethods()) {
+                                        if (m.getReturnType() == void.class && !Modifier.isStatic(m.getModifiers()) && m.getParameterTypes().length == 0) {
+                                            XposedHelpers.callMethod(activity, m.getName());
+                                            PLog.d("语音发送成功: " + m.getName());
+                                            dismiss();
+                                        }
+                                    }
+
+                                     */
                                     break;
                                 }
                             }
-                            break;
-                        }
-                    }
 
-                });
-                text.setPadding(0, 10, 0, 10);
-                list.addView(text);
+                        });
+                        text.setPadding(0, 10, 0, 10);
+                        list.addView(text);
+                    });
+                }
             }
-        }
+        });
     }
 
     public PDialogVoice uri(Uri uri) {

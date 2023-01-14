@@ -3,6 +3,7 @@ package cn.lliiooll.pphelper.startup;
 import android.app.Application;
 import cn.lliiooll.pphelper.hook.HookBus;
 import cn.lliiooll.pphelper.utils.AppUtils;
+import cn.lliiooll.pphelper.ffmpeg.FFmpeg;
 import cn.lliiooll.pphelper.utils.Natives;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodHook;
@@ -45,6 +46,7 @@ public class ModuleLauncher {
     private static void doStep(Application hostApp, XC_LoadPackage.LoadPackageParam param) {
         AppUtils.init(hostApp);
         Natives.init();
+        FFmpeg.init();
         ClassLoaderInjector.init(hostApp, param.classLoader);
         ClassLoaderInjector.inject();// 注入类加载器
         ResourcesInjector.inject(AppUtils.getHostAppInstance().getResources());// 注入资源

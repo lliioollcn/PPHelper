@@ -42,6 +42,7 @@ public class AudioSend extends BaseHook {
     public static AudioSend INSTANCE = new AudioSend();
     private static int REQUEST_CODE = 0x4c;
     private static ImageView imageView;
+    private static PDialogVoice dialog;
 
     public AudioSend() {
         super("自定义语音发送", "audioSend");
@@ -97,12 +98,20 @@ public class AudioSend extends BaseHook {
                     activity.getWindowManager().removeView(imageView);
                     imageView = null;
                 }
+
+                if (dialog != null) {
+                    dialog.dismiss();
+                    dialog = null;
+                }
             }
         };
 
 
         XposedHelpers.findAndHookMethod(clazz, "onDestroy", hook);
         //XposedHelpers.findAndHookMethod(clazz, "onStop", hook);
+
+        /*
+
         for (Method m : clazz.getDeclaredMethods()) {
 
             XposedBridge.hookMethod(m, new XC_MethodHook() {
@@ -110,10 +119,17 @@ public class AudioSend extends BaseHook {
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Activity activity = (Activity) param.thisObject;
                     PLog.d("调用了方法: " + m.getName());
+
+                    PLog.printStacks();
+
                 }
             });
 
         }
+
+
+         */
+
         return true;
     }
 
@@ -122,13 +138,18 @@ public class AudioSend extends BaseHook {
             imageView = new ImageView(activity);
             imageView.setBackgroundResource(R.drawable.ic_voice);
             imageView.setOnClickListener(v -> {
-                Toast.makeText(activity, "点击了我", Toast.LENGTH_SHORT).show();
+
                 String path = PConfig.str("voicePath", null);
                 if (path == null) {
                     Toast.makeText(activity, "请先到设置界面选择语音读取路径后继续", Toast.LENGTH_SHORT).show();
                 } else {
                     Uri uri = Uri.parse(path);
-                    new PDialogVoice(activity).uri(uri).show();
+                    if (!activity.isDestroyed() && !activity.isFinishing()) {
+                        if (dialog == null) {
+                            dialog = new PDialogVoice(activity);
+                        }
+                        dialog.uri(uri).show();
+                    }
                 }
             });
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams(120, 120, 0, 0, PixelFormat.TRANSPARENT);
