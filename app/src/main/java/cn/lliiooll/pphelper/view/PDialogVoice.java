@@ -102,7 +102,7 @@ public class PDialogVoice extends Dialog {
                             }
                             String fn = System.currentTimeMillis() + "." + file.getName().split("\\.")[1];
                             File tempFile = new File(tempDir, fn);
-                            File covertile = new File(covertDir, fn);
+                            File covertile = new File(covertDir, fn + ".mp3");
                             PLog.d("复制到文件: " + tempFile.getAbsolutePath());
                             IOUtils.copy(activity, file.getUri(), tempFile);
                             PLog.d("复制完毕: " + tempFile.length());
