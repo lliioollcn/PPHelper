@@ -15,7 +15,7 @@ android {
         minSdk 26
         targetSdk 31
         //versionCode Common.getBuildVersionCode(rootProject)
-        versionCode 21
+        versionCode 28
         versionName "2.0${Common.getGitHeadRefsSuffix(rootProject)}"
         resConfigs "zh"
         vectorDrawables.useSupportLibrary = true

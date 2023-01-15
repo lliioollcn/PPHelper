@@ -52,17 +52,6 @@ public class AntiAD extends BaseHook {
                         }
                         param.args[1] = 1L;
                     }
-                } else if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
-                    if ((int) param.args[0] == 11) {
-                        if (!HookBus.inited) {
-                            PLog.d("未加载完成，不进行跳转");
-                            param.args[0] = 666;
-                        } else {
-                            PLog.d("加载完成，进行跳转");
-                            param.args[0] = 29;
-                        }
-                        param.args[1] = 1L;
-                    }
                 }
             }
         });

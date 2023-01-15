@@ -105,6 +105,8 @@ public class AppUtils {
                 activity = "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity";
             } else if (packageName.equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
                 activity = "cn.xiaochuankeji.tieba.ui.home.setting.SettingActivity";
+            } else if (packageName.equalsIgnoreCase(HostInfo.PPX.PACKAGE_NAME)) {
+                activity = "com.sup.android.m_mine.view.SettingActivity";
             }
         } else {
             PLog.d("当前宿主应用为: null");
@@ -115,5 +117,23 @@ public class AppUtils {
     public static float dp2px(Context context, int dpValue) {
         float scale = context.getResources().getDisplayMetrics().density;
         return (dpValue * scale + 0.5f);
+    }
+
+    public static boolean isUpdate() {
+        int ver = PConfig.number(HookEntry.getPackageName() + ".version", 0);
+        return ver == 0 || ver != getHostAppVersionCode();
+    }
+
+    private static int getHostAppVersionCode() {
+        try {
+            return AppUtils.getHostAppInstance().getPackageManager().getPackageInfo(HookEntry.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            PLog.e(e);
+            return 0;
+        }
+    }
+
+    public static void update() {
+        PConfig.setNumber(HookEntry.getPackageName() + ".version", getHostAppVersionCode());
     }
 }

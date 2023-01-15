@@ -34,6 +34,9 @@ public class ModuleLauncher {
         } else if (param.packageName.equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
             PLog.d("开始初始化最右...");
             applicationClazz = "cn.xiaochuankeji.tieba.AppController";
+        } else if (param.packageName.equalsIgnoreCase(HostInfo.PPX.PACKAGE_NAME)) {
+            PLog.d("开始初始化皮皮虾...");
+            applicationClazz = "com.sup.android.safemode.SafeModeApplication";
         } else {
             PLog.d("未知的目标程序，不进行初始化");
             applicationClazz = null;

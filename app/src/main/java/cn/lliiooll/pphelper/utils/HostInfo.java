@@ -15,5 +15,10 @@ public class HostInfo {
         public static final int ZY_5_11_20 = 511200;
     }
 
+    public static class PPX {
+        public static final String PACKAGE_NAME = "com.sup.android.superb";
+        public static final int PPX_4_4_1 = 441;
+    }
+
 
 }

@@ -3,5 +3,6 @@
     <string-array name="xposedscope">
         <item>cn.xiaochuankeji.zuiyouLite</item>
         <item>cn.xiaochuankeji.tieba</item>
+        <item>com.sup.android.superb</item>
     </string-array>
 </resources>

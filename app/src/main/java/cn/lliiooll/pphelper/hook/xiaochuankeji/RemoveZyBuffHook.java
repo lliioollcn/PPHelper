@@ -3,12 +3,14 @@ package cn.lliiooll.pphelper.hook.xiaochuankeji;
 import android.content.Context;
 import android.view.View;
 import cn.lliiooll.pphelper.hook.BaseHook;
+import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.DexUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
+import io.luckypray.dexkit.DexKitBridge;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -47,6 +49,9 @@ public class RemoveZyBuffHook extends BaseHook {
 
     @Override
     public boolean needObf() {
+        if (AppUtils.isUpdate()) {
+            return true;
+        }
         Map<String, List<String>> cache = PConfig.cache();
         AtomicBoolean need = new AtomicBoolean(false);
         if (cache.containsKey(OBF)) {

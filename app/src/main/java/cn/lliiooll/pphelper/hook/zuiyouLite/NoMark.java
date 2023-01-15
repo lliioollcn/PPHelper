@@ -5,6 +5,7 @@ import cn.lliiooll.pphelper.data.CommentBeanData;
 import cn.lliiooll.pphelper.data.ServerImageBeanData;
 import cn.lliiooll.pphelper.download.DownloadManager;
 import cn.lliiooll.pphelper.hook.BaseHook;
+import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.DexUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.config.PConfig;
@@ -75,6 +76,9 @@ public class NoMark extends BaseHook {
 
     @Override
     public boolean needObf() {
+        if (AppUtils.isUpdate()) {
+            return true;
+        }
         Map<String, List<String>> cache = PConfig.cache();
         AtomicBoolean need = new AtomicBoolean(false);
         if (cache.containsKey(OBF_COMMENT_VIDEO)) {

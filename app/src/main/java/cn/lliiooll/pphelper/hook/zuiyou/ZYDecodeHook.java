@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.*;
 import de.robv.android.xposed.XC_MethodHook;
@@ -13,6 +14,7 @@ import de.robv.android.xposed.XposedHelpers;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ZYDecodeHook extends BaseHook {
 
@@ -60,7 +62,27 @@ public class ZYDecodeHook extends BaseHook {
 
     @Override
     public boolean needObf() {
-        return true;
+        if (AppUtils.isUpdate()) {
+            return true;
+        }
+        Map<String, List<String>> cache = PConfig.cache();
+        AtomicBoolean need = new AtomicBoolean(false);
+        if (cache.containsKey(OBF)) {
+            if (cache.getOrDefault(OBF, new ArrayList<>()).size() > 0) {
+                cache.get(OBF).forEach(c -> {
+                    try {
+                        HybridClassLoader.loadWithThrow(c);
+                    } catch (Throwable e) {
+                        need.set(true);
+                    }
+                });
+            } else {
+                need.set(true);
+            }
+        } else {
+            need.set(true);
+        }
+        return need.get();
     }
 
     @Override

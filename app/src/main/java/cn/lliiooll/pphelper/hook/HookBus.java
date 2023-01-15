@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.config.PConfig;
+import cn.lliiooll.pphelper.hook.ppx.PPXAddSettingHook;
+import cn.lliiooll.pphelper.hook.ppx.PPXTestHook;
 import cn.lliiooll.pphelper.hook.xiaochuankeji.AntiAD;
 import cn.lliiooll.pphelper.hook.xiaochuankeji.RemoveEvilInstrumentationHook;
 import cn.lliiooll.pphelper.hook.xiaochuankeji.RemoveZyBuffHook;
@@ -54,6 +56,10 @@ public class HookBus {
             RemoveEvilInstrumentationHook.INSTANCE,
             RemoveZyBuffHook.INSTANCE,
             ZYAddSettingHook.INSTANCE,
+    };
+    private static final BaseHook[] ppxHooks = {
+            PPXTestHook.INSTANCE,
+            PPXAddSettingHook.INSTANCE,
     };
     public static boolean inited = true;
 
@@ -180,6 +186,8 @@ public class HookBus {
             hooks.addAll(Arrays.asList(zuiyouLiteHooks));
         } else if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
             hooks.addAll(Arrays.asList(zuiyouHooks));
+        } else if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.PPX.PACKAGE_NAME)) {
+            hooks.addAll(Arrays.asList(ppxHooks));
         }
         return hooks;
     }
@@ -189,8 +197,32 @@ public class HookBus {
             initZuiyouLite();
         } else if (param.packageName.equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
             initZuiyou();
+        } else if (param.packageName.equalsIgnoreCase(HostInfo.PPX.PACKAGE_NAME)) {
+            initPPX();
+        }
+        if (AppUtils.isUpdate()) {
+            AppUtils.update();
         }
 
+    }
+
+    public static void initPPX() {
+        PLog.d("开始为皮皮虾加载模块...");
+        for (BaseHook hook : ppxHooks) {
+            if (hook.isEnable()) {
+                PLog.d("尝试加载hook: " + hook.getName());
+                if (hook.needObf()) {
+                    hook.doObf(DexUtils.obf(hook.obf()));
+                } else if (!hook.obf().isEmpty()) {
+                    hook.doObf(PConfig.cache());
+                }
+                try {
+                    hook.init();
+                } catch (Throwable e) {
+                    PLog.e(e);
+                }
+            }
+        }
     }
 
     public static void initZuiyou() {
@@ -201,12 +233,12 @@ public class HookBus {
                 PLog.d("尝试加载hook: " + hook.getName());
                 if (hook.needObf()) {
                     hook.doObf(DexUtils.obf(hook.obf()));
-                }else if (!hook.obf().isEmpty()){
+                } else if (!hook.obf().isEmpty()) {
                     hook.doObf(PConfig.cache());
                 }
                 try {
                     hook.init();
-                }catch (Throwable e){
+                } catch (Throwable e) {
                     PLog.e(e);
                 }
             }

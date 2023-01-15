@@ -202,6 +202,9 @@ public class AudioDownloadHook extends BaseHook {
 
     @Override
     public boolean needObf() {
+        if (AppUtils.isUpdate()) {
+            return true;
+        }
         Map<String, List<String>> cache = PConfig.cache();
         List<String> keys = new ArrayList<>();
         keys.add(OBF_AIO1);

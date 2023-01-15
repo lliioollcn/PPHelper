@@ -20,6 +20,7 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
     private final static List<String> PACKAGE_TARGET = new ArrayList<String>() {{
         add(HostInfo.ZuiyouLite.PACKAGE_NAME);
         add(HostInfo.TieBa.PACKAGE_NAME);
+        add(HostInfo.PPX.PACKAGE_NAME);
     }};// 目标应用包名
     private final static String PACKAGE_SELF = "cn.lliiooll.pphelper";// 模块包名
     private static String PACKAGE_NAME = "";// 宿主应用包名
