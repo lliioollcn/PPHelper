@@ -2,5 +2,6 @@
 <resources>
     <string-array name="xposedscope">
         <item>cn.xiaochuankeji.zuiyouLite</item>
+        <item>cn.xiaochuankeji.tieba</item>
     </string-array>
 </resources>

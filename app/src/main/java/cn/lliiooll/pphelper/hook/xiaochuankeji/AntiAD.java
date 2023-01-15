@@ -1,8 +1,10 @@
-package cn.lliiooll.pphelper.hook.zuiyouLite;
+package cn.lliiooll.pphelper.hook.xiaochuankeji;
 
 import android.os.Handler;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.hook.HookBus;
+import cn.lliiooll.pphelper.startup.HookEntry;
+import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodHook;
@@ -36,19 +38,31 @@ public class AntiAD extends BaseHook {
                 });
             }
         }
-
         XposedHelpers.findAndHookMethod(Handler.class, "sendEmptyMessageDelayed", int.class, long.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if ((int) param.args[0] == 29) {
-                    if (!HookBus.inited) {
-                        PLog.d("未加载完成，不进行跳转");
-                        param.args[0] = 666;
-                    } else {
-                        PLog.d("加载完成，进行跳转");
-                        param.args[0] = 29;
+                if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.ZuiyouLite.PACKAGE_NAME)) {
+                    if ((int) param.args[0] == 29) {
+                        if (!HookBus.inited) {
+                            PLog.d("未加载完成，不进行跳转");
+                            param.args[0] = 666;
+                        } else {
+                            PLog.d("加载完成，进行跳转");
+                            param.args[0] = 29;
+                        }
+                        param.args[1] = 1L;
                     }
-                    param.args[1] = 1L;
+                } else if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
+                    if ((int) param.args[0] == 11) {
+                        if (!HookBus.inited) {
+                            PLog.d("未加载完成，不进行跳转");
+                            param.args[0] = 666;
+                        } else {
+                            PLog.d("加载完成，进行跳转");
+                            param.args[0] = 29;
+                        }
+                        param.args[1] = 1L;
+                    }
                 }
             }
         });

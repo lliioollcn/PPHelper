@@ -17,8 +17,9 @@ import java.util.List;
 public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
 
-    private final static List<String> PACKAGE_TARGET = new ArrayList<String>(){{
+    private final static List<String> PACKAGE_TARGET = new ArrayList<String>() {{
         add(HostInfo.ZuiyouLite.PACKAGE_NAME);
+        add(HostInfo.TieBa.PACKAGE_NAME);
     }};// 目标应用包名
     private final static String PACKAGE_SELF = "cn.lliiooll.pphelper";// 模块包名
     private static String PACKAGE_NAME = "";// 宿主应用包名
@@ -39,9 +40,9 @@ public class HookEntry implements IXposedHookLoadPackage, IXposedHookZygoteInit 
             PLog.e("包id不能为 0x7f, 拒绝加载...");
             return;
         }
-        PACKAGE_NAME = param.packageName;
         if (PACKAGE_TARGET.contains(param.packageName)) {
             //TODO: 执行模块初始化
+            PACKAGE_NAME = param.packageName;
             ModuleLauncher.init(param);
         } else if (param.packageName.equalsIgnoreCase(PACKAGE_SELF)) {
             //TODO: 执行模块激活状态更新

@@ -4,6 +4,7 @@ import android.app.Application;
 import cn.lliiooll.pphelper.hook.HookBus;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.ffmpeg.FFmpeg;
+import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.Natives;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodHook;
@@ -26,21 +27,36 @@ public class ModuleLauncher {
             return;
         }
         PLog.d("开始加载,进程名称: " + param.processName);
-        XposedHelpers.findAndHookMethod(
-                "cn.xiaochuankeji.zuiyouLite.app.AppController",
-                param.classLoader,
-                "onCreate",
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam mParam) throws Throwable {
-                        if (mParam.thisObject instanceof Application) {
-                            Application hostApp = (Application) mParam.thisObject;
-                            doStep(hostApp, param);
-                        } else {
-                            PLog.e("意料之外的错误: 宿主Application实例获取失败,类名: cn.xiaochuankeji.zuiyouLite.app.AppController");
+        String applicationClazz = "";
+        if (param.packageName.equalsIgnoreCase(HostInfo.ZuiyouLite.PACKAGE_NAME)) {
+            PLog.d("开始初始化皮皮搞笑...");
+            applicationClazz = "cn.xiaochuankeji.zuiyouLite.app.AppController";
+        } else if (param.packageName.equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
+            PLog.d("开始初始化最右...");
+            applicationClazz = "cn.xiaochuankeji.tieba.AppController";
+        } else {
+            PLog.d("未知的目标程序，不进行初始化");
+            applicationClazz = null;
+        }
+        if (applicationClazz != null) {
+            String finalApplicationClazz = applicationClazz;
+            XposedHelpers.findAndHookMethod(
+                    applicationClazz,
+                    param.classLoader,
+                    "onCreate",
+                    new XC_MethodHook() {
+                        @Override
+                        protected void afterHookedMethod(MethodHookParam mParam) throws Throwable {
+                            if (mParam.thisObject instanceof Application) {
+                                Application hostApp = (Application) mParam.thisObject;
+                                doStep(hostApp, param);
+                            } else {
+                                PLog.e("意料之外的错误: 宿主Application实例获取失败,类名: " + finalApplicationClazz);
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
     }
 
     private static void doStep(Application hostApp, XC_LoadPackage.LoadPackageParam param) {

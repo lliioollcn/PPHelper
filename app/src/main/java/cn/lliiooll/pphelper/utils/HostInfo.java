@@ -10,5 +10,10 @@ public class HostInfo {
         private static final int PP_2_47_1 = 2470100;
     }
 
+    public static class TieBa {
+        public static final String PACKAGE_NAME = "cn.xiaochuankeji.tieba";
+        public static final int ZY_5_11_20 = 511200;
+    }
+
 
 }

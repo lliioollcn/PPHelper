@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import androidx.core.app.ActivityCompat;
 import cn.lliiooll.pphelper.config.PConfig;
+import cn.lliiooll.pphelper.startup.HookEntry;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.util.Arrays;
@@ -58,8 +59,11 @@ public class AppUtils {
     public static int findId(String type, String name) {
         int id = 0;
         try {
-            Class<?> clazz = HybridClassLoader.clLoader.loadClass("cn.xiaochuankeji.zuiyouLite.R$" + type);
+            String cn = HookEntry.getPackageName() + ".R$" + type;
+            PLog.d("尝试从: " + cn + " 中寻找 " + name);
+            Class<?> clazz = HybridClassLoader.clLoader.loadClass(cn);
             id = XposedHelpers.getStaticIntField(clazz, name);
+            PLog.d("查找结果: " + id);
         } catch (Throwable e) {
             PLog.e(e);
         }
@@ -99,6 +103,8 @@ public class AppUtils {
             PLog.d("当前宿主应用为: " + packageName);
             if (packageName.equalsIgnoreCase(HostInfo.ZuiyouLite.PACKAGE_NAME)) {
                 activity = "cn.xiaochuankeji.zuiyouLite.ui.setting.SettingActivity";
+            } else if (packageName.equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
+                activity = "cn.xiaochuankeji.tieba.ui.home.setting.SettingActivity";
             }
         } else {
             PLog.d("当前宿主应用为: null");

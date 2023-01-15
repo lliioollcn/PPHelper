@@ -9,6 +9,7 @@ import cn.lliiooll.pphelper.lifecycle.PackageManagerInvocationHandler;
 import cn.lliiooll.pphelper.lifecycle.ParasiticHandler;
 import cn.lliiooll.pphelper.lifecycle.ParasiticInstrumentation;
 import cn.lliiooll.pphelper.utils.AppUtils;
+import cn.lliiooll.pphelper.utils.HostInfo;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XposedHelpers;

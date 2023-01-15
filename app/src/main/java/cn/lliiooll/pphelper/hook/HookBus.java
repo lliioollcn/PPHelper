@@ -9,13 +9,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.config.PConfig;
+import cn.lliiooll.pphelper.hook.xiaochuankeji.AntiAD;
+import cn.lliiooll.pphelper.hook.xiaochuankeji.RemoveEvilInstrumentationHook;
+import cn.lliiooll.pphelper.hook.xiaochuankeji.RemoveZyBuffHook;
+import cn.lliiooll.pphelper.hook.zuiyou.ZYAddSettingHook;
+import cn.lliiooll.pphelper.hook.zuiyou.ZYDecodeHook;
 import cn.lliiooll.pphelper.hook.zuiyouLite.*;
+import cn.lliiooll.pphelper.startup.HookEntry;
 import cn.lliiooll.pphelper.utils.*;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -23,7 +30,7 @@ import java.util.*;
  */
 public class HookBus {
 
-    private static final BaseHook[] hooks = {
+    private static final BaseHook[] zuiyouLiteHooks = {
             RemoveEvilInstrumentationHook.INSTANCE,
             RemoveZyBuffHook.INSTANCE,
             AddSetting.INSTANCE,
@@ -40,6 +47,14 @@ public class HookBus {
             PPLog.INSTANCE,
             //CustomVideoRecord.INSTANCE,
     };
+    private static final BaseHook[] zuiyouHooks = {
+            cn.lliiooll.pphelper.hook.zuiyou.TestHook.INSTANCE,
+            AntiAD.INSTANCE,
+            ZYDecodeHook.INSTANCE,
+            RemoveEvilInstrumentationHook.INSTANCE,
+            RemoveZyBuffHook.INSTANCE,
+            ZYAddSettingHook.INSTANCE,
+    };
     public static boolean inited = true;
 
     private static int obfs = 0;
@@ -50,7 +65,7 @@ public class HookBus {
      */
     public static void initZuiyouLite() {
         inited = false;
-        for (BaseHook hook : hooks) {
+        for (BaseHook hook : zuiyouLiteHooks) {
             if (hook.isEnable()) {
                 if (hook.needObf()) {
                     obfs += hook.obf().size();
@@ -110,7 +125,7 @@ public class HookBus {
                     final int[] obf = {0};
                     PLog.d("开始加载");
                     SyncUtils.async(() -> {
-                        for (BaseHook hook : hooks) {
+                        for (BaseHook hook : zuiyouLiteHooks) {
                             if (hook.isEnable()) {
                                 if (hook.needObf()) {
                                     SyncUtils.sync(() -> text.setText("正在加载hook: " + hook.getName()));
@@ -159,13 +174,58 @@ public class HookBus {
 
     }
 
-    public static ArrayList<BaseHook> getAllHooks() {
-        return new ArrayList<>(Arrays.asList(hooks));
+    public static List<BaseHook> getAllHooks() {
+        List<BaseHook> hooks = new ArrayList<>();
+        if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.ZuiyouLite.PACKAGE_NAME)) {
+            hooks.addAll(Arrays.asList(zuiyouLiteHooks));
+        } else if (HookEntry.getPackageName().equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
+            hooks.addAll(Arrays.asList(zuiyouHooks));
+        }
+        return hooks;
     }
 
     public static void init(XC_LoadPackage.LoadPackageParam param) {
         if (param.packageName.equalsIgnoreCase(HostInfo.ZuiyouLite.PACKAGE_NAME)) {
             initZuiyouLite();
+        } else if (param.packageName.equalsIgnoreCase(HostInfo.TieBa.PACKAGE_NAME)) {
+            initZuiyou();
         }
+
+    }
+
+    public static void initZuiyou() {
+        inited = false;
+        PLog.d("开始为最右加载模块...");
+        for (BaseHook hook : zuiyouHooks) {
+            if (hook.isEnable()) {
+                PLog.d("尝试加载hook: " + hook.getName());
+                if (hook.needObf()) {
+                    hook.doObf(DexUtils.obf(hook.obf()));
+                }else if (!hook.obf().isEmpty()){
+                    hook.doObf(PConfig.cache());
+                }
+                try {
+                    hook.init();
+                }catch (Throwable e){
+                    PLog.e(e);
+                }
+            }
+        }
+        XposedHelpers.findAndHookMethod("cn.xiaochuankeji.tieba.ui.base.SplashActivity", HybridClassLoader.clLoader, "onCreate", Bundle.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                PLog.d("广告界面开始加载...");
+                Activity activity = (Activity) param.thisObject;
+                Class<?> clazz = activity.getClass();
+                for (Method m : clazz.getDeclaredMethods()) {
+                    if (m.getReturnType() == void.class && m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == String.class) {
+                        PLog.d("找到方法: " + m.getName());
+                        m.setAccessible(true);
+                        m.invoke(activity, new Object[]{null});
+                    }
+                }
+            }
+        });
+
     }
 }
