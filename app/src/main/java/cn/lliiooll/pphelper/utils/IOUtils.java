@@ -194,4 +194,20 @@ public class IOUtils {
             PLog.e(e);
         }
     }
+
+    public static void copy(Context ctx, File file, Uri uri) {
+        try {
+            ContentResolver resolver = ctx.getContentResolver();
+            OutputStream fos = resolver.openOutputStream(uri);
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileInputStream fis = new FileInputStream(file);
+            copy(fis, fos);
+        } catch (Throwable e) {
+            PLog.e(e);
+        }
+
+    }
 }

@@ -7,6 +7,7 @@ public class HostInfo {
         private static final int PP_2_45_10 = 2451000;
         private static final int PP_2_46_0 = 2460000;
         private static final int PP_2_46_1 = 2460100;
+        private static final int PP_2_47_1 = 2470100;
     }
 
 

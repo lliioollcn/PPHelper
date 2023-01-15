@@ -44,8 +44,11 @@ public class AntiAD extends BaseHook {
                     if (!HookBus.inited) {
                         PLog.d("未加载完成，不进行跳转");
                         param.args[0] = 666;
+                    } else {
+                        PLog.d("加载完成，进行跳转");
+                        param.args[0] = 29;
                     }
-                    param.args[1] = 10L;
+                    param.args[1] = 1L;
                 }
             }
         });

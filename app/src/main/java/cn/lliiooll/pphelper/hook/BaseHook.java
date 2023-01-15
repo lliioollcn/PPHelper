@@ -3,11 +3,10 @@ package cn.lliiooll.pphelper.hook;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import cn.lliiooll.pphelper.R;
-import cn.lliiooll.pphelper.utils.PConfig;
+import cn.lliiooll.pphelper.config.PConfig;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,5 +1,7 @@
 package cn.lliiooll.pphelper.utils;
 
+import cn.lliiooll.pphelper.config.PConfig;
+
 import java.util.*;
 
 public class HideList {
@@ -29,7 +31,7 @@ public class HideList {
         put("PartitionHeadHolder", -10);
         put("HolderStoryAlert", -102);
         put("BottomInfoHolder", 101);
-        put("UserTownPostCommentViewHolder", 1);
+        put("普通图片/文字帖", 1);
         put("FollowedRecommendAuthorHolder", 217);
         put("Live$j.q", 200);
         put("HolderPrivacyAlert", AppUtils.findId("layout", "layout_holder_privacy_alert"));
@@ -48,6 +50,7 @@ public class HideList {
         put("功能入口> 每日抽奖", "my_tab_lottery_layout");
         put("功能入口> 帮助反馈", "my_tab_help");
         put("功能入口> 官方认证", "my_tab_apply_kol");
+        put("功能入口> 小黑屋", "my_tab_black_layout");
         put("功能入口> 吹水日记", "my_tab_tree_new_bee");
         put("功能入口> 锦旗墙", "my_tab_pennants_layout");
         put("个人信息> 全部", "headerView");

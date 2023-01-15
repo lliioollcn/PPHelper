@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import androidx.core.app.ActivityCompat;
-import cn.lliiooll.pphelper.startup.HookEntry;
+import cn.lliiooll.pphelper.config.PConfig;
 import de.robv.android.xposed.XposedHelpers;
 
 import java.util.Arrays;

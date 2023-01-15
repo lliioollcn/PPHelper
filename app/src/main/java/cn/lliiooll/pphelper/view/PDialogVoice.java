@@ -15,6 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 import cn.lliiooll.pphelper.R;
+import cn.lliiooll.pphelper.aio.AudioBuilder;
+import cn.lliiooll.pphelper.config.PConfig;
+import cn.lliiooll.pphelper.ffmpeg.FFmpeg;
+import cn.lliiooll.pphelper.ffmpeg.FFmpegCallBack;
 import cn.lliiooll.pphelper.utils.*;
 import de.robv.android.xposed.XposedHelpers;
 
@@ -75,6 +79,10 @@ public class PDialogVoice extends Dialog {
             PLog.d("文件个数: " + files.length + " @" + dir.getUri());
             for (DocumentFile file : files) {
                 PLog.d("文件路径@" + file.canRead() + ": " + file.getUri());
+                if (!file.getName().contains(".")) {
+                    PLog.d("无效文件: " + file.getName());
+                    continue;
+                }
                 if (file.isDirectory()) {
                     addFiles(list, uri);
                 } else {
@@ -85,35 +93,66 @@ public class PDialogVoice extends Dialog {
                         text.setTextColor(Color.BLACK);
                         text.setOnClickListener(v -> {
                             File tempDir = activity.getExternalFilesDir("helperVoiceTemp");
+                            File covertDir = activity.getExternalFilesDir("helperVoiceCovert");
                             if (!tempDir.exists()) {
                                 tempDir.mkdirs();
                             }
-                            File tempFile = new File(tempDir, file.getName());
+                            if (!covertDir.exists()) {
+                                covertDir.mkdirs();
+                            }
+                            String fn = System.currentTimeMillis() + "." + file.getName().split("\\.")[1];
+                            File tempFile = new File(tempDir, fn);
+                            File covertile = new File(covertDir, fn);
                             PLog.d("复制到文件: " + tempFile.getAbsolutePath());
                             IOUtils.copy(activity, file.getUri(), tempFile);
                             PLog.d("复制完毕: " + tempFile.length());
-                            Class<?> clazz = activity.getClass();
-                            for (Field f : clazz.getDeclaredFields()) {
-                                if (f.getType().getName().contains("AudioBean")) {
-                                    XposedHelpers.setObjectField(activity, f.getName(), AudioBuilder.build(tempFile.getAbsolutePath(), null, PConfig.number("voiceTime", 5201314)));
-                                    PLog.d("语音设置成功，准备发送");
-                                    XposedHelpers.callMethod(activity, "M1");
-                                    PLog.d("语音发送成功: M1");
-
-                                    /*
-                                    for (Method m : clazz.getDeclaredMethods()) {
-                                        if (m.getReturnType() == void.class && !Modifier.isStatic(m.getModifiers()) && m.getParameterTypes().length == 0) {
-                                            XposedHelpers.callMethod(activity, m.getName());
-                                            PLog.d("语音发送成功: " + m.getName());
-                                            dismiss();
+                            FFmpegCallBack callBack = () -> {
+                                Class<?> clazz = activity.getClass();
+                                for (Field f : clazz.getDeclaredFields()) {
+                                    if (f.getType().getName().contains("AudioBean")) {
+                                        if (PConfig.isEnable("voiceAutoCovert", true)) {
+                                            XposedHelpers.setObjectField(activity, f.getName(), AudioBuilder.build(covertile.getAbsolutePath(), null, PConfig.number("voiceTime", 5201314)));
+                                        } else {
+                                            XposedHelpers.setObjectField(activity, f.getName(), AudioBuilder.build(tempFile.getAbsolutePath(), null, PConfig.number("voiceTime", 5201314)));
                                         }
+                                        PLog.d("语音设置成功，准备发送");
+                                        XposedHelpers.callMethod(activity, "M1");
+                                        PLog.d("语音发送成功: M1");
+                                        PLog.d("开始清除缓存...");
+                                        if (tempDir.listFiles() != null) {
+                                            for (File f1 : tempDir.listFiles()) {
+                                                PLog.d("删除缓存文件: " + f1.getName() + "@" + f1.delete());
+                                            }
+                                        }
+                                        if (covertDir.listFiles() != null) {
+                                            for (File f1 : covertDir.listFiles()) {
+                                                if (!f1.getName().equalsIgnoreCase(covertile.getName())) {
+                                                    PLog.d("删除转换文件: " + f1.getName() + "@" + f1.delete());
+                                                }
+                                            }
+                                        }
+
+                                /*
+                                for (Method m : clazz.getDeclaredMethods()) {
+                                    if (m.getReturnType() == void.class && !Modifier.isStatic(m.getModifiers()) && m.getParameterTypes().length == 0) {
+                                        XposedHelpers.callMethod(activity, m.getName());
+                                        PLog.d("语音发送成功: " + m.getName());
+                                        dismiss();
                                     }
-
-                                     */
-                                    break;
                                 }
-                            }
 
+                                 */
+                                        break;
+                                    }
+                                }
+                            };
+                            if (PConfig.isEnable("voiceAutoCovert", true)) {
+                                PLog.d("开始转换格式...");
+                                FFmpeg.runCmd("ffmpeg.exe -i " + tempFile.getAbsolutePath() + " -map_metadata -1 " + covertile.getAbsolutePath(), callBack);
+                            } else {
+                                PLog.d("未启用自动转换，直接发送");
+                                callBack.finish();
+                            }
                         });
                         text.setPadding(0, 10, 0, 10);
                         list.addView(text);

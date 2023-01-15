@@ -1,41 +1,26 @@
 package cn.lliiooll.pphelper.hook.zuiyouLite;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.DocumentsProvider;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.*;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.provider.DocumentsContractCompat;
-import androidx.documentfile.provider.DocumentFile;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.activity.zuiyouLite.SendVoiceActivity;
-import cn.lliiooll.pphelper.activity.zuiyouLite.SimpleMeActivity;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.AppUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
-import cn.lliiooll.pphelper.utils.PConfig;
-import cn.lliiooll.pphelper.utils.PLog;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.view.FloatingViewTouch;
 import cn.lliiooll.pphelper.view.PDialogVoice;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-
-import java.io.File;
-import java.lang.reflect.Method;
 
 public class AudioSend extends BaseHook {
 

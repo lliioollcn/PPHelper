@@ -143,6 +143,39 @@
                     android:track="@drawable/style_switch_track_selector"
                     android:layout_weight="1"/>
         </LinearLayout>
+        <TextView
+                android:text="如果发生闪退请关闭下面的开关，如果语音发送不出去或者发送失败请打开下面的开关"
+                android:layout_width="wrap_content"
+                android:textColor="#000000"
+                android:textSize="10dp"
+                android:layout_height="wrap_content"
+    />
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            <TextView
+                    android:text="自动转换格式"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            <Switch
+                    android:text=""
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pp_a_covert_switch"
+                    android:thumb="@drawable/style_switch_thumb"
+                    android:track="@drawable/style_switch_track_selector"
+                    android:layout_weight="1"/>
+        </LinearLayout>
     </LinearLayout>
 
 

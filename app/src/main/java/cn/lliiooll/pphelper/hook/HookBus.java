@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.lliiooll.pphelper.R;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.hook.zuiyouLite.*;
 import cn.lliiooll.pphelper.utils.*;
 import de.robv.android.xposed.XC_MethodHook;
@@ -30,15 +31,16 @@ public class HookBus {
             AntiAD.INSTANCE,
             NoMark.INSTANCE,
             AntiVoiceRoomHook.INSTANCE,
-            SimpleMe.INSTANCE,
-            RemovePost.INSTANCE,
             CustomData.INSTANCE,
-            PPLog.INSTANCE,
             AudioDownloadHook.INSTANCE,
             AudioSend.INSTANCE,
+            CustomDownloadHook.INSTANCE,
+            SimpleMe.INSTANCE,
+            RemovePost.INSTANCE,
+            PPLog.INSTANCE,
             //CustomVideoRecord.INSTANCE,
     };
-    public static boolean inited = false;
+    public static boolean inited = true;
 
     private static int obfs = 0;
 
@@ -47,7 +49,7 @@ public class HookBus {
      * 初始化hook管理器
      */
     public static void initZuiyouLite() {
-
+        inited = false;
         for (BaseHook hook : hooks) {
             if (hook.isEnable()) {
                 if (hook.needObf()) {

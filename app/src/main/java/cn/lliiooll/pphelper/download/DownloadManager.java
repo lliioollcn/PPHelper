@@ -1,8 +1,11 @@
 package cn.lliiooll.pphelper.download;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
+import androidx.documentfile.provider.DocumentFile;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.data.ServerImageBeanData;
 import cn.lliiooll.pphelper.utils.*;
 import com.google.gson.GsonBuilder;
@@ -60,6 +63,16 @@ public class DownloadManager {
                     file.delete();
                 }
                 download(finalUrl, file);
+
+                String videoSavePath = PConfig.str("saveVideoPath", null);
+                if (videoSavePath != null) {
+                    PLog.d("存在自定义视频路径，复制到自定义路径: " + videoSavePath);
+                    Uri uri = Uri.parse(videoSavePath);
+                    DocumentFile saveDir = DocumentFile.fromTreeUri(AppUtils.getHostAppInstance(), uri);
+                    DocumentFile saveFile = saveDir.createFile("video/mp4", file.getName());
+                    IOUtils.copy(AppUtils.getHostAppInstance(), file, saveFile.getUri());
+                    PLog.d("复制视频到自定义路径成功");
+                }
                 handler.post(() -> {
                     MediaStoreUtils.insertVideo(AppUtils.getHostAppInstance(), file);
                     Toast.makeText(AppUtils.getHostAppInstance(), "无水印视频下载完毕", Toast.LENGTH_SHORT).show();
@@ -104,11 +117,20 @@ public class DownloadManager {
                         }
                     }
                 }
-                File file = new File(dir, System.currentTimeMillis() + ".wav");
+                File file = new File(dir, System.currentTimeMillis() + ".mp3");
                 if (file.exists()) {
                     file.delete();
                 }
                 download(url, file);
+                String voiceSavePath = PConfig.str("saveVoicePath", null);
+                if (voiceSavePath != null) {
+                    PLog.d("存在自定义语音路径，复制到自定义路径: " + voiceSavePath);
+                    Uri uri = Uri.parse(voiceSavePath);
+                    DocumentFile saveDir = DocumentFile.fromTreeUri(AppUtils.getHostAppInstance(), uri);
+                    DocumentFile saveFile = saveDir.createFile("audio/x-mpeg", file.getName());
+                    IOUtils.copy(AppUtils.getHostAppInstance(), file, saveFile.getUri());
+                    PLog.d("复制到自定义语音路径成功");
+                }
                 handler.post(() -> {
                     MediaStoreUtils.insertVoice(AppUtils.getHostAppInstance(), file);
                     Toast.makeText(AppUtils.getHostAppInstance(), "语音下载完毕", Toast.LENGTH_SHORT).show();

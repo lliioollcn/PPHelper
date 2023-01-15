@@ -2,22 +2,16 @@ package cn.lliiooll.pphelper.hook.zuiyouLite;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-import cn.lliiooll.pphelper.R;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.download.DownloadManager;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.*;
 import cn.lliiooll.pphelper.view.PDialog;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

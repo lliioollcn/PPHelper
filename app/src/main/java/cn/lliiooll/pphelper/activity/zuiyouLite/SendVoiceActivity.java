@@ -5,19 +5,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import cn.lliiooll.pphelper.R;
 import cn.lliiooll.pphelper.hook.zuiyouLite.AudioSend;
 import cn.lliiooll.pphelper.utils.AppUtils;
-import cn.lliiooll.pphelper.utils.HideList;
-import cn.lliiooll.pphelper.utils.PConfig;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.utils.PLog;
-
-import java.net.URI;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SendVoiceActivity extends Activity {
 
@@ -47,8 +42,9 @@ public class SendVoiceActivity extends Activity {
         Button save = findViewById(R.id.pp_a_voice_save);
         LinearLayout path = findViewById(R.id.pp_a_voice_path);
         Switch sw = findViewById(R.id.pp_a_voice_switch);
+        Switch c = findViewById(R.id.pp_a_covert_switch);
 
-        time.setText(PConfig.number("voiceTime", 51201314) + "");
+        time.setText(PConfig.number("voiceTime", 5201314) + "");
 
         save.setOnClickListener(v -> {
             PConfig.setNumber("voiceTime", Integer.parseInt(time.getText().toString()));
@@ -62,10 +58,17 @@ public class SendVoiceActivity extends Activity {
         });
 
         sw.setChecked(AudioSend.INSTANCE.isEnable());
+        c.setChecked(PConfig.isEnable("voiceAutoCovert", true));
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 AudioSend.INSTANCE.setEnable(isChecked);
+            }
+        });
+        c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PConfig.setEnable("voiceAutoCovert", isChecked);
             }
         });
 

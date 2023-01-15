@@ -5,7 +5,7 @@ import android.view.View;
 import cn.lliiooll.pphelper.hook.BaseHook;
 import cn.lliiooll.pphelper.utils.DexUtils;
 import cn.lliiooll.pphelper.utils.HybridClassLoader;
-import cn.lliiooll.pphelper.utils.PConfig;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.utils.PLog;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;

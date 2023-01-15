@@ -6,11 +6,11 @@ import android.os.Build;
 import android.os.Process;
 import android.system.Os;
 import android.system.StructUtsname;
+import cn.lliiooll.pphelper.config.PConfig;
 import cn.lliiooll.pphelper.startup.HookEntry;
 import com.tencent.mmkv.MMKV;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,6 +67,8 @@ public class Natives {
                     MMKV.initialize(ctx, mmkvDir.getAbsolutePath(), s -> {
                         PLog.d("尝试加载libpphelper.so ......");
                         System.load(modulePath + "!/lib/" + abi + "/libpphelper.so");
+                        PLog.d("尝试加载libffmpeg.so ......");
+                        System.load(modulePath + "!/lib/" + abi + "/libffmpeg.so");
                     });
                     PLog.d("dlopen by mmap success");
                 }
@@ -91,6 +93,7 @@ public class Natives {
         } catch (ClassNotFoundException e) {
             // not in host process, ignore
             System.loadLibrary("pphelper");
+            System.loadLibrary("ffmpeg");
         }
         try {
             test();
@@ -111,6 +114,7 @@ public class Natives {
 
     private static List<String> libList = new ArrayList<String>() {{
         add("libpphelper");
+        add("libffmpeg");
     }};
 
     public static void load2(Context ctx) {
